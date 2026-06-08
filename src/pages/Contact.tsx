@@ -137,7 +137,7 @@ const Contact = () => {
                       <Phone className="h-5 w-5" />
                     </div>
                     <div className="font-semibold text-orange-500 dark:text-orange-400 mb-1">Technical Support</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">24/7 support for partners</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Support based on pilot scope</div>
                   </div>
                 </div>
               </CardContent>

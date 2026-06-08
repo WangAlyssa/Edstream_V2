@@ -15,7 +15,7 @@ const Footer = () => {
   const legalLinks = [
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms of Service", href: "/terms" },
-    { name: "Documentation", href: "https://mintlify.com", external: true },
+    { name: "Help Docs", href: "https://universityofflorida-6bad23dc.mintlify.app", external: true },
   ];
 
   return (
@@ -28,15 +28,15 @@ const Footer = () => {
             <div className="lg:col-span-2">
               <Link to="/" className="inline-flex items-center space-x-3 mb-6 hover:opacity-80 transition-all duration-300 hover:scale-105">
                 <img 
-                  src="/lovable-uploads/8f4a6de0-da43-4b0b-8550-2d2f9c1c4e5b.png" 
+                  src="/logo.svg" 
                   alt="EdStream Logo" 
-                  className="w-10 h-10 dark:brightness-0 dark:invert transition-transform duration-300" 
+                  className="logo-image w-10 h-10 transition-transform duration-300" 
                 />
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">EdStream</span>
               </Link>
               
               <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md text-lg leading-relaxed">
-                Cultivating Campus Communities through integrated messaging and collaboration tools for Canvas LMS.
+                A simple Canvas communication layer for course channels, class files, and student requests.
               </p>
               
               {/* Contact */}
