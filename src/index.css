@@ -1,0 +1,308 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221 100% 33%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-lato;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+    /* Enhanced Dark mode specific improvements */
+  .dark {
+    /* Logo enhancement for dark mode - more aggressive inversion */
+    img[alt*="Logo"], img[alt*="logo"], img[alt*="EdStream"] {
+      filter: brightness(0) invert(1) contrast(1.2) !important;
+    }
+    
+    /* Target specific logo images */
+    .logo-image {
+      filter: brightness(0) invert(1) contrast(1.2) !important;
+    }
+    
+    /* Ensure logo images are fully visible */
+    img[src*="8f4a6de0-da43-4b0b-8550-2d2f9c1c4e5b"] {
+      filter: brightness(0) invert(1) contrast(1.2) !important;
+    }
+    
+    /* Ensure better contrast for cards and sections */
+    .bg-white {
+      @apply bg-gray-800;
+    }
+    
+    .bg-gray-50 {
+      @apply bg-gray-800;
+    }
+    
+    .bg-gray-100 {
+      @apply bg-gray-900;
+    }
+    
+    .bg-blue-50\/30 {
+      @apply bg-gray-800/30;
+    }
+    
+    .text-gray-600 {
+      @apply text-gray-300;
+    }
+    
+    .text-gray-700 {
+      @apply text-gray-200;
+    }
+    
+    .text-gray-800 {
+      @apply text-gray-100;
+    }
+    
+    .text-gray-900 {
+      @apply text-white;
+    }
+
+    /* Enhanced text visibility */
+    .text-blue {
+      @apply text-blue-400;
+    }
+    
+    .text-blue-600 {
+      @apply text-blue-400;
+    }
+
+    .text-blue-700 {
+      @apply text-blue-300;
+    }
+    
+    /* Improved heading visibility in dark mode */
+    h1, h2, h3, h4, h5, h6 {
+      @apply text-foreground;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      color: hsl(var(--foreground)) !important;
+    }
+    
+    /* Specific heading color overrides for better visibility */
+    .text-blue.font-bold,
+    .font-bold.text-blue {
+      @apply text-blue-300;
+    }
+    
+    .border-blue-100 {
+      @apply border-gray-700;
+    }
+    
+    .border-orange-100 {
+      @apply border-gray-700;
+    }
+    
+    .border-gray-200 {
+      @apply border-gray-700;
+    }
+    
+    /* Improve gradient visibility in dark mode */
+    .bg-gradient-to-br.from-gray-50.to-blue-50\/30 {
+      @apply from-gray-800 to-gray-900/50;
+    }
+    
+    .bg-gradient-to-br.from-blue-50.via-white.to-orange-50 {
+      @apply from-gray-800/20 via-gray-800 to-gray-900/10;
+    }
+    
+    .bg-gradient-to-r.from-blue-50.to-orange-50 {
+      @apply from-gray-800/20 to-gray-900/10;
+    }
+    
+    /* Better shadow for dark mode */
+    .shadow-xl {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+    }
+    
+    .shadow-lg {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .shadow-md {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Enhanced button visibility and force white text on orange buttons */
+    .bg-orange-500,
+    .bg-gradient-to-r.from-orange-500.to-orange-600,
+    .from-orange-500.to-orange-600 {
+      color: white !important;
+    }
+    
+    .hover\:from-orange-600:hover,
+    .hover\:to-orange-700:hover,
+    .hover\:from-orange-400:hover,
+    .hover\:to-orange-500:hover {
+      color: white !important;
+    }
+
+    .bg-blue-600 {
+      @apply bg-blue-500;
+    }
+    
+    .hover\:bg-blue-700:hover {
+      @apply hover:bg-blue-600;
+    }
+    
+    .hover\:bg-orange-600:hover {
+      @apply hover:bg-orange-400;
+    }
+
+    /* Form elements */
+    input, textarea, select {
+      @apply bg-gray-800 text-gray-100 border-gray-600;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      @apply border-blue-500 ring-blue-500/20;
+    }
+
+    /* Links */
+    a {
+      @apply text-blue-400 hover:text-blue-300;
+    }
+
+    /* Cards and sections */
+    .bg-blue-50 {
+      @apply bg-gray-800;
+    }
+
+    .bg-orange-50 {
+      @apply bg-gray-800;
+    }
+  }
+}
+
+@layer utilities {
+  .gradient-orange {
+    background: linear-gradient(45deg, #FA4616, #FF6B3D);
+  }
+  
+  .gradient-blue {
+    background: linear-gradient(90deg, #0021A5, #003DD6);
+  }
+
+  /* Standardized app store button styles */
+  .app-store-button {
+    width: 200px !important;
+    height: 60px !important;
+    object-fit: contain !important;
+  }
+
+  /* Dark mode backdrop blur improvements */
+  .dark .backdrop-blur-sm {
+    backdrop-filter: blur(4px) saturate(150%);
+  }
+  
+  /* Better text contrast in dark mode for specific elements */
+  .dark .text-blue-100 {
+    @apply text-blue-200;
+  }
+  
+  .dark .text-blue-600 {
+    @apply text-blue-400;
+  }
+  
+  /* Enhanced heading visibility */
+  .dark .text-orange {
+    @apply text-orange-400;
+  }
+
+  /* Ensure proper contrast for interactive elements */
+  .dark .hover\:text-blue-600:hover {
+    @apply hover:text-blue-400;
+  }
+
+  .dark .hover\:text-orange-600:hover {
+    @apply hover:text-orange-400;
+  }
+}
