@@ -1,78 +1,62 @@
-<<<<<<< HEAD
-# Welcome to your Lovable project
+# EdStream V2
 
-## Project info
+EdStream V2 is a Vite + React + TypeScript landing page for an integrated Canvas LMS communication and academic collaboration product. The UI uses shadcn-ui components and Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/ada6ff52-dd23-4232-b8dc-dd260f700a39
+## Tech stack
 
-## How can I edit this code?
+- Vite
+- React
+- TypeScript
+- shadcn-ui
+- Tailwind CSS
+- React Router
 
-There are several ways of editing your application.
+## Prerequisites
 
-**Use Lovable**
+Install Node.js and npm before running the project. The repository includes `package-lock.json`, so use `npm ci` for reproducible installs.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ada6ff52-dd23-4232-b8dc-dd260f700a39) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Local development
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm ci
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The Vite development server is configured to listen on port `8080`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Open:
 
-**Use GitHub Codespaces**
+```text
+http://localhost:8080
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Available scripts
 
-## What technologies are used for this project?
+```sh
+npm run dev       # Start the local development server
+npm run build     # Build the production bundle into dist/
+npm run build:dev # Build with Vite development mode
+npm run lint      # Run ESLint
+npm run preview   # Preview the built dist/ bundle locally
+```
 
-This project is built with:
+## Production build and preview
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```sh
+npm run build
+npm run preview
+```
 
-## How can I deploy this project?
+`npm run preview` serves the files generated in `dist/`.
 
-Simply open [Lovable](https://lovable.dev/projects/ada6ff52-dd23-4232-b8dc-dd260f700a39) and click on Share -> Publish.
+## Routing and deployment notes
 
-## Can I connect a custom domain to my Lovable project?
+This is a client-side React Router app. The `public/_redirects` file rewrites all routes to `/index.html` for static hosts that support Netlify-style redirects.
 
-Yes, you can!
+For other static hosts, configure fallback routing so paths like `/features`, `/about`, and `/contact` return `index.html`.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Troubleshooting
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-=======
-# Edstream_V2
-Version2
->>>>>>> e63c65aab5019da2e905e27a6174d310a2c53a87
+- If `vite: not found` appears, dependencies are missing. Run `npm ci`.
+- If the build cannot resolve `index.html`, confirm the repository root contains `index.html` and that it loads `/src/main.tsx`.
+- If ESLint reports warnings about Fast Refresh, they come from existing component files exporting helper values alongside components. They do not block the current build.
