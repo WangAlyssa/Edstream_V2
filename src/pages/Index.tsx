@@ -173,23 +173,27 @@ const PhoneMockup = () => (
 );
 
 const HeroMockup = () => (
-  <div className="relative mx-auto h-[560px] max-w-[650px]">
-    <div className="absolute left-0 top-0 w-[590px] max-w-[88%]">
-      <div className="overflow-hidden rounded-[1.6rem] border-[10px] border-gray-950 bg-white shadow-2xl">
-        <DesktopChatMockup />
+  <div className="relative mx-auto h-[560px] w-full max-w-[700px]">
+    <div className="absolute left-0 top-10 w-[620px] max-w-[88%]">
+      <div className="rounded-[1.8rem] bg-gray-950 p-3 shadow-2xl">
+        <div className="overflow-hidden rounded-xl bg-white">
+          <DesktopChatMockup />
+        </div>
+        <div className="mx-auto mt-3 h-3 w-3 rounded-full bg-blue-900" />
       </div>
       <div className="mx-auto h-16 w-40 bg-gray-950" />
-      <div className="mx-auto h-4 w-72 rounded bg-gray-950" />
+      <div className="mx-auto h-4 w-72 rounded-md bg-gray-950" />
     </div>
-    <div className="absolute bottom-3 right-0 hidden sm:block">
+    <div className="absolute bottom-5 right-2 hidden sm:block">
       <PhoneMockup />
     </div>
   </div>
 );
 
-const ClickCursor = ({ className = "" }: { className?: string }) => (
+const DemoCursor = ({ position }: { position: { left: string; top: string } }) => (
   <MousePointer2
-    className={`demo-cursor-float pointer-events-none absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-500 ease-out ${className}`}
+    className="demo-cursor-float pointer-events-none absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-1000 ease-in-out"
+    style={position}
   />
 );
 
@@ -197,9 +201,37 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const timer = window.setInterval(() => setStep((current) => (current + 1) % 3), 1800);
+    const timer = window.setInterval(() => setStep((current) => (current + 1) % 3), 2300);
     return () => window.clearInterval(timer);
   }, []);
+
+  const cursorPositions: Record<FeatureId, Array<{ left: string; top: string }>> = {
+    channels: [
+      { left: "25%", top: "15%" },
+      { left: "57%", top: "50%" },
+      { left: "64%", top: "75%" },
+    ],
+    files: [
+      { left: "77%", top: "78%" },
+      { left: "61%", top: "42%" },
+      { left: "67%", top: "60%" },
+    ],
+    media: [
+      { left: "83%", top: "22%" },
+      { left: "49%", top: "35%" },
+      { left: "66%", top: "35%" },
+    ],
+    requests: [
+      { left: "48%", top: "32%" },
+      { left: "66%", top: "66%" },
+      { left: "66%", top: "66%" },
+    ],
+    community: [
+      { left: "27%", top: "88%" },
+      { left: "50%", top: "38%" },
+      { left: "69%", top: "38%" },
+    ],
+  };
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-blue-100 bg-white p-5 shadow-xl">
@@ -215,9 +247,8 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           <aside className="bg-blue-800 p-3 text-white">
             <div className="mb-3 flex items-center justify-between text-xs font-bold">
               <span># Channels</span>
-              <span className={`relative rounded ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}>
+              <span className={`relative rounded transition-colors duration-500 ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}>
                 <Plus className="h-4 w-4" />
-                {id === "channels" && step === 0 && <ClickCursor className="-bottom-3 -right-3" />}
               </span>
             </div>
             {["# General", "# Peer Mentors", "# Project"].map((item, index) => (
@@ -243,20 +274,18 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                   <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Visibility</span><b>Private</b></div>
                   <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Who can send</span><b>Everyone</b></div>
                 </div>
-                <div className={`relative mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700 ${step === 1 ? "ring-2 ring-blue-200" : ""}`}>
+                <div className={`relative mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700 transition-all duration-500 ${step === 1 ? "ring-2 ring-blue-200" : ""}`}>
                   # project-group-alpha
-                  {step === 1 && <ClickCursor className="-bottom-2 right-6" />}
                 </div>
-                <button className={`relative w-full rounded-lg py-3 text-sm font-black text-white ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}>
+                <button className={`relative w-full rounded-lg py-3 text-sm font-black text-white transition-colors duration-500 ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}>
                   Create Channel
-                  {step === 2 && <ClickCursor className="-bottom-2 right-14" />}
                 </button>
               </div>
             )}
             {id === "files" && (
               <div className="space-y-4">
                 <div className="rounded-xl border bg-gray-50 p-4 text-sm text-gray-500">Share a course handout in # General</div>
-                <div className={`relative rounded-2xl border bg-white p-5 shadow-lg transition ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}>
+                <div className={`relative rounded-2xl border bg-white p-5 shadow-lg transition-all duration-700 ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}>
                   <FileText className="mb-3 h-8 w-8 text-orange-500" />
                   <h4 className="font-black text-blue-700">Research-paper.pdf</h4>
                   {step < 2 ? (
@@ -275,11 +304,9 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                       </div>
                     </div>
                   )}
-                  {step === 1 && <ClickCursor className="right-8 top-9" />}
                 </div>
                 <div className="relative flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">
                   Type message <Plus className="ml-auto h-4 w-4 text-blue-600" />
-                  {step === 0 && <ClickCursor className="-bottom-2 right-2" />}
                 </div>
               </div>
             )}
@@ -287,16 +314,14 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <h4 className="font-black text-blue-700">Channel Details</h4>
-                  <span className={`relative rounded-full px-2 py-1 text-xs ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}>
+                  <span className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}>
                     i
-                    {step === 0 && <ClickCursor className="-bottom-3 -right-2" />}
                   </span>
                 </div>
                 <div className="mb-4 flex gap-2">
                   {["Photos", "Videos", "Files"].map((tab, index) => (
-                    <span key={tab} className={`relative rounded-full px-3 py-1 text-xs font-black ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}>
+                    <span key={tab} className={`relative rounded-full px-3 py-1 text-xs font-black transition-colors duration-500 ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}>
                       {tab}
-                      {index === step && step > 0 && <ClickCursor className="-bottom-3 right-1" />}
                     </span>
                   ))}
                 </div>
@@ -311,9 +336,8 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                 <p className="text-sm text-gray-500">Student requests more time for Project Checkpoint 2.</p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <button className="rounded-lg border py-2 text-sm font-bold text-gray-500">Deny</button>
-                  <button className={`relative rounded-lg py-2 text-sm font-bold text-white ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}>
+                  <button className={`relative rounded-lg py-2 text-sm font-bold text-white transition-colors duration-500 ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}>
                     {step === 2 ? "Approved" : "Approve"}
-                    {step > 0 && <ClickCursor className="-bottom-2 right-6" />}
                   </button>
                 </div>
               </div>
@@ -323,9 +347,8 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                 <h4 className="mb-4 text-xl font-black text-blue-700">Communities</h4>
                 <div className="grid grid-cols-2 gap-3">
                   {["Study Group", "Project Teams", "Peer Mentors", "Exam Review"].map((community, index) => (
-                    <div key={community} className={`relative h-24 rounded-xl p-4 text-sm font-bold ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}>
+                    <div key={community} className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}>
                       {community}
-                      {index === step && <ClickCursor className="bottom-3 right-3" />}
                     </div>
                   ))}
                 </div>
@@ -334,6 +357,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           </main>
         </div>
       </div>
+      <DemoCursor position={cursorPositions[id][step]} />
     </div>
   );
 };
