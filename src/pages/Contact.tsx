@@ -14,14 +14,14 @@ const Contact = () => {
     <div className="min-h-screen bg-white text-gray-900">
       <Header />
 
-      <section className="bg-gradient-to-br from-blue-50 via-white to-orange-50 py-20">
+      <section className="bg-gradient-to-br from-blue-700 to-blue-800 py-12 text-white">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-6 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-bold text-blue-700">
+          <div className="mb-4 inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-orange-100">
             <Mail className="mr-2 h-4 w-4" />
             Contact
           </div>
-          <h1 className="text-5xl font-black text-blue-700 lg:text-6xl">Talk with the EdStream team</h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-gray-600">
+          <h1 className="text-4xl font-black lg:text-5xl">Talk with the EdStream team</h1>
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-blue-100">
             Ask about a pilot, request a walkthrough, or share what your course communication workflow needs.
           </p>
         </div>

@@ -168,18 +168,18 @@ const Blog = () => {
     <div className="min-h-screen bg-white text-gray-900">
       <Header />
 
-      <section className="bg-gradient-to-br from-blue-50 via-white to-orange-50 py-20">
+      <section className="bg-gradient-to-br from-blue-700 to-blue-800 py-12 text-white">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-6 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-bold text-blue-700">
+          <div className="mb-4 inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-orange-100">
             <BookOpen className="mr-2 h-4 w-4" />
             Guides
           </div>
-          <h1 className="text-5xl font-black text-blue-700 lg:text-6xl">Step-by-step visual guides</h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-gray-600">
+          <h1 className="text-4xl font-black lg:text-5xl">Step-by-step visual guides</h1>
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-blue-100">
             Screenshot-style tutorials with fake names and fake course data. Orange circles show exactly where to click.
           </p>
 
-          <div className="mx-auto mt-10 grid max-w-md grid-cols-2 rounded-2xl bg-white p-2 shadow-lg">
+          <div className="mx-auto mt-7 grid max-w-md grid-cols-2 rounded-2xl bg-white/10 p-2 shadow-lg backdrop-blur">
             {[
               { value: "instructor" as const, label: "For Instructor", icon: GraduationCap },
               { value: "student" as const, label: "For Student", icon: Users },
@@ -192,7 +192,7 @@ const Blog = () => {
                   type="button"
                   onClick={() => setActiveRole(tab.value)}
                   className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-black transition-all duration-300 ${
-                    active ? "bg-blue-700 text-white shadow-md" : "text-blue-700 hover:bg-blue-50"
+                    active ? "bg-white text-blue-700 shadow-md" : "text-white hover:bg-white/10"
                   }`}
                 >
                   <Icon className="h-4 w-4" />

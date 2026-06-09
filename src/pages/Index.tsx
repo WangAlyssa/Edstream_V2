@@ -1,4 +1,4 @@
-import { type CSSProperties, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -187,10 +187,9 @@ const HeroMockup = () => (
   </div>
 );
 
-const Cursor = ({ style }: { style: CSSProperties }) => (
+const ClickCursor = ({ className = "" }: { className?: string }) => (
   <MousePointer2
-    className="demo-cursor-float absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-700 ease-in-out"
-    style={style}
+    className={`demo-cursor-float pointer-events-none absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-500 ease-out ${className}`}
   />
 );
 
@@ -201,34 +200,6 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
     const timer = window.setInterval(() => setStep((current) => (current + 1) % 3), 1800);
     return () => window.clearInterval(timer);
   }, []);
-
-  const cursorPositions: Record<FeatureId, Array<CSSProperties>> = {
-    channels: [
-      { left: "27%", top: "16%" },
-      { left: "55%", top: "49%" },
-      { left: "62%", top: "72%" },
-    ],
-    files: [
-      { left: "77%", top: "77%" },
-      { left: "54%", top: "43%" },
-      { left: "75%", top: "71%" },
-    ],
-    media: [
-      { left: "84%", top: "21%" },
-      { left: "48%", top: "34%" },
-      { left: "66%", top: "34%" },
-    ],
-    requests: [
-      { left: "47%", top: "31%" },
-      { left: "65%", top: "65%" },
-      { left: "65%", top: "65%" },
-    ],
-    community: [
-      { left: "26%", top: "88%" },
-      { left: "49%", top: "37%" },
-      { left: "68%", top: "37%" },
-    ],
-  };
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-blue-100 bg-white p-5 shadow-xl">
@@ -244,7 +215,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           <aside className="bg-blue-800 p-3 text-white">
             <div className="mb-3 flex items-center justify-between text-xs font-bold">
               <span># Channels</span>
-              <Plus className={`h-4 w-4 rounded ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`} />
+              <span className={`relative rounded ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}>
+                <Plus className="h-4 w-4" />
+                {id === "channels" && step === 0 && <ClickCursor className="-bottom-3 -right-3" />}
+              </span>
             </div>
             {["# General", "# Peer Mentors", "# Project"].map((item, index) => (
               <div key={item} className={`mb-2 rounded px-2 py-1.5 text-xs ${index === 0 ? "bg-white/15" : "text-blue-100"}`}>
@@ -269,30 +243,61 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                   <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Visibility</span><b>Private</b></div>
                   <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Who can send</span><b>Everyone</b></div>
                 </div>
-                <div className="mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700"># project-group-alpha</div>
-                <button className={`w-full rounded-lg py-3 text-sm font-black text-white ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}>Create Channel</button>
+                <div className={`relative mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700 ${step === 1 ? "ring-2 ring-blue-200" : ""}`}>
+                  # project-group-alpha
+                  {step === 1 && <ClickCursor className="-bottom-2 right-6" />}
+                </div>
+                <button className={`relative w-full rounded-lg py-3 text-sm font-black text-white ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}>
+                  Create Channel
+                  {step === 2 && <ClickCursor className="-bottom-2 right-14" />}
+                </button>
               </div>
             )}
             {id === "files" && (
               <div className="space-y-4">
                 <div className="rounded-xl border bg-gray-50 p-4 text-sm text-gray-500">Share a course handout in # General</div>
-                <div className={`rounded-2xl border bg-white p-5 shadow-lg transition ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}>
+                <div className={`relative rounded-2xl border bg-white p-5 shadow-lg transition ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}>
                   <FileText className="mb-3 h-8 w-8 text-orange-500" />
-                  <h4 className="font-black text-blue-700">Midterm-review.pdf</h4>
-                  <div className="mt-3 space-y-2">{[1, 2, 3].map((line) => <div key={line} className="h-2 rounded bg-blue-100" />)}</div>
+                  <h4 className="font-black text-blue-700">Research-paper.pdf</h4>
+                  {step < 2 ? (
+                    <div className="mt-3 space-y-2">
+                      {[1, 2, 3].map((line) => <div key={line} className="h-2 rounded bg-blue-100" />)}
+                    </div>
+                  ) : (
+                    <div className="mt-3 rounded-lg border bg-blue-50/60 p-3">
+                      <div className="mb-2 h-3 w-28 rounded bg-blue-300" />
+                      <div className="space-y-1.5">
+                        {[1, 2, 3, 4].map((line) => <div key={line} className="h-1.5 rounded bg-white" />)}
+                      </div>
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <div className="h-10 rounded bg-white" />
+                        <div className="h-10 rounded bg-white" />
+                      </div>
+                    </div>
+                  )}
+                  {step === 1 && <ClickCursor className="right-8 top-9" />}
                 </div>
-                <div className="flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">Type message <Plus className="ml-auto h-4 w-4 text-blue-600" /></div>
+                <div className="relative flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">
+                  Type message <Plus className="ml-auto h-4 w-4 text-blue-600" />
+                  {step === 0 && <ClickCursor className="-bottom-2 right-2" />}
+                </div>
               </div>
             )}
             {id === "media" && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <h4 className="font-black text-blue-700">Channel Details</h4>
-                  <span className={`rounded-full px-2 py-1 text-xs ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}>i</span>
+                  <span className={`relative rounded-full px-2 py-1 text-xs ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}>
+                    i
+                    {step === 0 && <ClickCursor className="-bottom-3 -right-2" />}
+                  </span>
                 </div>
                 <div className="mb-4 flex gap-2">
                   {["Photos", "Videos", "Files"].map((tab, index) => (
-                    <span key={tab} className={`rounded-full px-3 py-1 text-xs font-black ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}>{tab}</span>
+                    <span key={tab} className={`relative rounded-full px-3 py-1 text-xs font-black ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}>
+                      {tab}
+                      {index === step && step > 0 && <ClickCursor className="-bottom-3 right-1" />}
+                    </span>
                   ))}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -306,7 +311,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                 <p className="text-sm text-gray-500">Student requests more time for Project Checkpoint 2.</p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <button className="rounded-lg border py-2 text-sm font-bold text-gray-500">Deny</button>
-                  <button className={`rounded-lg py-2 text-sm font-bold text-white ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}>{step === 2 ? "Approved" : "Approve"}</button>
+                  <button className={`relative rounded-lg py-2 text-sm font-bold text-white ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}>
+                    {step === 2 ? "Approved" : "Approve"}
+                    {step > 0 && <ClickCursor className="-bottom-2 right-6" />}
+                  </button>
                 </div>
               </div>
             )}
@@ -315,7 +323,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                 <h4 className="mb-4 text-xl font-black text-blue-700">Communities</h4>
                 <div className="grid grid-cols-2 gap-3">
                   {["Study Group", "Project Teams", "Peer Mentors", "Exam Review"].map((community, index) => (
-                    <div key={community} className={`h-24 rounded-xl p-4 text-sm font-bold ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}>{community}</div>
+                    <div key={community} className={`relative h-24 rounded-xl p-4 text-sm font-bold ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}>
+                      {community}
+                      {index === step && <ClickCursor className="bottom-3 right-3" />}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -323,7 +334,6 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           </main>
         </div>
       </div>
-      <Cursor style={cursorPositions[id][step]} />
     </div>
   );
 };
