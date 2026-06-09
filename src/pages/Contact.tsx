@@ -27,7 +27,7 @@ const Contact = () => {
         </div>
       </section>
 
-      <section className="-mt-8 pb-20">
+      <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <Card className="border-0 shadow-2xl">

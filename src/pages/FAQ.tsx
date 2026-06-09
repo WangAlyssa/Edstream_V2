@@ -112,7 +112,7 @@ const FAQ = () => {
         </div>
       </section>
 
-      <section className="-mt-8 pb-20">
+      <section className="py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Card className="border-0 shadow-2xl">
             <CardContent className="p-6 lg:p-8">

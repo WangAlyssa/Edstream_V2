@@ -150,10 +150,10 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
 );
 
 const PhoneMockup = () => (
-  <div className="w-[150px] rounded-[1.7rem] border-[7px] border-gray-950 bg-white p-3 shadow-2xl">
+  <div className="w-[176px] rounded-[1.9rem] border-[8px] border-gray-950 bg-white p-4 shadow-2xl">
     <div className="mx-auto mb-4 h-4 w-16 rounded-b-xl bg-black" />
     <div className="mb-5 flex items-center justify-between">
-      <span className="text-base font-black text-blue-700">EdStream</span>
+      <span className="text-lg font-black text-blue-700">EdStream</span>
       <span className="text-gray-400">≡</span>
     </div>
     {[
@@ -184,7 +184,7 @@ const HeroMockup = () => (
       <div className="mx-auto h-16 w-40 bg-gray-950" />
       <div className="mx-auto h-4 w-72 rounded-md bg-gray-950" />
     </div>
-    <div className="absolute bottom-5 right-2 hidden sm:block">
+    <div className="absolute bottom-4 right-0 hidden sm:block">
       <PhoneMockup />
     </div>
   </div>
