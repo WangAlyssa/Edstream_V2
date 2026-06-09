@@ -2,65 +2,11 @@ import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import GuideMockup from "@/components/GuideMockup";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { findGuideById, guideSections, type GuideHighlight } from "@/content/guides";
-import { ArrowLeft, ArrowRight, CheckCircle, Plus } from "lucide-react";
-
-const FakeAppScreenshot = ({ highlights }: { highlights: GuideHighlight[] }) => (
-  <div className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-xl">
-    <div className="flex h-11 items-center bg-blue-700 px-4 text-white">
-      <div className="mr-4 h-5 w-5 rounded border border-white/70" />
-      <div className="mx-auto h-7 w-full max-w-xs rounded-full bg-white/15 px-4 pt-1 text-xs text-blue-100">
-        Search course
-      </div>
-    </div>
-    <div className="grid h-[330px] grid-cols-[150px_1fr]">
-      <aside className="relative bg-blue-800 p-4 text-white">
-        <div className="mb-4 flex items-center justify-between text-xs font-bold">
-          <span># Channels</span>
-          <Plus className="h-4 w-4" />
-        </div>
-        {["# General", "# Peer Mentors", "# Project Q&A"].map((item, index) => (
-          <div key={item} className={`mb-2 rounded px-3 py-2 text-xs ${index === 0 ? "bg-white/15" : "text-blue-100"}`}>
-            {item}
-          </div>
-        ))}
-        <div className="mt-6 text-xs font-bold">Direct messages</div>
-        <div className="mt-2 rounded bg-white/15 px-3 py-2 text-xs">Prof. Rivera</div>
-        <div className="absolute bottom-0 left-0 grid w-[150px] grid-cols-3 gap-1 bg-blue-950 p-2 text-[9px] text-blue-100">
-          <span className="rounded bg-white/10 px-1 py-2 text-center">Courses</span>
-          <span className="rounded px-1 py-2 text-center">Communities</span>
-          <span className="rounded px-1 py-2 text-center">DMs</span>
-        </div>
-      </aside>
-      <main className="p-5">
-        <div className="mb-5 border-b pb-3">
-          <h3 className="text-xl font-black text-blue-700"># General</h3>
-          <p className="text-xs text-gray-400">Demo Course • 7 members</p>
-        </div>
-        <div className="space-y-4">
-          <div className="rounded-xl bg-blue-50 p-4 text-sm text-gray-700">
-            <b>Prof. Rivera:</b> Welcome! Use this channel for general course questions.
-          </div>
-          <div className="rounded-xl bg-orange-50 p-4 text-sm text-gray-700">
-            <b>Student Lee:</b> Where should I submit an extension request?
-          </div>
-          <div className="mt-8 rounded-xl border bg-gray-50 px-4 py-3 text-sm text-gray-400">
-            Type your message here...
-          </div>
-        </div>
-      </main>
-    </div>
-    {highlights.map((highlight) => (
-      <div key={highlight.label} className={`demo-highlight-pulse absolute rounded-full border-4 border-orange-500 bg-orange-400/10 ${highlight.className}`}>
-        <span className="absolute left-1/2 top-full mt-2 w-40 -translate-x-1/2 rounded-lg bg-orange-500 px-3 py-2 text-center text-xs font-bold text-white shadow-lg">
-          {highlight.label}
-        </span>
-      </div>
-    ))}
-  </div>
-);
+import { findGuideById, guideSections } from "@/content/guides";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const GuideTutorial = () => {
   const { guideId } = useParams();
@@ -95,42 +41,27 @@ const GuideTutorial = () => {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-20">
-        <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6 lg:px-8">
-          {guide.steps.map((step, index) => {
-            const highlight = guide.highlights[index % guide.highlights.length];
-
-            return (
-              <Card key={step} className="border-0 shadow-xl">
-                <CardContent className="p-6 lg:p-8">
-                  <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-                    <div>
-                      <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white">
+      <section className="bg-gray-50 py-16">
+        <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
+          {guide.steps.map((step, index) => (
+            <Card key={step.instruction} className="border-0 shadow-xl">
+              <CardContent className="p-5 lg:p-6">
+                <div className="grid gap-5 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] lg:items-start">
+                  <div>
+                    <div className="mb-3 flex items-center gap-3">
+                      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-base font-black text-white">
                         {index + 1}
                       </span>
-                      <h2 className="mb-4 text-2xl font-black text-blue-700">Step {index + 1}</h2>
-                      <p className="mb-6 text-lg leading-8 text-gray-700">{step}</p>
-                      <div className="space-y-4">
-                        <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4">
-                          <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-blue-700">Click target</h3>
-                          <p className="text-sm leading-6 text-gray-700">
-                            {index === 0 ? guide.clickTarget : highlight.label}
-                          </p>
-                        </div>
-                        <div className="rounded-2xl border border-orange-100 bg-orange-50/60 p-4">
-                          <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-orange-600">Check result</h3>
-                          <p className="text-sm leading-6 text-gray-700">
-                            {index === guide.steps.length - 1 ? guide.checkResult : "The highlighted part of the interface should update or become the focus of the next step."}
-                          </p>
-                        </div>
-                      </div>
+                      <h2 className="text-xl font-black text-blue-700">Step {index + 1}</h2>
                     </div>
-                    <FakeAppScreenshot highlights={[highlight]} />
+                    <p className="text-base font-bold leading-7 text-gray-900">{step.instruction}</p>
+                    <p className="mt-3 text-sm leading-7 text-gray-600">{step.detail}</p>
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                  <GuideMockup scene={step.scene} highlight={step.highlight} highlightLabel={step.highlightLabel} />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 

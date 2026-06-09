@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Card, CardContent } from "@/components/ui/card";
 import { guideSections, type GuideRole } from "@/content/guides";
-import { ArrowRight, BookOpen, GraduationCap, Users } from "lucide-react";
+import { ArrowRight, GraduationCap, Users } from "lucide-react";
 
 const Blog = () => {
   const [activeRole, setActiveRole] = useState<GuideRole>("instructor");
@@ -26,8 +25,8 @@ const Blog = () => {
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h1 className="text-4xl font-black lg:text-5xl">Step-by-step visual guides</h1>
           <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-blue-100">
-            Choose a tutorial below. Each guide opens as its own page with screenshots, steps, click targets, and
-            expected results.
+            Choose a tutorial below. Each guide opens as its own page with step-by-step screenshots and short
+            instructions.
           </p>
 
           <div className="mx-auto mt-7 grid max-w-md grid-cols-2 rounded-2xl bg-white/10 p-2 shadow-lg backdrop-blur">
@@ -55,30 +54,23 @@ const Blog = () => {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 md:grid-cols-2">
+      <section className="bg-gray-50 py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4">
             {visibleGuides.map((guide, index) => (
-              <Link
-                key={guide.id}
-                to={`/guides/${guide.id}`}
-                className="group block"
-              >
-                <Card className="h-full border-0 shadow-lg transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl">
-                  <CardContent className="p-8">
-                    <div className="mb-5 flex items-center justify-between">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white">
-                        {index + 1}
-                      </span>
-                      <ArrowRight className="h-5 w-5 text-blue-700 transition-transform duration-300 group-hover:translate-x-1" />
-                    </div>
-                    <h2 className="mb-3 text-2xl font-black text-blue-700">{guide.title}</h2>
-                    <p className="mb-5 leading-7 text-gray-600">{guide.description}</p>
-                    <div className="rounded-2xl bg-blue-50 p-4 text-sm font-bold text-blue-700">
-                      Open full tutorial page
-                    </div>
-                  </CardContent>
-                </Card>
+              <Link key={guide.id} to={`/guides/${guide.id}`} className="group block">
+                <div
+                  className="flex aspect-[16/3] items-center gap-5 rounded-2xl border border-gray-100 bg-white px-5 shadow-lg transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-2xl sm:gap-8 sm:px-8"
+                >
+                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white sm:h-11 sm:w-11">
+                    {index + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-lg font-black text-blue-700 sm:text-xl">{guide.title}</h2>
+                    <p className="mt-1 truncate text-sm text-gray-600 sm:text-base">{guide.description}</p>
+                  </div>
+                  <ArrowRight className="h-5 w-5 flex-shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-1" />
+                </div>
               </Link>
             ))}
           </div>

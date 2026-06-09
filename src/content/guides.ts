@@ -1,8 +1,53 @@
 export type GuideRole = "instructor" | "student";
 
-export type GuideHighlight = {
-  label: string;
-  className: string;
+export type GuideScene =
+  | "canvas-course-home"
+  | "bottom-nav"
+  | "channel-general"
+  | "sidebar-overview"
+  | "channel-composer"
+  | "create-channel"
+  | "channels-created"
+  | "channel-details"
+  | "channel-details-files"
+  | "file-in-chat"
+  | "message-reply"
+  | "message-thread"
+  | "request-queue"
+  | "canvas-settings"
+  | "canvas-enable";
+
+export type GuideHighlightId =
+  | "sidebar"
+  | "channels-section"
+  | "channel-general"
+  | "channel-plus"
+  | "channel-name-input"
+  | "qa-channel"
+  | "composer"
+  | "welcome-message-area"
+  | "channel-details-info"
+  | "files-tab"
+  | "file-card"
+  | "reply-btn"
+  | "thread-indicator"
+  | "thread-panel"
+  | "thread-composer"
+  | "request-btn"
+  | "bottom-nav-all"
+  | "bottom-nav-courses"
+  | "bottom-nav-communities"
+  | "bottom-nav-dms"
+  | "canvas-navigation-menu"
+  | "canvas-edstream-link"
+  | "save-btn";
+
+export type GuideStep = {
+  instruction: string;
+  detail: string;
+  scene: GuideScene;
+  highlight: GuideHighlightId;
+  highlightLabel: string;
 };
 
 export type GuideSection = {
@@ -11,10 +56,7 @@ export type GuideSection = {
   title: string;
   description: string;
   overview: string;
-  steps: string[];
-  clickTarget: string;
-  checkResult: string;
-  highlights: GuideHighlight[];
+  steps: GuideStep[];
 };
 
 export const guideSections: GuideSection[] = [
@@ -26,17 +68,70 @@ export const guideSections: GuideSection[] = [
     overview:
       "This primer introduces the minimum EdStream layout instructors should understand before using it with a live class.",
     steps: [
-      "Open EdStream from the Canvas course navigation.",
-      "Review the left sidebar: channels, direct messages, and course tools.",
-      "Open # General to see the main course conversation.",
-      "Use the composer for announcements, class Q&A, and shared files.",
-      "Tell students which channel to use for general questions versus project work.",
-    ],
-    clickTarget: "Click # General in the channel list to show the main course conversation.",
-    checkResult: "You should see the course header, member count, recent messages, and message composer.",
-    highlights: [
-      { label: "Course channels", className: "left-[5%] top-[17%] h-20 w-28" },
-      { label: "Class conversation", className: "left-[43%] top-[26%] h-24 w-44" },
+      {
+        instruction: "Open EdStream from the Canvas course navigation.",
+        detail:
+          "EdStream lives in your Canvas course menu, usually right below Home. Click it to launch the course workspace without leaving Canvas.",
+        scene: "canvas-course-home",
+        highlight: "canvas-edstream-link",
+        highlightLabel: "EdStream link",
+      },
+      {
+        instruction: "Review the left sidebar: channels, direct messages, and course tools.",
+        detail:
+          "The sidebar is your control center — channels organize class conversations, direct messages reach individuals, and everything stays tied to the course.",
+        scene: "sidebar-overview",
+        highlight: "sidebar",
+        highlightLabel: "Left sidebar",
+      },
+      {
+        instruction: "Use the bottom navigation to switch between Courses, Communities, and DMs.",
+        detail:
+          "Courses brings you back to class channels, Communities opens study groups beyond your roster, and DMs handles one-on-one messages.",
+        scene: "bottom-nav",
+        highlight: "bottom-nav-all",
+        highlightLabel: "Courses · Communities · DMs",
+      },
+      {
+        instruction: "Open # General to see the main course conversation.",
+        detail:
+          "# General is the default hub for class-wide questions and announcements. Most students should start here before posting.",
+        scene: "channel-general",
+        highlight: "channel-general",
+        highlightLabel: "# General",
+      },
+      {
+        instruction: "Use the composer for announcements, class Q&A, and shared files.",
+        detail:
+          "The message composer at the bottom lets you post updates, answer questions, and attach files so everything stays in the conversation thread.",
+        scene: "channel-composer",
+        highlight: "composer",
+        highlightLabel: "Message composer",
+      },
+      {
+        instruction: "Reply to a message to answer without cluttering the main channel.",
+        detail:
+          "Hover a message and click the reply icon — like Slack, this starts a side thread so follow-up answers stay tied to one question.",
+        scene: "message-reply",
+        highlight: "reply-btn",
+        highlightLabel: "Reply",
+      },
+      {
+        instruction: "Open the thread panel to read and post follow-up replies.",
+        detail:
+          "The thread panel slides in on the right with the original message and all replies. Students see only what relates to their question.",
+        scene: "message-thread",
+        highlight: "thread-panel",
+        highlightLabel: "Thread panel",
+      },
+      {
+        instruction: "Tell students which channel to use for general questions versus project work.",
+        detail:
+          "A clear channel list helps students pick the right space — general Q&A in one channel, project or lab work in another — so messages don't get lost.",
+        scene: "channel-general",
+        highlight: "channels-section",
+        highlightLabel: "Course channels",
+      },
     ],
   },
   {
@@ -47,17 +142,46 @@ export const guideSections: GuideSection[] = [
     overview:
       "Start small. This guide keeps the first course setup focused so students are not overwhelmed by too many spaces.",
     steps: [
-      "Click the plus button beside Channels.",
-      "Create #announcements for instructor-only updates.",
-      "Create #general-q-and-a for student questions.",
-      "Post a welcome message that explains what each channel is for.",
-      "Repeat the channel guidance during the first week of class.",
-    ],
-    clickTarget: "Click the + button next to Channels, then enter the channel name and posting permissions.",
-    checkResult: "The new channel should appear in the sidebar and be visible to the intended course roles.",
-    highlights: [
-      { label: "Create channel", className: "left-[27%] top-[13%] h-10 w-10" },
-      { label: "Welcome message", className: "left-[43%] top-[74%] h-14 w-44" },
+      {
+        instruction: "Click the plus button beside Channels.",
+        detail:
+          "The + next to Channels opens the create flow. Use it whenever you need a new space for announcements, labs, or project groups.",
+        scene: "channel-general",
+        highlight: "channel-plus",
+        highlightLabel: "Create channel",
+      },
+      {
+        instruction: "Create #announcements for instructor-only updates.",
+        detail:
+          "Name the channel and set visibility so only instructors and TAs can post — students can read but not clutter the feed with replies.",
+        scene: "create-channel",
+        highlight: "channel-name-input",
+        highlightLabel: "Channel name",
+      },
+      {
+        instruction: "Create #general-q-and-a for student questions.",
+        detail:
+          "A separate Q&A channel keeps student questions out of announcements. Everyone can post here when they need help from staff or classmates.",
+        scene: "channels-created",
+        highlight: "qa-channel",
+        highlightLabel: "#general-q-and-a",
+      },
+      {
+        instruction: "Post a welcome message that explains what each channel is for.",
+        detail:
+          "A short welcome in the composer sets expectations — which channel is for what — so students don't ask in the wrong place on day one.",
+        scene: "channel-composer",
+        highlight: "composer",
+        highlightLabel: "Welcome message",
+      },
+      {
+        instruction: "Repeat the channel guidance during the first week of class.",
+        detail:
+          "Point students to the channel list early and often. A quick reminder in class or in Canvas reduces duplicate questions across channels.",
+        scene: "channels-created",
+        highlight: "channels-section",
+        highlightLabel: "Channel list",
+      },
     ],
   },
   {
@@ -68,17 +192,62 @@ export const guideSections: GuideSection[] = [
     overview:
       "Use this guide as the index for the main EdStream workflows an instructor or TA will repeat during a course.",
     steps: [
-      "Create or open the channel that matches the task.",
-      "Share files in the relevant channel instead of sending them through email.",
-      "Use request workflows for extension, attendance, or regrade questions.",
-      "Open Channel Details to review shared photos, videos, and files.",
-      "Confirm students can find the result without leaving the course workspace.",
-    ],
-    clickTarget: "Click the relevant workflow area: channel details, file card, request queue, or community tab.",
-    checkResult: "The action panel should update without sending students away from the course workspace.",
-    highlights: [
-      { label: "Choose workflow", className: "left-[5%] top-[38%] h-20 w-28" },
-      { label: "Action panel", className: "left-[59%] top-[30%] h-28 w-32" },
+      {
+        instruction: "Create or open the channel that matches the task.",
+        detail:
+          "Pick the channel that fits the workflow — general discussion, lab updates, or staff-only planning — so files and requests stay in context.",
+        scene: "channel-general",
+        highlight: "channel-general",
+        highlightLabel: "Choose channel",
+      },
+      {
+        instruction: "Share files in the relevant channel instead of sending them through email.",
+        detail:
+          "File cards appear inline in the chat. Students can open handouts and PDFs right where the discussion happens, without digging through email.",
+        scene: "file-in-chat",
+        highlight: "file-card",
+        highlightLabel: "Shared file",
+      },
+      {
+        instruction: "Reply in a thread when a question needs a longer back-and-forth.",
+        detail:
+          "Use reply on any message to open a thread. Side conversations stay organized while the main channel feed stays easy to scan.",
+        scene: "message-reply",
+        highlight: "reply-btn",
+        highlightLabel: "Reply",
+      },
+      {
+        instruction: "Follow thread replies in the message panel on the right.",
+        detail:
+          "The thread panel shows every reply in order. Click “1 reply” under a message or use reply to jump into the same view.",
+        scene: "message-thread",
+        highlight: "thread-composer",
+        highlightLabel: "Thread replies",
+      },
+      {
+        instruction: "Use request workflows for extension, attendance, or regrade questions.",
+        detail:
+          "Structured requests replace scattered emails. Review pending items, approve or deny, and keep a clear record for both sides.",
+        scene: "request-queue",
+        highlight: "request-btn",
+        highlightLabel: "Request queue",
+      },
+      {
+        instruction: "Open Channel Details to review shared photos, videos, and files.",
+        detail:
+          "The info button opens the channel panel where shared media is collected automatically — useful after a busy lab or project week.",
+        scene: "channel-details",
+        highlight: "channel-details-info",
+        highlightLabel: "Channel details",
+      },
+      {
+        instruction: "Confirm students can find the result without leaving the course workspace.",
+        detail:
+          "The Files tab in Channel Details lists everything shared in that channel, so students can revisit materials without asking for a resend.",
+        scene: "channel-details-files",
+        highlight: "files-tab",
+        highlightLabel: "Files tab",
+      },
     ],
   },
   {
@@ -89,18 +258,46 @@ export const guideSections: GuideSection[] = [
     overview:
       "This guide is written for course teams working with an institution where EdStream has already been enabled.",
     steps: [
-      "Ask your institution or Canvas administrator to enable the EdStream Canvas tool.",
-      "Open the Canvas course where EdStream should appear.",
-      "Go to course settings and open Course Navigation.",
-      "Move EdStream into the visible navigation list.",
-      "Save changes and confirm instructor, TA, and student roles can open the tool.",
-      "Open the student view before announcing the tool to the class.",
-    ],
-    clickTarget: "Click Course Navigation in Canvas settings, then move EdStream into the visible course tools.",
-    checkResult: "Students should see EdStream in the Canvas course navigation and open into the correct course space.",
-    highlights: [
-      { label: "Course navigation", className: "left-[5%] top-[62%] h-14 w-28" },
-      { label: "Publish link", className: "left-[43%] top-[18%] h-16 w-40" },
+      {
+        instruction: "Ask your institution or Canvas administrator to enable the EdStream Canvas tool.",
+        detail:
+          "Before students can see EdStream, your institution must enable the LTI tool at the admin level. Once enabled, course teams can add it to individual courses.",
+        scene: "canvas-enable",
+        highlight: "canvas-edstream-link",
+        highlightLabel: "Enable EdStream",
+      },
+      {
+        instruction: "Open Course Navigation in the Canvas course settings.",
+        detail:
+          "Course Navigation controls which links appear in the left menu for students. This is where you decide whether EdStream is visible in the course.",
+        scene: "canvas-settings",
+        highlight: "canvas-navigation-menu",
+        highlightLabel: "Course Navigation",
+      },
+      {
+        instruction: "Move EdStream into the visible navigation list and save your changes.",
+        detail:
+          "Drag EdStream from the hidden list into the enabled list so it appears alongside Home, Assignments, and other course tools students already use.",
+        scene: "canvas-settings",
+        highlight: "canvas-edstream-link",
+        highlightLabel: "Move EdStream",
+      },
+      {
+        instruction: "Save changes and confirm instructor, TA, and student roles can open the tool.",
+        detail:
+          "Save the navigation settings, then open EdStream yourself to confirm it loads the correct course space for each role.",
+        scene: "canvas-settings",
+        highlight: "save-btn",
+        highlightLabel: "Save changes",
+      },
+      {
+        instruction: "Open the student view before announcing the tool to the class.",
+        detail:
+          "Switch to Student View in Canvas and confirm EdStream shows in the course menu — the same link students will click on day one.",
+        scene: "canvas-course-home",
+        highlight: "canvas-edstream-link",
+        highlightLabel: "Student view",
+      },
     ],
   },
   {
@@ -111,18 +308,70 @@ export const guideSections: GuideSection[] = [
     overview:
       "This student guide explains the first actions a student should take after opening EdStream from Canvas.",
     steps: [
-      "Open EdStream from the Canvas course navigation.",
-      "Select the channel that best matches your question.",
-      "Read pinned or recent instructor messages before posting.",
-      "Ask your question in the message composer.",
-      "Check shared files or media before asking classmates to resend materials.",
-      "Use requests only for workflows your course team has enabled.",
-    ],
-    clickTarget: "Click the course channel that best matches your question before typing a message.",
-    checkResult: "Your message should appear in the correct course channel, where classmates and course staff can respond.",
-    highlights: [
-      { label: "Pick a channel", className: "left-[5%] top-[25%] h-14 w-28" },
-      { label: "Write message", className: "left-[43%] top-[76%] h-14 w-44" },
+      {
+        instruction: "Open EdStream from the Canvas course navigation.",
+        detail:
+          "Find EdStream in your Canvas course menu and click it. You'll land in your class workspace with channels, messages, and shared files.",
+        scene: "canvas-course-home",
+        highlight: "canvas-edstream-link",
+        highlightLabel: "Open EdStream",
+      },
+      {
+        instruction: "Select the channel that best matches your question.",
+        detail:
+          "Channels separate topics — general questions, project help, or peer mentors. Pick the one that fits so staff and classmates see your message in the right place.",
+        scene: "channel-general",
+        highlight: "channels-section",
+        highlightLabel: "Pick a channel",
+      },
+      {
+        instruction: "Read pinned or recent instructor messages before posting.",
+        detail:
+          "Check recent posts first — your answer may already be there, or you'll see how others are asking questions in this channel.",
+        scene: "channel-general",
+        highlight: "welcome-message-area",
+        highlightLabel: "Recent messages",
+      },
+      {
+        instruction: "Ask your question in the message composer.",
+        detail:
+          "Type at the bottom of the channel to post your question. Classmates and course staff can reply in the same thread.",
+        scene: "channel-composer",
+        highlight: "composer",
+        highlightLabel: "Write message",
+      },
+      {
+        instruction: "Use reply to respond to a specific message without flooding the channel.",
+        detail:
+          "Hover a message and click reply — your answer goes into a thread linked to that post, so the main channel stays readable.",
+        scene: "message-reply",
+        highlight: "reply-btn",
+        highlightLabel: "Reply",
+      },
+      {
+        instruction: "Read and add replies in the thread panel on the right.",
+        detail:
+          "When a thread is open, the right panel shows the full conversation. You can read staff answers and post follow-ups there.",
+        scene: "message-thread",
+        highlight: "thread-composer",
+        highlightLabel: "Thread panel",
+      },
+      {
+        instruction: "Check shared files or media before asking classmates to resend materials.",
+        detail:
+          "Open Channel Details and browse the Files tab — handouts and slides shared in the channel are collected there for easy download.",
+        scene: "channel-details-files",
+        highlight: "file-card",
+        highlightLabel: "Shared files",
+      },
+      {
+        instruction: "Use requests only for workflows your course team has enabled.",
+        detail:
+          "If your course uses extension or regrade requests, submit through the request flow instead of emailing — staff can track and respond in one place.",
+        scene: "request-queue",
+        highlight: "request-btn",
+        highlightLabel: "Submit request",
+      },
     ],
   },
 ];
