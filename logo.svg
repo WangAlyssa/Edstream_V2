@@ -1,0 +1,13 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">EdStream logo</title>
+  <desc id="desc">A blue chat bubble with three people and orange motion accents.</desc>
+  <path d="M22 15L14 5M12 25L4 15" stroke="#FA4616" stroke-width="4" stroke-linecap="round"/>
+  <path d="M82 85L92 95M90 75L100 85" stroke="#FA4616" stroke-width="4" stroke-linecap="round"/>
+  <path d="M25 80C28 72 25 65 20 60C10 50 10 25 35 15C65 5 95 20 90 50C85 80 45 85 25 80Z" stroke="#0021A5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="40" r="7" stroke="#0021A5" stroke-width="4"/>
+  <path d="M36 60C36 50 44 47 50 47C56 47 64 50 64 60" stroke="#0021A5" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="30" cy="45" r="5" stroke="#0021A5" stroke-width="4"/>
+  <path d="M22 60C22 53 26 51 30 51C32 51 34 52 36 54" stroke="#0021A5" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="70" cy="45" r="5" stroke="#0021A5" stroke-width="4"/>
+  <path d="M64 54C66 52 68 51 70 51C74 51 78 53 78 60" stroke="#0021A5" stroke-width="4" stroke-linecap="round"/>
+</svg>
