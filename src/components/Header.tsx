@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Apple, Menu, Play, X } from "lucide-react";
+import { HeaderStoreLinks } from "@/components/StoreBadges";
+import { Menu, X } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,25 +58,7 @@ const Header = () => {
 
           {/* Login Button */}
           <div className="hidden md:flex items-center gap-3">
-            <div className="h-8 w-px bg-gray-200" />
-            <a
-              href="https://apps.apple.com/us/app/edstream/id6736952355"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Download EdStream on the App Store"
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-50 hover:text-blue-700"
-            >
-              <Apple className="h-5 w-5" />
-            </a>
-            <a
-              href="https://play.google.com/store/apps/details?id=com.edstreamchat.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Get EdStream on Google Play"
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-50 hover:text-blue-700"
-            >
-              <Play className="h-4 w-4 fill-current" />
-            </a>
+            <HeaderStoreLinks />
             <Button 
               asChild
               className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 transition-all duration-200 font-bold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform"
@@ -116,25 +99,8 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <a
-                  href="https://apps.apple.com/us/app/edstream/id6736952355"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 font-bold text-blue-700"
-                >
-                  <Apple className="h-4 w-4" />
-                  iOS
-                </a>
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.edstreamchat.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 font-bold text-blue-700"
-                >
-                  <Play className="h-4 w-4 fill-current" />
-                  Android
-                </a>
+              <div className="flex justify-center py-3">
+                <HeaderStoreLinks />
               </div>
               <div className="pt-2">
                 <Button 

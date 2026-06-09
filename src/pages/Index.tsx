@@ -77,72 +77,87 @@ const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" |
   );
 };
 
-const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
-  <div className="relative h-full overflow-hidden bg-white">
-    <div className="flex h-12 items-center bg-blue-700 px-4 text-white">
-      <div className="mr-4 h-5 w-5 rounded border border-white/70" />
-      <div className="mx-auto flex h-8 w-full max-w-xs items-center rounded-full bg-white/15 px-4 text-sm text-blue-100">
-        <Search className="mr-2 h-4 w-4" />
-        Search course
+const DesktopChatMockup = () => (
+  <div className="relative flex h-full flex-col overflow-hidden bg-[#eef0f4]">
+    <div className="flex h-[9%] min-h-[32px] flex-shrink-0 items-center bg-[#2d3a8c] px-3 text-white sm:px-4">
+      <div className="mr-2 h-3.5 w-3.5 flex-shrink-0 rounded border border-white/60 sm:mr-3 sm:h-4 sm:w-4" />
+      <div className="mx-auto flex h-6 w-full max-w-md items-center rounded-full bg-[#1e2868]/80 px-3 text-[10px] text-blue-100 sm:h-7 sm:text-xs">
+        <Search className="mr-1.5 h-3 w-3 flex-shrink-0 sm:mr-2 sm:h-3.5 sm:w-3.5" />
+        Search
       </div>
     </div>
-    <div className={`grid ${compact ? "h-[280px] grid-cols-[132px_1fr]" : "h-[330px] grid-cols-[150px_1fr]"}`}>
-      <aside className="bg-blue-800 p-4 text-white">
-        <div className="mb-3 flex items-center justify-between text-sm font-bold">
-          <span># Channels</span>
-          <Plus className="h-4 w-4" />
+    <div className="grid min-h-0 flex-1 grid-cols-[minmax(72px,18%)_1fr]">
+      <aside className="flex min-h-0 flex-col bg-[#2d3a8c] px-2 py-2.5 text-white sm:px-3 sm:py-3">
+        <div className="mb-1.5 flex items-center justify-between text-[10px] font-bold sm:text-xs">
+          <span className="truncate"># Channels</span>
+          <Plus className="h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5" />
         </div>
-        {["# General", "# Peer Mentors", "# Project Q&A"].map((channel, index) => (
-          <div key={channel} className={`mb-2 rounded-lg px-3 py-2 text-sm ${index === 0 ? "bg-white/15" : "text-blue-100"}`}>
+        {["# General", "# Peer Mentors", "# Project Lab"].map((channel, index) => (
+          <div
+            key={channel}
+            className={`mb-0.5 truncate rounded px-2 py-1 text-[10px] sm:mb-1 sm:px-2.5 sm:py-1.5 sm:text-xs ${
+              index === 0 ? "bg-white/15" : "text-blue-100"
+            }`}
+          >
             {channel}
           </div>
         ))}
-        <div className="mt-5 text-sm font-bold">Direct messages</div>
-        <div className="mt-2 flex items-center gap-2 rounded-lg bg-white/15 px-2 py-2 text-sm">
-          <FakeAvatar label="PI" color="orange" />
-          Prof. Rivera
+        <div className="mt-3 text-[10px] font-bold sm:text-xs">Direct messages</div>
+        <div className="mt-1 flex items-center gap-1.5 truncate rounded bg-white/10 px-2 py-1 text-[10px] sm:py-1.5 sm:text-xs">
+          <FakeAvatar label="JP" color="orange" />
+          <span className="truncate">Jamie Park</span>
         </div>
-        {!compact && (
-          <div className="absolute bottom-0 left-0 hidden w-[150px] grid-cols-3 gap-1 bg-blue-950 p-2 text-[10px] text-blue-100 lg:grid">
-            <span className="rounded bg-white/10 px-1 py-2 text-center">Courses</span>
-            <span className="rounded px-1 py-2 text-center">Communities</span>
-            <span className="rounded px-1 py-2 text-center">DMs</span>
+        <div className="mt-auto shrink-0 pt-2">
+          <div className="grid grid-cols-3 gap-1 rounded-md bg-[#1a2258] p-1">
+            <div className="rounded bg-white/15 py-1.5 text-center text-[8px] leading-none sm:text-[9px]">Courses</div>
+            <div className="rounded py-1.5 text-center text-[8px] leading-none text-blue-100/80 sm:text-[9px]">
+              Communities
+            </div>
+            <div className="rounded py-1.5 text-center text-[8px] leading-none text-blue-100/80 sm:text-[9px]">DMs</div>
           </div>
-        )}
+        </div>
       </aside>
-      <main className="p-5">
-        <div className="mb-5 flex items-center justify-between border-b pb-3">
+      <main className="flex min-h-0 flex-col bg-white p-3 sm:p-4">
+        <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-2 sm:mb-3">
           <div>
-            <h3 className="text-xl font-black text-blue-700"># General</h3>
-            <p className="text-xs font-bold text-gray-400">7 members</p>
+            <h3 className="text-sm font-black text-gray-800 sm:text-base"># General</h3>
+            <p className="text-[9px] text-gray-400 sm:text-[10px]">Intro to Biology · 24 members</p>
           </div>
-          <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-orange-600">Course chat</span>
+          <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[9px] font-bold text-blue-600 sm:text-[10px]">i</span>
         </div>
-        <div className="space-y-4">
-          <div className="flex gap-3">
-            <FakeAvatar label="PI" />
-            <div>
-              <div className="text-sm font-black text-gray-900">
-                Prof. Rivera <span className="ml-2 rounded bg-blue-50 px-2 py-0.5 text-xs text-blue-700">Instructor</span>
+        <div className="min-h-0 flex-1 space-y-2.5 overflow-hidden sm:space-y-3">
+          <div className="flex gap-2 sm:gap-2.5">
+            <FakeAvatar label="DM" />
+            <div className="min-w-0">
+              <div className="text-[10px] font-black text-gray-900 sm:text-xs">
+                Dr. Morgan
+                <span className="ml-1 rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-bold text-blue-700 sm:text-[10px]">
+                  Instructor
+                </span>
               </div>
-              <p className="mt-1 text-sm text-gray-600">Hi @everyone, welcome to our class!</p>
-              <div className="mt-2 flex gap-2 text-xs">
-                <span className="rounded-full bg-orange-50 px-2 py-1">👍 16</span>
-                <span className="rounded-full bg-blue-50 px-2 py-1">💬 7</span>
+              <p className="mt-0.5 text-[10px] leading-relaxed text-gray-600 sm:text-xs">
+                Hi @everyone, welcome to our class! Post questions here.
+              </p>
+              <div className="mt-1 flex gap-1.5 text-[9px] sm:text-[10px]">
+                <span className="rounded-full bg-orange-50 px-2 py-0.5">👍 12</span>
+                <span className="rounded-full bg-blue-50 px-2 py-0.5">💬 4</span>
               </div>
             </div>
           </div>
-          <div className="flex gap-3">
-            <FakeAvatar label="ST" color="gray" />
-            <div>
-              <div className="text-sm font-black text-gray-900">Student Team</div>
-              <p className="mt-1 text-sm text-gray-600">Can someone explain the project checkpoint?</p>
+          <div className="flex gap-2 sm:gap-2.5">
+            <FakeAvatar label="AK" color="gray" />
+            <div className="min-w-0">
+              <div className="text-[10px] font-black text-gray-900 sm:text-xs">Alex Kim</div>
+              <p className="mt-0.5 text-[10px] leading-relaxed text-gray-600 sm:text-xs">
+                Can someone explain the project checkpoint?
+              </p>
             </div>
           </div>
-          <div className="mt-8 flex items-center rounded-xl border bg-gray-50 px-4 py-3 text-sm text-gray-400">
-            Type your message here...
-            <Send className="ml-auto h-4 w-4 text-blue-600" />
-          </div>
+        </div>
+        <div className="mt-2 flex shrink-0 items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-2 text-[10px] text-gray-400 sm:px-3 sm:py-2.5 sm:text-xs">
+          <Plus className="h-3.5 w-3.5 flex-shrink-0 text-blue-600 sm:h-4 sm:w-4" />
+          <span className="flex-1">Type your message here...</span>
+          <Send className="h-3.5 w-3.5 flex-shrink-0 text-blue-600 sm:h-4 sm:w-4" />
         </div>
       </main>
     </div>
@@ -150,15 +165,15 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
 );
 
 const PhoneMockup = () => (
-  <div className="w-[232px] rounded-[2.25rem] border-[9px] border-gray-950 bg-white p-4 shadow-2xl">
+  <div className="w-full rounded-[2rem] border-[7px] border-gray-950 bg-white p-3 shadow-2xl sm:rounded-[2.25rem] sm:border-[8px] sm:p-3.5">
     <div className="mx-auto mb-4 h-4 w-16 rounded-b-xl bg-black" />
     <div className="mb-5 flex items-center justify-between">
       <span className="text-lg font-black text-blue-700">EdStream</span>
       <span className="text-gray-400">≡</span>
     </div>
     {[
-      ["PI", "Professor", "Reminder: lab notes are posted in # General."],
-      ["ST", "Student", "Where can I find the review PDF?"],
+      ["DM", "Dr. Morgan", "Reminder: lab notes are posted in # General."],
+      ["AK", "Alex Kim", "Where can I find the review PDF?"],
     ].map(([initials, name, text]) => (
       <div key={name} className="mb-3 rounded-xl border p-3 shadow-sm">
         <div className="mb-2 flex items-center gap-2">
@@ -173,18 +188,18 @@ const PhoneMockup = () => (
 );
 
 const HeroMockup = () => (
-  <div className="relative mx-auto h-[560px] w-full max-w-[700px]">
-    <div className="absolute left-0 top-10 w-[620px] max-w-[88%]">
-      <div className="rounded-[1.8rem] bg-gray-950 p-3 shadow-2xl">
-        <div className="overflow-hidden rounded-xl bg-white">
+  <div className="relative w-full lg:pl-2">
+    <div className="w-full">
+      <div className="rounded-xl bg-gray-950 p-2 shadow-2xl sm:rounded-2xl sm:p-2.5">
+        <div className="aspect-[16/10] overflow-hidden rounded-md bg-white sm:rounded-lg">
           <DesktopChatMockup />
         </div>
-        <div className="mx-auto mt-3 h-3 w-3 rounded-full bg-blue-900" />
+        <div className="mx-auto mt-2 h-2 w-2 rounded-full bg-gray-800 sm:mt-2.5 sm:h-2.5 sm:w-2.5" />
       </div>
-      <div className="mx-auto h-16 w-40 bg-gray-950" />
-      <div className="mx-auto h-4 w-72 rounded-md bg-gray-950" />
+      <div className="mx-auto h-10 w-28 bg-gray-950 sm:h-12 sm:w-32" />
+      <div className="mx-auto h-2.5 w-48 rounded-sm bg-gray-950 sm:h-3 sm:w-56" />
     </div>
-    <div className="absolute bottom-4 right-0 hidden sm:block">
+    <div className="absolute -bottom-4 right-0 hidden w-[28%] max-w-[200px] sm:block lg:-right-6 lg:max-w-[220px]">
       <PhoneMockup />
     </div>
   </div>
@@ -270,7 +285,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
               </div>
             ))}
             <div className="mt-8 text-xs font-bold">Direct messages</div>
-            <div className="mt-2 rounded bg-white/15 px-2 py-2 text-xs">Prof. Rivera</div>
+            <div className="mt-2 rounded bg-white/15 px-2 py-2 text-xs">Dr. Morgan</div>
             {id === "community" && (
               <div className="absolute bottom-0 left-0 grid w-[135px] grid-cols-3 bg-blue-950 p-1 text-[9px] text-blue-100">
                 <span className="rounded px-1 py-2 text-center">Courses</span>
@@ -302,31 +317,55 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
               </div>
             )}
             {id === "files" && (
-              <div className="space-y-4">
+              <div className="relative space-y-4">
                 <div className="rounded-xl border bg-gray-50 p-4 text-sm text-gray-500">Share a course handout in # General</div>
-                <div
-                  data-demo-target={id === "files" && step > 0 ? String(step) : undefined}
-                  className={`relative rounded-2xl border bg-white p-5 shadow-lg transition-all duration-700 ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}
-                >
-                  <FileText className="mb-3 h-8 w-8 text-orange-500" />
-                  <h4 className="font-black text-blue-700">Research-paper.pdf</h4>
-                  {step < 2 ? (
-                    <div className="mt-3 space-y-2">
-                      {[1, 2, 3].map((line) => <div key={line} className="h-2 rounded bg-blue-100" />)}
-                    </div>
-                  ) : (
-                    <div className="mt-3 rounded-lg border bg-blue-50/60 p-3">
-                      <div className="mb-2 h-3 w-28 rounded bg-blue-300" />
-                      <div className="space-y-1.5">
-                        {[1, 2, 3, 4].map((line) => <div key={line} className="h-1.5 rounded bg-white" />)}
-                      </div>
-                      <div className="mt-3 grid grid-cols-2 gap-2">
-                        <div className="h-10 rounded bg-white" />
-                        <div className="h-10 rounded bg-white" />
+                <div className="flex gap-3">
+                  <FakeAvatar label="PI" />
+                  <div>
+                    <div className="text-xs font-black text-gray-900">Dr. Morgan</div>
+                    <p className="mt-1 text-xs text-gray-500">Here is the course welcome packet for everyone.</p>
+                    <div
+                      data-demo-target="1"
+                      className={`relative mt-2 flex items-center gap-3 rounded-xl border bg-white p-3 shadow-md transition-all duration-500 ${step > 0 ? "ring-2 ring-orange-200" : ""}`}
+                    >
+                      <FileText className="h-7 w-7 flex-shrink-0 text-orange-500" />
+                      <div>
+                        <h4 className="text-sm font-black text-blue-700">Welcome-to-EdStream.pdf</h4>
+                        <p className="text-[10px] text-gray-400">248 KB · PDF</p>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
+                {step >= 2 && (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-blue-950/25 backdrop-blur-[1px]">
+                    <div
+                      data-demo-target="2"
+                      className="mx-3 w-full max-w-[240px] rounded-2xl bg-white shadow-2xl ring-1 ring-blue-100"
+                    >
+                      <div className="flex items-center justify-between border-b px-4 py-2.5">
+                        <div className="flex items-center gap-2">
+                          <FileText className="h-4 w-4 text-orange-500" />
+                          <span className="text-xs font-black text-blue-700">Welcome-to-EdStream.pdf</span>
+                        </div>
+                        <span className="text-xs text-gray-400">✕</span>
+                      </div>
+                      <div className="space-y-2.5 p-4 text-xs leading-5 text-gray-600">
+                        <h5 className="text-sm font-black text-blue-700">Welcome to EdStream</h5>
+                        <p>
+                          EdStream is your Canvas-aware course communication workspace — channels, files, and student
+                          requests in one place.
+                        </p>
+                        <p>
+                          Start with <span className="font-bold text-blue-700"># General</span> for announcements, share
+                          handouts inline, and keep materials attached to the conversation.
+                        </p>
+                        <div className="rounded-lg bg-blue-50 px-3 py-2 font-bold text-blue-700">
+                          Tip: Click any file card to preview without leaving the channel.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div data-demo-target="0" className="relative flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">
                   Type message <Plus className="ml-auto h-4 w-4 text-blue-600" />
                 </div>
@@ -408,7 +447,7 @@ const Index = () => {
       <Header />
 
       <section className="overflow-hidden bg-gradient-to-br from-blue-50 via-white to-orange-50 py-20 lg:py-28">
-        <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-10 lg:px-8">
           <div>
             <div className="mb-7 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-bold text-blue-700">
               <MessageSquare className="mr-2 h-4 w-4" />
