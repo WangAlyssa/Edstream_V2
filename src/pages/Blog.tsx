@@ -1,176 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, ClipboardCheck, GraduationCap, Plus, Settings, Users } from "lucide-react";
-
-type Role = "instructor" | "student";
-
-type Highlight = {
-  label: string;
-  className: string;
-};
-
-const guideSections: Array<{
-  id: string;
-  role: Role;
-  title: string;
-  description: string;
-  steps: string[];
-  clickTarget: string;
-  checkResult: string;
-  highlights: Highlight[];
-}> = [
-  {
-    id: "basic-primer",
-    role: "instructor",
-    title: "Basic Primer",
-    description: "A quick overview of the main instructor workspace before inviting students.",
-    steps: [
-      "Open EdStream from the Canvas course navigation.",
-      "Review the left sidebar: channels, direct messages, and course tools.",
-      "Use the main message area for announcements, class Q&A, and shared files.",
-      "Tell students which channel to use for general questions versus project work.",
-    ],
-    clickTarget: "Click # General in the channel list to show the main course conversation.",
-    checkResult: "You should see the course header, member count, recent messages, and message composer.",
-    highlights: [
-      { label: "Course channels", className: "left-[5%] top-[17%] h-20 w-28" },
-      { label: "Class conversation", className: "left-[43%] top-[26%] h-24 w-44" },
-    ],
-  },
-  {
-    id: "how-to-start",
-    role: "instructor",
-    title: "How to Start",
-    description: "Start with the smallest useful setup: one announcement space and one Q&A space.",
-    steps: [
-      "Click the plus button beside Channels.",
-      "Create #announcements and #general-q-and-a.",
-      "Post one welcome message that tells students where to ask for help.",
-      "Pin or repeat the channel guidance during the first week of class.",
-    ],
-    clickTarget: "Click the + button next to Channels, then enter the channel name and posting permissions.",
-    checkResult: "The new channel should appear in the sidebar and be visible to the intended course roles.",
-    highlights: [
-      { label: "Create channel", className: "left-[27%] top-[13%] h-10 w-10" },
-      { label: "Welcome message", className: "left-[43%] top-[74%] h-14 w-44" },
-    ],
-  },
-  {
-    id: "functions",
-    role: "instructor",
-    title: "Functions: Step-by-step Guides",
-    description: "Use these workflows for channels, files, requests, and media organization.",
-    steps: [
-      "Pick the workflow in the sidebar or channel details.",
-      "Follow the highlighted action area.",
-      "Confirm the result appears in the main course workspace.",
-      "Use one workflow at a time before adding more channels or request types.",
-    ],
-    clickTarget: "Click the relevant workflow area: channel details, file card, request queue, or community tab.",
-    checkResult: "The action panel should update without sending students away from the course workspace.",
-    highlights: [
-      { label: "Choose workflow", className: "left-[5%] top-[38%] h-20 w-28" },
-      { label: "Action panel", className: "left-[59%] top-[30%] h-28 w-32" },
-    ],
-  },
-  {
-    id: "add-course",
-    role: "instructor",
-    title: "How to Add EdStream to Your Course",
-    description: "A simple Canvas setup checklist for course teams.",
-    steps: [
-      "Ask your institution to enable the EdStream Canvas tool.",
-      "Open Canvas course settings and course navigation.",
-      "Publish the EdStream link after confirming instructor, TA, and student roles.",
-      "Open the student view to confirm the link is visible before announcing it.",
-    ],
-    clickTarget: "Click Course Navigation in Canvas settings, then move EdStream into the visible course tools.",
-    checkResult: "Students should see EdStream in the Canvas course navigation and open into the correct course space.",
-    highlights: [
-      { label: "Course navigation", className: "left-[5%] top-[62%] h-14 w-28" },
-      { label: "Publish link", className: "left-[43%] top-[18%] h-16 w-40" },
-    ],
-  },
-  {
-    id: "student-start",
-    role: "student",
-    title: "Student Quick Start",
-    description: "A short walkthrough for students opening EdStream for the first time.",
-    steps: [
-      "Open EdStream from Canvas.",
-      "Select the correct course channel.",
-      "Ask questions in the message composer and check shared files before asking for a resend.",
-      "Use requests only for workflows your course team has enabled.",
-    ],
-    clickTarget: "Click the course channel that best matches your question before typing a message.",
-    checkResult: "Your message should appear in the correct course channel, where classmates and course staff can respond.",
-    highlights: [
-      { label: "Pick a channel", className: "left-[5%] top-[25%] h-14 w-28" },
-      { label: "Write message", className: "left-[43%] top-[76%] h-14 w-44" },
-    ],
-  },
-];
-
-const FakeAppScreenshot = ({ highlights }: { highlights: Highlight[] }) => (
-  <div className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-xl">
-    <div className="flex h-11 items-center bg-blue-700 px-4 text-white">
-      <div className="mr-4 h-5 w-5 rounded border border-white/70" />
-      <div className="mx-auto h-7 w-full max-w-xs rounded-full bg-white/15 px-4 pt-1 text-xs text-blue-100">
-        Search course
-      </div>
-    </div>
-    <div className="grid h-[315px] grid-cols-[150px_1fr]">
-      <aside className="relative bg-blue-800 p-4 text-white">
-        <div className="mb-4 flex items-center justify-between text-xs font-bold">
-          <span># Channels</span>
-          <Plus className="h-4 w-4" />
-        </div>
-        {["# General", "# Peer Mentors", "# Project Q&A"].map((item, index) => (
-          <div key={item} className={`mb-2 rounded px-3 py-2 text-xs ${index === 0 ? "bg-white/15" : "text-blue-100"}`}>
-            {item}
-          </div>
-        ))}
-        <div className="mt-6 text-xs font-bold">Direct messages</div>
-        <div className="mt-2 rounded bg-white/15 px-3 py-2 text-xs">Prof. Rivera</div>
-        <div className="absolute bottom-0 left-0 grid w-[150px] grid-cols-3 gap-1 bg-blue-950 p-2 text-[9px] text-blue-100">
-          <span className="rounded bg-white/10 px-1 py-2 text-center">Courses</span>
-          <span className="rounded px-1 py-2 text-center">Communities</span>
-          <span className="rounded px-1 py-2 text-center">DMs</span>
-        </div>
-      </aside>
-      <main className="p-5">
-        <div className="mb-5 border-b pb-3">
-          <h3 className="text-xl font-black text-blue-700"># General</h3>
-          <p className="text-xs text-gray-400">Demo Course • 7 members</p>
-        </div>
-        <div className="space-y-4">
-          <div className="rounded-xl bg-blue-50 p-4 text-sm text-gray-700">
-            <b>Prof. Rivera:</b> Welcome! Use this channel for general course questions.
-          </div>
-          <div className="rounded-xl bg-orange-50 p-4 text-sm text-gray-700">
-            <b>Student Lee:</b> Where should I submit an extension request?
-          </div>
-          <div className="mt-8 rounded-xl border bg-gray-50 px-4 py-3 text-sm text-gray-400">
-            Type your message here...
-          </div>
-        </div>
-      </main>
-    </div>
-    {highlights.map((highlight) => (
-      <div key={highlight.label} className={`demo-highlight-pulse absolute rounded-full border-4 border-orange-500 bg-orange-400/10 ${highlight.className}`}>
-        <span className="absolute left-1/2 top-full mt-2 w-40 -translate-x-1/2 rounded-lg bg-orange-500 px-3 py-2 text-center text-xs font-bold text-white shadow-lg">
-          {highlight.label}
-        </span>
-      </div>
-    ))}
-  </div>
-);
+import { guideSections, type GuideRole } from "@/content/guides";
+import { ArrowRight, BookOpen, GraduationCap, Users } from "lucide-react";
 
 const Blog = () => {
-  const [activeRole, setActiveRole] = useState<Role>("instructor");
+  const [activeRole, setActiveRole] = useState<GuideRole>("instructor");
 
   useEffect(() => {
     document.title = "Guides - EdStream";
@@ -193,7 +30,8 @@ const Blog = () => {
           </div>
           <h1 className="text-4xl font-black lg:text-5xl">Step-by-step visual guides</h1>
           <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-blue-100">
-            Screenshot-style tutorials with fake names and fake course data. Orange circles show exactly where to click.
+            Choose a tutorial below. Each guide opens as its own page with screenshots, steps, click targets, and
+            expected results.
           </p>
 
           <div className="mx-auto mt-7 grid max-w-md grid-cols-2 rounded-2xl bg-white/10 p-2 shadow-lg backdrop-blur">
@@ -218,59 +56,36 @@ const Blog = () => {
               );
             })}
           </div>
-
-          <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-3">
-            {visibleGuides.map((guide) => (
-              <a
-                key={guide.id}
-                href={`#${guide.id}`}
-                className="rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-blue-700"
-              >
-                {guide.title}
-              </a>
-            ))}
-          </div>
         </div>
       </section>
 
       <section className="bg-gray-50 py-20">
-        <div className="mx-auto max-w-7xl space-y-12 px-4 sm:px-6 lg:px-8">
-          {visibleGuides.map((guide, index) => (
-            <Card key={guide.id} id={guide.id} className="scroll-mt-28 border-0 shadow-xl transition-all duration-500">
-              <CardContent className="p-6 lg:p-8">
-                <div className="grid gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:items-center">
-                  <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                    <h2 className="mb-4 text-3xl font-black text-blue-700">{guide.title}</h2>
-                    <p className="mb-6 text-lg leading-8 text-gray-600">{guide.description}</p>
-                    <ol className="space-y-3">
-                      {guide.steps.map((step, stepIndex) => (
-                        <li key={step} className="flex gap-3 text-gray-700">
-                          <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-sm font-black text-white">
-                            {stepIndex + 1}
-                          </span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
-                    </ol>
-                    <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4">
-                        <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-blue-700">Click target</h3>
-                        <p className="text-sm leading-6 text-gray-700">{guide.clickTarget}</p>
-                      </div>
-                      <div className="rounded-2xl border border-orange-100 bg-orange-50/60 p-4">
-                        <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-orange-600">Check result</h3>
-                        <p className="text-sm leading-6 text-gray-700">{guide.checkResult}</p>
-                      </div>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-2">
+            {visibleGuides.map((guide, index) => (
+              <Link
+                key={guide.id}
+                to={`/guides/${guide.id}`}
+                className="group block"
+              >
+                <Card className="h-full border-0 shadow-lg transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl">
+                  <CardContent className="p-8">
+                    <div className="mb-5 flex items-center justify-between">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white">
+                        {index + 1}
+                      </span>
+                      <ArrowRight className="h-5 w-5 text-blue-700 transition-transform duration-300 group-hover:translate-x-1" />
                     </div>
-                    <Button className="mt-8 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700" asChild>
-                      <a href={`#${guide.id}`}>Open {guide.title} link</a>
-                    </Button>
-                  </div>
-                  <FakeAppScreenshot highlights={guide.highlights} />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                    <h2 className="mb-3 text-2xl font-black text-blue-700">{guide.title}</h2>
+                    <p className="mb-5 leading-7 text-gray-600">{guide.description}</p>
+                    <div className="rounded-2xl bg-blue-50 p-4 text-sm font-bold text-blue-700">
+                      Open full tutorial page
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

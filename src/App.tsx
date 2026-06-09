@@ -9,6 +9,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
+import GuideTutorial from "./pages/GuideTutorial";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -27,6 +28,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/guides" element={<Blog />} />
+            <Route path="/guides/:guideId" element={<GuideTutorial />} />
             <Route path="/help" element={<FAQ />} />
             <Route path="/features" element={<Navigate to="/" replace />} />
             <Route path="/about" element={<Navigate to="/" replace />} />
