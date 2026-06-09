@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -78,7 +78,7 @@ const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" |
 };
 
 const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
-  <div className="overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-2xl">
+  <div className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-2xl">
     <div className="flex h-12 items-center bg-blue-700 px-4 text-white">
       <div className="mr-4 h-5 w-5 rounded border border-white/70" />
       <div className="mx-auto flex h-8 w-full max-w-xs items-center rounded-full bg-white/15 px-4 text-sm text-blue-100">
@@ -150,10 +150,10 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
 );
 
 const PhoneMockup = () => (
-  <div className="w-[190px] rounded-[2rem] border-[8px] border-gray-950 bg-white p-4 shadow-2xl">
+  <div className="w-[150px] rounded-[1.7rem] border-[7px] border-gray-950 bg-white p-3 shadow-2xl">
     <div className="mx-auto mb-4 h-4 w-16 rounded-b-xl bg-black" />
     <div className="mb-5 flex items-center justify-between">
-      <span className="text-lg font-black text-blue-700">EdStream</span>
+      <span className="text-base font-black text-blue-700">EdStream</span>
       <span className="text-gray-400">≡</span>
     </div>
     {[
@@ -173,16 +173,21 @@ const PhoneMockup = () => (
 );
 
 const HeroMockup = () => (
-  <div className="relative mx-auto max-w-[650px] pb-10 pt-4">
-    <DesktopChatMockup />
-    <div className="absolute -bottom-2 right-2 hidden sm:block">
+  <div className="relative mx-auto max-w-[680px] pb-16 pr-10 pt-4">
+    <div className="origin-center scale-[0.98]">
+      <DesktopChatMockup />
+    </div>
+    <div className="absolute bottom-0 right-0 hidden sm:block">
       <PhoneMockup />
     </div>
   </div>
 );
 
-const Cursor = ({ className }: { className: string }) => (
-  <MousePointer2 className={`absolute z-20 h-8 w-8 fill-white text-blue-950 drop-shadow-lg transition-all duration-700 ${className}`} />
+const Cursor = ({ style }: { style: CSSProperties }) => (
+  <MousePointer2
+    className="demo-cursor-float absolute z-30 h-5 w-5 fill-white text-blue-950 transition-all duration-700 ease-in-out"
+    style={style}
+  />
 );
 
 const FeatureDemo = ({ id }: { id: FeatureId }) => {
@@ -193,12 +198,38 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
     return () => window.clearInterval(timer);
   }, []);
 
-  const cursorPosition: Record<FeatureId, string[]> = {
-    channels: ["left-[25%] top-[18%]", "left-[44%] top-[56%]", "left-[61%] top-[78%]"],
-    files: ["left-[72%] top-[78%]", "left-[50%] top-[48%]", "left-[72%] top-[40%]"],
-    media: ["left-[86%] top-[18%]", "left-[50%] top-[33%]", "left-[70%] top-[33%]"],
-    requests: ["left-[22%] top-[70%]", "left-[58%] top-[60%]", "left-[71%] top-[74%]"],
-    community: ["left-[42%] top-[86%]", "left-[53%] top-[36%]", "left-[75%] top-[36%]"],
+  const targets: Record<FeatureId, Array<{ left: string; top: string; width: string; height: string }>> = {
+    channels: [
+      { left: "22%", top: "15%", width: "32px", height: "32px" },
+      { left: "45%", top: "45%", width: "210px", height: "48px" },
+      { left: "54%", top: "67%", width: "190px", height: "46px" },
+    ],
+    files: [
+      { left: "76%", top: "74%", width: "34px", height: "34px" },
+      { left: "42%", top: "34%", width: "220px", height: "120px" },
+      { left: "44%", top: "72%", width: "240px", height: "38px" },
+    ],
+    media: [
+      { left: "82%", top: "18%", width: "34px", height: "30px" },
+      { left: "43%", top: "30%", width: "70px", height: "32px" },
+      { left: "62%", top: "30%", width: "60px", height: "32px" },
+    ],
+    requests: [
+      { left: "42%", top: "27%", width: "150px", height: "30px" },
+      { left: "58%", top: "61%", width: "85px", height: "40px" },
+      { left: "58%", top: "61%", width: "85px", height: "40px" },
+    ],
+    community: [
+      { left: "25%", top: "84%", width: "50px", height: "34px" },
+      { left: "42%", top: "31%", width: "130px", height: "78px" },
+      { left: "60%", top: "31%", width: "130px", height: "78px" },
+    ],
+  };
+
+  const activeTarget = targets[id][step];
+  const cursorStyle = {
+    left: `calc(${activeTarget.left} + ${activeTarget.width} - 2px)`,
+    top: `calc(${activeTarget.top} + ${activeTarget.height} - 2px)`,
   };
 
   return (
@@ -294,7 +325,11 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           </main>
         </div>
       </div>
-      <Cursor className={cursorPosition[id][step]} />
+      <div
+        className="demo-highlight-pulse pointer-events-none absolute z-20 rounded-xl border-2 border-orange-500 bg-orange-500/10 transition-all duration-700 ease-in-out"
+        style={activeTarget}
+      />
+      <Cursor style={cursorStyle} />
     </div>
   );
 };
@@ -331,9 +366,6 @@ const Index = () => {
                 <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
                   Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
-              </Button>
-              <Button asChild variant="outline" className="rounded-xl border-blue-200 px-8 py-6 font-bold text-blue-700 hover:bg-blue-50">
-                <Link to="/help">Visit Help Center</Link>
               </Button>
             </div>
           </div>

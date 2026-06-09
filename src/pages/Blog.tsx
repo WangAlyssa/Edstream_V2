@@ -1,73 +1,100 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, BookOpen, ClipboardCheck, GraduationCap, MessageSquare, Plus, Settings, Users } from "lucide-react";
+import { BookOpen, ClipboardCheck, GraduationCap, Plus, Settings, Users } from "lucide-react";
+
+type Role = "instructor" | "student";
 
 type Highlight = {
   label: string;
   className: string;
 };
 
-const guideSections = [
+const guideSections: Array<{
+  id: string;
+  role: Role;
+  title: string;
+  description: string;
+  steps: string[];
+  highlights: Highlight[];
+}> = [
   {
     id: "basic-primer",
-    group: "For Instructors",
+    role: "instructor",
     title: "Basic Primer",
-    description: "Understand the core areas before inviting students.",
+    description: "A quick overview of the main instructor workspace before inviting students.",
+    steps: [
+      "Open EdStream from the Canvas course navigation.",
+      "Review the left sidebar: channels, direct messages, and course tools.",
+      "Use the main message area for announcements, class Q&A, and shared files.",
+    ],
     highlights: [
-      { label: "Course channels live here", className: "left-[5%] top-[18%] h-20 w-28" },
-      { label: "Messages and files appear here", className: "left-[43%] top-[26%] h-24 w-44" },
+      { label: "Course channels", className: "left-[5%] top-[17%] h-20 w-28" },
+      { label: "Class conversation", className: "left-[43%] top-[26%] h-24 w-44" },
     ],
   },
   {
     id: "how-to-start",
-    group: "For Instructors",
+    role: "instructor",
     title: "How to Start",
-    description: "Start with an announcement channel and one Q&A channel.",
+    description: "Start with the smallest useful setup: one announcement space and one Q&A space.",
+    steps: [
+      "Click the plus button beside Channels.",
+      "Create #announcements and #general-q-and-a.",
+      "Post one welcome message that tells students where to ask for help.",
+    ],
     highlights: [
-      { label: "Click + to create a channel", className: "left-[27%] top-[14%] h-10 w-10" },
-      { label: "Post a welcome message", className: "left-[48%] top-[75%] h-14 w-44" },
+      { label: "Create channel", className: "left-[27%] top-[13%] h-10 w-10" },
+      { label: "Welcome message", className: "left-[43%] top-[74%] h-14 w-44" },
     ],
   },
   {
     id: "functions",
-    group: "For Instructors",
+    role: "instructor",
     title: "Functions: Step-by-step Guides",
-    description: "Walk through channels, files, requests, and media organization.",
+    description: "Use these workflows for channels, files, requests, and media organization.",
+    steps: [
+      "Pick the workflow in the sidebar or channel details.",
+      "Follow the highlighted action area.",
+      "Confirm the result appears in the main course workspace.",
+    ],
     highlights: [
-      { label: "Choose a workflow", className: "left-[6%] top-[40%] h-20 w-28" },
-      { label: "Review the action panel", className: "left-[58%] top-[30%] h-28 w-32" },
+      { label: "Choose workflow", className: "left-[5%] top-[38%] h-20 w-28" },
+      { label: "Action panel", className: "left-[59%] top-[30%] h-28 w-32" },
     ],
   },
   {
     id: "add-course",
-    group: "For Instructors",
+    role: "instructor",
     title: "How to Add EdStream to Your Course",
     description: "A simple Canvas setup checklist for course teams.",
+    steps: [
+      "Ask your institution to enable the EdStream Canvas tool.",
+      "Open Canvas course settings and course navigation.",
+      "Publish the EdStream link after confirming instructor, TA, and student roles.",
+    ],
     highlights: [
-      { label: "Open course navigation", className: "left-[5%] top-[62%] h-14 w-28" },
-      { label: "Publish EdStream link", className: "left-[43%] top-[18%] h-16 w-40" },
+      { label: "Course navigation", className: "left-[5%] top-[62%] h-14 w-28" },
+      { label: "Publish link", className: "left-[43%] top-[18%] h-16 w-40" },
     ],
   },
   {
     id: "student-start",
-    group: "For Students",
+    role: "student",
     title: "Student Quick Start",
-    description: "Show students where to ask, find files, and submit requests.",
+    description: "A short walkthrough for students opening EdStream for the first time.",
+    steps: [
+      "Open EdStream from Canvas.",
+      "Select the correct course channel.",
+      "Ask questions in the message composer and check shared files before asking for a resend.",
+    ],
     highlights: [
-      { label: "Select the right channel", className: "left-[5%] top-[25%] h-14 w-28" },
-      { label: "Use the message composer", className: "left-[43%] top-[76%] h-14 w-44" },
+      { label: "Pick a channel", className: "left-[5%] top-[25%] h-14 w-28" },
+      { label: "Write message", className: "left-[43%] top-[76%] h-14 w-44" },
     ],
   },
-];
-
-const steps = [
-  "Open EdStream from the Canvas course navigation.",
-  "Pick the channel or workflow for the task.",
-  "Follow the highlighted action in the screenshot.",
-  "Confirm students can find the same place later.",
 ];
 
 const FakeAppScreenshot = ({ highlights }: { highlights: Highlight[] }) => (
@@ -79,7 +106,7 @@ const FakeAppScreenshot = ({ highlights }: { highlights: Highlight[] }) => (
       </div>
     </div>
     <div className="grid h-[315px] grid-cols-[150px_1fr]">
-      <aside className="bg-blue-800 p-4 text-white">
+      <aside className="relative bg-blue-800 p-4 text-white">
         <div className="mb-4 flex items-center justify-between text-xs font-bold">
           <span># Channels</span>
           <Plus className="h-4 w-4" />
@@ -116,7 +143,7 @@ const FakeAppScreenshot = ({ highlights }: { highlights: Highlight[] }) => (
       </main>
     </div>
     {highlights.map((highlight) => (
-      <div key={highlight.label} className={`absolute rounded-full border-4 border-orange-500 bg-orange-400/10 shadow-[0_0_0_6px_rgba(250,70,22,0.15)] ${highlight.className}`}>
+      <div key={highlight.label} className={`demo-highlight-pulse absolute rounded-full border-4 border-orange-500 bg-orange-400/10 ${highlight.className}`}>
         <span className="absolute left-1/2 top-full mt-2 w-40 -translate-x-1/2 rounded-lg bg-orange-500 px-3 py-2 text-center text-xs font-bold text-white shadow-lg">
           {highlight.label}
         </span>
@@ -126,9 +153,16 @@ const FakeAppScreenshot = ({ highlights }: { highlights: Highlight[] }) => (
 );
 
 const Blog = () => {
+  const [activeRole, setActiveRole] = useState<Role>("instructor");
+
   useEffect(() => {
     document.title = "Guides - EdStream";
   }, []);
+
+  const visibleGuides = useMemo(
+    () => guideSections.filter((guide) => guide.role === activeRole),
+    [activeRole],
+  );
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -142,45 +176,48 @@ const Blog = () => {
           </div>
           <h1 className="text-5xl font-black text-blue-700 lg:text-6xl">Step-by-step visual guides</h1>
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-gray-600">
-            These are screenshot-style tutorials using fake names and fake course data. Orange circles show exactly
-            where an instructor or student should click.
+            Screenshot-style tutorials with fake names and fake course data. Orange circles show exactly where to click.
           </p>
-        </div>
-      </section>
 
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {guideSections.map((guide) => (
-              <a key={guide.id} href={`#${guide.id}`} className="group rounded-2xl border border-blue-100 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
-                <span className="mb-4 inline-flex rounded-full bg-orange-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-orange-600">
-                  {guide.group}
-                </span>
-                <h2 className="mb-3 text-2xl font-black text-blue-700">{guide.title}</h2>
-                <p className="mb-5 leading-7 text-gray-600">{guide.description}</p>
-                <span className="inline-flex items-center font-black text-blue-700">
-                  Open tutorial <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
-                </span>
-              </a>
-            ))}
+          <div className="mx-auto mt-10 grid max-w-md grid-cols-2 rounded-2xl bg-white p-2 shadow-lg">
+            {[
+              { value: "instructor" as const, label: "For Instructor", icon: GraduationCap },
+              { value: "student" as const, label: "For Student", icon: Users },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const active = activeRole === tab.value;
+              return (
+                <button
+                  key={tab.value}
+                  type="button"
+                  onClick={() => setActiveRole(tab.value)}
+                  className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-black transition-all duration-300 ${
+                    active ? "bg-blue-700 text-white shadow-md" : "text-blue-700 hover:bg-blue-50"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
       <section className="bg-gray-50 py-20">
-        <div className="mx-auto max-w-7xl space-y-16 px-4 sm:px-6 lg:px-8">
-          {guideSections.map((guide, index) => (
-            <Card key={guide.id} id={guide.id} className="scroll-mt-28 border-0 shadow-xl">
+        <div className="mx-auto max-w-7xl space-y-12 px-4 sm:px-6 lg:px-8">
+          {visibleGuides.map((guide, index) => (
+            <Card key={guide.id} id={guide.id} className="scroll-mt-28 border-0 shadow-xl transition-all duration-500">
               <CardContent className="p-6 lg:p-8">
-                <div className="mb-8 grid gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:items-center">
+                <div className="grid gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:items-center">
                   <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                    <span className="mb-4 inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">
-                      {guide.group}
+                    <span className="mb-4 inline-flex rounded-full bg-orange-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-orange-600">
+                      Visual tutorial
                     </span>
                     <h2 className="mb-4 text-3xl font-black text-blue-700">{guide.title}</h2>
                     <p className="mb-6 text-lg leading-8 text-gray-600">{guide.description}</p>
                     <ol className="space-y-3">
-                      {steps.map((step, stepIndex) => (
+                      {guide.steps.map((step, stepIndex) => (
                         <li key={step} className="flex gap-3 text-gray-700">
                           <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-sm font-black text-white">
                             {stepIndex + 1}
@@ -190,7 +227,7 @@ const Blog = () => {
                       ))}
                     </ol>
                     <Button className="mt-8 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700" asChild>
-                      <a href={`#${guide.id}`}>Slide deck placeholder</a>
+                      <a href={`#${guide.id}`}>Slide deck link placeholder</a>
                     </Button>
                   </div>
                   <FakeAppScreenshot highlights={guide.highlights} />
@@ -198,17 +235,6 @@ const Blog = () => {
               </CardContent>
             </Card>
           ))}
-        </div>
-      </section>
-
-      <section className="bg-gradient-to-r from-blue-700 to-blue-800 py-16 text-white">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <GraduationCap className="mx-auto mb-5 h-10 w-10 text-orange-300" />
-          <h2 className="text-3xl font-black">Suggestion for real slide decks</h2>
-          <p className="mt-4 leading-8 text-blue-100">
-            Keep these web tutorials as the public version. When the real decks are ready, replace each placeholder
-            button with a Google Slides, Canva, or PDF link.
-          </p>
         </div>
       </section>
 

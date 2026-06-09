@@ -14,7 +14,7 @@ EdStream V2 is a Vite + React + TypeScript marketing and guide site for EdStream
 ## Site structure
 
 - `/` - Home page with hero, about/pain-solution story, and feature demos
-- `/guides` - Screenshot-style tutorials with fake course data and orange click highlights
+- `/guides` - Instructor/student segmented screenshot-style tutorials with fake course data and orange click highlights
 - `/help` - Help Center with searchable FAQ
 - `/contact` - Contact and pilot inquiry page
 - `/privacy` and `/terms` - Policy pages
@@ -29,6 +29,7 @@ The site should stay Canvas-first, simple, and accurate.
 - Prefer concrete workflows over broad enterprise claims.
 - Do not claim certifications, uptime guarantees, end-to-end encryption, institution counts, or adoption metrics unless they are verified.
 - The main navigation should stay small: Home, Guides, Help Center, Contact.
+- Header download icons link to the live iOS and Android app listings.
 - Guides use fake screenshot-style walkthroughs now. Replace the placeholder buttons with real Google Slides, Canva, PDF, or Mintlify links when the decks are ready.
 - Feature copy should focus on what a course team can understand quickly: 1-Click Channels, Seamless File Sharing, Automated Media Sorting, Centralized Requests, and Community.
 
