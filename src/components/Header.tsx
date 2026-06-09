@@ -31,7 +31,7 @@ const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-all duration-300 hover:scale-105">
               <img 
-                src="/logo.svg" 
+                src="/Edstream_V2/logo.svg"
                 alt="EdStream Logo" 
                 className="logo-image w-12 h-12 transition-transform duration-300" 
               />

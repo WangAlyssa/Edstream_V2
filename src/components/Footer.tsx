@@ -26,7 +26,7 @@ const Footer = () => {
             <div className="lg:col-span-2">
               <Link to="/" className="inline-flex items-center space-x-3 mb-6 hover:opacity-80 transition-all duration-300 hover:scale-105">
                 <img 
-                  src="/logo.svg" 
+                  src="/Edstream_V2/logo.svg" 
                   alt="EdStream Logo" 
                   className="logo-image w-10 h-10 transition-transform duration-300" 
                 />
