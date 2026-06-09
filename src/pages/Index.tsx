@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -150,7 +150,7 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
 );
 
 const PhoneMockup = () => (
-  <div className="w-[176px] rounded-[1.9rem] border-[8px] border-gray-950 bg-white p-4 shadow-2xl">
+  <div className="w-[210px] rounded-[2.1rem] border-[9px] border-gray-950 bg-white p-4 shadow-2xl">
     <div className="mx-auto mb-4 h-4 w-16 rounded-b-xl bg-black" />
     <div className="mb-5 flex items-center justify-between">
       <span className="text-lg font-black text-blue-700">EdStream</span>
@@ -190,7 +190,7 @@ const HeroMockup = () => (
   </div>
 );
 
-const DemoCursor = ({ position }: { position: { left: string; top: string } }) => (
+const DemoCursor = ({ position }: { position: CSSProperties }) => (
   <MousePointer2
     className="demo-cursor-float pointer-events-none absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-1000 ease-in-out"
     style={position}
@@ -199,42 +199,49 @@ const DemoCursor = ({ position }: { position: { left: string; top: string } }) =
 
 const FeatureDemo = ({ id }: { id: FeatureId }) => {
   const [step, setStep] = useState(0);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [cursorPosition, setCursorPosition] = useState<CSSProperties>({
+    left: "50%",
+    top: "50%",
+    opacity: 0,
+  });
 
   useEffect(() => {
     const timer = window.setInterval(() => setStep((current) => (current + 1) % 3), 2300);
     return () => window.clearInterval(timer);
   }, []);
 
-  const cursorPositions: Record<FeatureId, Array<{ left: string; top: string }>> = {
-    channels: [
-      { left: "25%", top: "15%" },
-      { left: "57%", top: "50%" },
-      { left: "64%", top: "75%" },
-    ],
-    files: [
-      { left: "77%", top: "78%" },
-      { left: "61%", top: "42%" },
-      { left: "67%", top: "60%" },
-    ],
-    media: [
-      { left: "83%", top: "22%" },
-      { left: "49%", top: "35%" },
-      { left: "66%", top: "35%" },
-    ],
-    requests: [
-      { left: "48%", top: "32%" },
-      { left: "66%", top: "66%" },
-      { left: "66%", top: "66%" },
-    ],
-    community: [
-      { left: "27%", top: "88%" },
-      { left: "50%", top: "38%" },
-      { left: "69%", top: "38%" },
-    ],
-  };
+  useLayoutEffect(() => {
+    const updateCursor = () => {
+      const frame = frameRef.current;
+      const target = frame?.querySelector(`[data-demo-target="${step}"]`) as HTMLElement | null;
+
+      if (!frame || !target) {
+        setCursorPosition((current) => ({ ...current, opacity: 0 }));
+        return;
+      }
+
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+
+      setCursorPosition({
+        left: targetRect.left - frameRect.left + targetRect.width * 0.72,
+        top: targetRect.top - frameRect.top + targetRect.height * 0.72,
+        opacity: 1,
+      });
+    };
+
+    const animationFrame = window.requestAnimationFrame(updateCursor);
+    window.addEventListener("resize", updateCursor);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", updateCursor);
+    };
+  }, [id, step]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-blue-100 bg-white p-5 shadow-xl">
+    <div ref={frameRef} className="relative overflow-hidden rounded-3xl border border-blue-100 bg-white p-5 shadow-xl">
       <div className="relative overflow-hidden rounded-2xl border bg-white">
         <div className="flex h-11 items-center bg-blue-700 px-4 text-white">
           <div className="mr-4 h-5 w-5 rounded border border-white/70" />
@@ -247,7 +254,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           <aside className="bg-blue-800 p-3 text-white">
             <div className="mb-3 flex items-center justify-between text-xs font-bold">
               <span># Channels</span>
-              <span className={`relative rounded transition-colors duration-500 ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}>
+              <span
+                data-demo-target={id === "channels" ? "0" : undefined}
+                className={`relative rounded transition-colors duration-500 ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}
+              >
                 <Plus className="h-4 w-4" />
               </span>
             </div>
@@ -274,10 +284,16 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                   <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Visibility</span><b>Private</b></div>
                   <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Who can send</span><b>Everyone</b></div>
                 </div>
-                <div className={`relative mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700 transition-all duration-500 ${step === 1 ? "ring-2 ring-blue-200" : ""}`}>
+                <div
+                  data-demo-target="1"
+                  className={`relative mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700 transition-all duration-500 ${step === 1 ? "ring-2 ring-blue-200" : ""}`}
+                >
                   # project-group-alpha
                 </div>
-                <button className={`relative w-full rounded-lg py-3 text-sm font-black text-white transition-colors duration-500 ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}>
+                <button
+                  data-demo-target="2"
+                  className={`relative w-full rounded-lg py-3 text-sm font-black text-white transition-colors duration-500 ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}
+                >
                   Create Channel
                 </button>
               </div>
@@ -285,7 +301,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             {id === "files" && (
               <div className="space-y-4">
                 <div className="rounded-xl border bg-gray-50 p-4 text-sm text-gray-500">Share a course handout in # General</div>
-                <div className={`relative rounded-2xl border bg-white p-5 shadow-lg transition-all duration-700 ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}>
+                <div
+                  data-demo-target={id === "files" && step > 0 ? String(step) : undefined}
+                  className={`relative rounded-2xl border bg-white p-5 shadow-lg transition-all duration-700 ${step > 0 ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}
+                >
                   <FileText className="mb-3 h-8 w-8 text-orange-500" />
                   <h4 className="font-black text-blue-700">Research-paper.pdf</h4>
                   {step < 2 ? (
@@ -305,7 +324,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                     </div>
                   )}
                 </div>
-                <div className="relative flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">
+                <div data-demo-target="0" className="relative flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">
                   Type message <Plus className="ml-auto h-4 w-4 text-blue-600" />
                 </div>
               </div>
@@ -314,13 +333,20 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <h4 className="font-black text-blue-700">Channel Details</h4>
-                  <span className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}>
+                  <span
+                    data-demo-target={id === "media" ? "0" : undefined}
+                    className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}
+                  >
                     i
                   </span>
                 </div>
                 <div className="mb-4 flex gap-2">
                   {["Photos", "Videos", "Files"].map((tab, index) => (
-                    <span key={tab} className={`relative rounded-full px-3 py-1 text-xs font-black transition-colors duration-500 ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}>
+                    <span
+                      key={tab}
+                      data-demo-target={id === "media" && index === step ? String(step) : undefined}
+                      className={`relative rounded-full px-3 py-1 text-xs font-black transition-colors duration-500 ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}
+                    >
                       {tab}
                     </span>
                   ))}
@@ -332,11 +358,14 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             )}
             {id === "requests" && (
               <div className="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-xl">
-                <div className="mb-3 rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-orange-600">Extension request</div>
+                <div data-demo-target="0" className="mb-3 rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-orange-600">Extension request</div>
                 <p className="text-sm text-gray-500">Student requests more time for Project Checkpoint 2.</p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <button className="rounded-lg border py-2 text-sm font-bold text-gray-500">Deny</button>
-                  <button className={`relative rounded-lg py-2 text-sm font-bold text-white transition-colors duration-500 ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}>
+                  <button
+                    data-demo-target={step > 0 ? String(step) : undefined}
+                    className={`relative rounded-lg py-2 text-sm font-bold text-white transition-colors duration-500 ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}
+                  >
                     {step === 2 ? "Approved" : "Approve"}
                   </button>
                 </div>
@@ -347,7 +376,11 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                 <h4 className="mb-4 text-xl font-black text-blue-700">Communities</h4>
                 <div className="grid grid-cols-2 gap-3">
                   {["Study Group", "Project Teams", "Peer Mentors", "Exam Review"].map((community, index) => (
-                    <div key={community} className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}>
+                    <div
+                      key={community}
+                      data-demo-target={id === "community" && index === step ? String(step) : undefined}
+                      className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}
+                    >
                       {community}
                     </div>
                   ))}
@@ -357,7 +390,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           </main>
         </div>
       </div>
-      <DemoCursor position={cursorPositions[id][step]} />
+      <DemoCursor position={cursorPosition} />
     </div>
   );
 };

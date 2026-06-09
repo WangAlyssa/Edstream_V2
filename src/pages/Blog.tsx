@@ -29,6 +29,7 @@ const guideSections: Array<{
       "Open EdStream from the Canvas course navigation.",
       "Review the left sidebar: channels, direct messages, and course tools.",
       "Use the main message area for announcements, class Q&A, and shared files.",
+      "Tell students which channel to use for general questions versus project work.",
     ],
     highlights: [
       { label: "Course channels", className: "left-[5%] top-[17%] h-20 w-28" },
@@ -44,6 +45,7 @@ const guideSections: Array<{
       "Click the plus button beside Channels.",
       "Create #announcements and #general-q-and-a.",
       "Post one welcome message that tells students where to ask for help.",
+      "Pin or repeat the channel guidance during the first week of class.",
     ],
     highlights: [
       { label: "Create channel", className: "left-[27%] top-[13%] h-10 w-10" },
@@ -59,6 +61,7 @@ const guideSections: Array<{
       "Pick the workflow in the sidebar or channel details.",
       "Follow the highlighted action area.",
       "Confirm the result appears in the main course workspace.",
+      "Use one workflow at a time before adding more channels or request types.",
     ],
     highlights: [
       { label: "Choose workflow", className: "left-[5%] top-[38%] h-20 w-28" },
@@ -74,6 +77,7 @@ const guideSections: Array<{
       "Ask your institution to enable the EdStream Canvas tool.",
       "Open Canvas course settings and course navigation.",
       "Publish the EdStream link after confirming instructor, TA, and student roles.",
+      "Open the student view to confirm the link is visible before announcing it.",
     ],
     highlights: [
       { label: "Course navigation", className: "left-[5%] top-[62%] h-14 w-28" },
@@ -89,6 +93,7 @@ const guideSections: Array<{
       "Open EdStream from Canvas.",
       "Select the correct course channel.",
       "Ask questions in the message composer and check shared files before asking for a resend.",
+      "Use requests only for workflows your course team has enabled.",
     ],
     highlights: [
       { label: "Pick a channel", className: "left-[5%] top-[25%] h-14 w-28" },
@@ -201,6 +206,18 @@ const Blog = () => {
               );
             })}
           </div>
+
+          <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-3">
+            {visibleGuides.map((guide) => (
+              <a
+                key={guide.id}
+                href={`#${guide.id}`}
+                className="rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-blue-700"
+              >
+                {guide.title}
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -211,9 +228,6 @@ const Blog = () => {
               <CardContent className="p-6 lg:p-8">
                 <div className="grid gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:items-center">
                   <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                    <span className="mb-4 inline-flex rounded-full bg-orange-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-orange-600">
-                      Visual tutorial
-                    </span>
                     <h2 className="mb-4 text-3xl font-black text-blue-700">{guide.title}</h2>
                     <p className="mb-6 text-lg leading-8 text-gray-600">{guide.description}</p>
                     <ol className="space-y-3">
@@ -227,7 +241,7 @@ const Blog = () => {
                       ))}
                     </ol>
                     <Button className="mt-8 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700" asChild>
-                      <a href={`#${guide.id}`}>Slide deck link placeholder</a>
+                      <a href={`#${guide.id}`}>Open {guide.title} link</a>
                     </Button>
                   </div>
                   <FakeAppScreenshot highlights={guide.highlights} />
