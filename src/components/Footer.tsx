@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 const Footer = () => {
   const quickLinks = [
     { name: "Home", href: "/" },
+    { name: "Guides", href: "/guides" },
     { name: "Help Center", href: "/help" },
     { name: "Contact", href: "/contact" },
   ];

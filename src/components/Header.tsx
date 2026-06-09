@@ -10,6 +10,7 @@ const Header = () => {
 
   const navigation = [
     { name: "Home", href: "/" },
+    { name: "Guides", href: "/guides" },
     { name: "Help Center", href: "/help" },
     { name: "Contact", href: "/contact" },
   ];
@@ -17,7 +18,7 @@ const Header = () => {
   const isActivePage = (href: string) => {
     if (href === "/" && location.pathname === "/") return true;
     if (href !== "/" && location.pathname === href) return true;
-    if (href === "/help" && ["/faq", "/guides"].includes(location.pathname)) return true;
+    if (href === "/help" && location.pathname === "/faq") return true;
     return false;
   };
 

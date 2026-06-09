@@ -1,187 +1,166 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
-import { HelpCircle, LockKeyhole, MessageSquare, Smartphone, Users } from "lucide-react";
+import { ArrowRight, HelpCircle, Search } from "lucide-react";
 
-const faqSections = [
+const faqItems = [
   {
-    title: "General",
-    icon: HelpCircle,
-    questions: [
-      {
-        question: "What is EdStream?",
-        answer:
-          "EdStream is a Canvas-focused communication layer for courses. It brings Slack-like channels, shared materials, and student requests into a space designed around instructors, TAs, and students.",
-      },
-      {
-        question: "Is EdStream meant to replace Canvas?",
-        answer:
-          "No. EdStream is meant to sit alongside Canvas as a communication tool. Canvas remains the place for assignments, grades, and official course structure.",
-      },
-      {
-        question: "Do students need a separate account?",
-        answer:
-          "The product is designed around Canvas course access, so students should not need to manage a separate social workspace for each class.",
-      },
-    ],
+    category: "General",
+    question: "What is EdStream?",
+    answer:
+      "EdStream is a Canvas-focused communication layer for courses. It adds Slack-like channels, shared materials, and structured student requests to the course experience.",
   },
   {
-    title: "For instructors",
-    icon: MessageSquare,
-    questions: [
-      {
-        question: "How do instructors add EdStream to a course?",
-        answer:
-          "The intended workflow is to add EdStream as a Canvas course tool, confirm the course roster and roles, then create the channels that match the course structure.",
-      },
-      {
-        question: "Can I control who posts in a channel?",
-        answer:
-          "Yes. EdStream is designed for role-aware channels, such as announcement spaces where only instructors or TAs post and group spaces where students can collaborate.",
-      },
-      {
-        question: "How do student requests work?",
-        answer:
-          "Students can submit common course requests from a structured form. Instructors review the request, choose a response, and keep the status visible instead of relying on scattered email threads.",
-      },
-    ],
+    category: "General",
+    question: "Is EdStream replacing Canvas?",
+    answer:
+      "No. Canvas remains the system for assignments, grades, and course structure. EdStream focuses on real-time course communication and student support workflows.",
   },
   {
-    title: "For students",
-    icon: Users,
-    questions: [
-      {
-        question: "What can students do in EdStream?",
-        answer:
-          "Students can ask questions in course channels, coordinate with classmates, review shared files, and submit requests such as extensions or regrade questions when enabled by the course team.",
-      },
-      {
-        question: "Does EdStream have mobile apps?",
-        answer:
-          "Yes. EdStream has iOS and Android app listings so students can stay connected from mobile devices as well as the web experience.",
-      },
-      {
-        question: "Can students find files after a chat moves on?",
-        answer:
-          "The media and file areas are designed to collect shared materials from a channel so students can revisit handouts, photos, and other course resources.",
-      },
-    ],
+    category: "Accounts",
+    question: "Do students need a separate account?",
+    answer:
+      "The product is designed around Canvas course access, so students should not need to manage a separate social workspace for each class.",
   },
   {
-    title: "Security and rollout",
-    icon: LockKeyhole,
-    questions: [
-      {
-        question: "How should institutions think about privacy?",
-        answer:
-          "EdStream should be reviewed through the same institutional privacy and security process used for other Canvas tools. The website avoids making certification claims until they are formally verified.",
-      },
-      {
-        question: "How is EdStream priced?",
-        answer:
-          "Pricing and pilot details should be discussed directly with the EdStream team because needs vary by institution, course size, and rollout scope.",
-      },
-      {
-        question: "Where should I start?",
-        answer:
-          "Start with the guides page. It gives instructors a simple setup path and gives students a short primer on the core workflows.",
-      },
-    ],
+    category: "Instructors",
+    question: "How do instructors create channels?",
+    answer:
+      "Instructors choose a channel purpose, set visibility and posting permissions, and invite the relevant course roles such as students, TAs, or staff.",
+  },
+  {
+    category: "Instructors",
+    question: "Can I control who can send messages?",
+    answer:
+      "Yes. Channels can be designed around course roles, for example announcement channels for instructors and open Q&A channels for the class.",
+  },
+  {
+    category: "Requests",
+    question: "What are centralized requests?",
+    answer:
+      "Requests help move repeated workflows such as extensions, attendance notes, and regrade questions out of scattered email threads and into one review queue.",
+  },
+  {
+    category: "Files",
+    question: "How does file sharing work?",
+    answer:
+      "Files are shared in context inside a channel, so handouts, PDFs, and slides stay connected to the conversation where they were posted.",
+  },
+  {
+    category: "Media",
+    question: "What does media sorting mean?",
+    answer:
+      "Channel details can group shared photos, videos, and files into simple tabs, making it easier to revisit whiteboard photos, lab media, and project materials.",
+  },
+  {
+    category: "Students",
+    question: "How do students use EdStream?",
+    answer:
+      "Students open EdStream from Canvas, join the course channels, ask questions in the right place, review shared materials, and submit requests when enabled.",
+  },
+  {
+    category: "Mobile",
+    question: "Does EdStream have mobile apps?",
+    answer:
+      "EdStream has iOS and Android app listings so students can follow course communication from mobile devices as well as the web.",
+  },
+  {
+    category: "Rollout",
+    question: "Where should a course team start?",
+    answer:
+      "Start with one announcement channel, one Q&A channel, and one request type. Add project or lab channels only when the course structure needs them.",
+  },
+  {
+    category: "Privacy",
+    question: "How should institutions think about privacy?",
+    answer:
+      "EdStream should be reviewed through the same institutional privacy and security process used for other Canvas tools. Public marketing copy should avoid certification claims until they are formally verified.",
   },
 ];
 
 const FAQ = () => {
+  const [query, setQuery] = useState("");
+
   useEffect(() => {
-    document.title = "FAQ - EdStream";
+    document.title = "Help Center - EdStream";
   }, []);
 
+  const filteredFaq = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return faqItems;
+
+    return faqItems.filter((item) =>
+      `${item.category} ${item.question} ${item.answer}`.toLowerCase().includes(normalized),
+    );
+  }, [query]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-white text-gray-900">
       <Header />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 py-20 dark:from-gray-800 dark:via-gray-900 dark:to-black">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-6 inline-flex items-center rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm">
-            <HelpCircle className="mr-2 h-5 w-5 text-white" />
-            <span className="font-bold text-white">Frequently asked questions</span>
+      <section className="bg-gradient-to-br from-blue-50 via-white to-orange-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-6 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-bold text-blue-700">
+            <HelpCircle className="mr-2 h-4 w-4" />
+            Help Center
           </div>
-          <h1 className="text-4xl font-black leading-tight text-white lg:text-6xl">
-            Clear answers for
-            <span className="block bg-gradient-to-r from-orange-300 to-orange-100 bg-clip-text text-transparent">
-              a simple pilot
-            </span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-xl leading-8 text-blue-100">
-            These answers keep the public website accurate and avoid promises that should be confirmed during an
-            institutional review.
+          <h1 className="text-5xl font-black text-blue-700 lg:text-6xl">Search answers quickly</h1>
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-gray-600">
+            Search by topic, role, or workflow. The answers stay grounded in the current Canvas-first product story.
           </p>
         </div>
       </section>
 
-      <section className="-mt-10 py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="space-y-8">
-            {faqSections.map((section, sectionIndex) => {
-              const Icon = section.icon;
-              return (
-                <Card key={section.title} className="border-0 bg-white/90 shadow-xl backdrop-blur dark:bg-gray-800/90">
-                  <CardContent className="p-6 lg:p-8">
-                    <div className="mb-6 flex items-center gap-4">
-                      <div className={`flex h-14 w-14 items-center justify-center rounded-2xl text-white ${sectionIndex % 2 === 0 ? "bg-orange-500" : "bg-blue-600"}`}>
-                        <Icon className="h-7 w-7" />
-                      </div>
-                      <div>
-                        <h2 className="text-2xl font-black text-gray-900 dark:text-white">{section.title}</h2>
-                        <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-orange-500 to-orange-300" />
-                      </div>
-                    </div>
+      <section className="-mt-8 pb-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <Card className="border-0 shadow-2xl">
+            <CardContent className="p-6 lg:p-8">
+              <div className="relative mx-auto mb-8 max-w-2xl">
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search FAQ: channels, requests, files, students..."
+                  className="w-full rounded-xl border border-blue-100 bg-blue-50/40 py-4 pl-12 pr-4 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                />
+              </div>
 
-                    <Accordion type="single" collapsible className="space-y-3">
-                      {section.questions.map((faq, questionIndex) => (
-                        <AccordionItem
-                          key={faq.question}
-                          value={`${sectionIndex}-${questionIndex}`}
-                          className="rounded-xl border border-gray-200 bg-white/70 px-5 dark:border-gray-700 dark:bg-gray-900/40"
-                        >
-                          <AccordionTrigger className="text-left text-base font-bold text-gray-800 hover:text-blue-600 hover:no-underline dark:text-gray-100 dark:hover:text-blue-300">
-                            {faq.question}
-                          </AccordionTrigger>
-                          <AccordionContent className="leading-7 text-gray-600 dark:text-gray-300">
-                            {faq.answer}
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                    </Accordion>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+              <div className="grid gap-5 md:grid-cols-2">
+                {filteredFaq.map((item) => (
+                  <div key={item.question} className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
+                    <span className="mb-4 inline-flex rounded-full bg-orange-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-orange-600">
+                      {item.category}
+                    </span>
+                    <h2 className="mb-3 text-xl font-black text-blue-700">{item.question}</h2>
+                    <p className="leading-7 text-gray-600">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+
+              {filteredFaq.length === 0 && (
+                <div className="rounded-2xl bg-blue-50 p-8 text-center text-gray-600">
+                  No FAQ matches that keyword yet. Try another term or contact us.
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </section>
 
-      <section className="bg-white py-20 dark:bg-gray-900">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <Smartphone className="mx-auto mb-5 h-10 w-10 text-orange-500" />
-          <h2 className="text-3xl font-black text-blue-600 dark:text-blue-300 lg:text-4xl">
-            Want the practical walkthrough?
-          </h2>
-          <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-300">
-            The guides page breaks the product into instructor and student workflows.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button asChild className="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 text-base font-bold text-white hover:from-orange-600 hover:to-orange-700">
-              <Link to="/guides">Open guides</Link>
-            </Button>
-            <Button asChild variant="outline" className="border-blue-200 px-8 py-6 text-base font-bold text-blue-600 hover:bg-blue-50">
-              <Link to="/contact">Contact us</Link>
-            </Button>
+      <section className="bg-gradient-to-r from-blue-700 to-blue-800 py-16 text-white">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-4 text-center sm:px-6 lg:flex-row lg:text-left">
+          <div>
+            <h2 className="text-3xl font-black">Need step-by-step screenshots?</h2>
+            <p className="mt-2 text-blue-100">Open the Guides page for orange-circle click walkthroughs.</p>
           </div>
+          <Button asChild className="rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 font-bold text-white hover:from-orange-600 hover:to-orange-700">
+            <Link to="/guides">
+              View Guides <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </section>
 
