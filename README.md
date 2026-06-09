@@ -73,11 +73,23 @@ npm run preview
 
 `npm run preview` serves the files generated in `dist/`.
 
-## Routing and deployment notes
+## GitHub Pages deployment
 
-This is a client-side React Router app. The `public/_redirects` file rewrites all routes to `/index.html` for static hosts that support Netlify-style redirects.
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds with `npm ci` and deploys `dist/` to GitHub Pages.
 
-For other static hosts, configure fallback routing so paths like `/help`, `/contact`, and legacy redirects return `index.html`.
+Live site (after Pages is enabled):
+
+```text
+https://wangalyssa.github.io/Edstream_V2/
+```
+
+**One-time GitHub setup**
+
+1. Repo → **Settings** → **Pages**
+2. **Source**: GitHub Actions (not “Deploy from a branch”)
+3. Push to `main` and wait for the **Deploy to GitHub Pages** workflow to finish
+
+This is a client-side React Router app. `public/404.html` and the redirect script in `index.html` handle deep links such as `/guides/basic-primer` on GitHub Pages.
 
 ## Troubleshooting
 
