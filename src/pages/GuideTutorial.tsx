@@ -89,9 +89,6 @@ const GuideTutorial = () => {
             </Link>
           </Button>
           <div className="max-w-3xl">
-            <span className="mb-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-orange-100">
-              {guide.role === "instructor" ? "For Instructor" : "For Student"}
-            </span>
             <h1 className="text-4xl font-black lg:text-5xl">{guide.title}</h1>
             <p className="mt-4 text-base leading-7 text-blue-100">{guide.overview}</p>
           </div>
@@ -99,47 +96,41 @@ const GuideTutorial = () => {
       </section>
 
       <section className="bg-gray-50 py-20">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.25fr] lg:px-8">
-          <div className="space-y-6">
-            <Card className="border-0 shadow-xl">
-              <CardContent className="p-8">
-                <h2 className="mb-5 text-2xl font-black text-blue-700">Step-by-step tutorial</h2>
-                <ol className="space-y-4">
-                  {guide.steps.map((step, index) => (
-                    <li key={step} className="flex gap-3 text-gray-700">
-                      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-sm font-black text-white">
+        <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6 lg:px-8">
+          {guide.steps.map((step, index) => {
+            const highlight = guide.highlights[index % guide.highlights.length];
+
+            return (
+              <Card key={step} className="border-0 shadow-xl">
+                <CardContent className="p-6 lg:p-8">
+                  <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+                    <div>
+                      <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white">
                         {index + 1}
                       </span>
-                      <span className="leading-7">{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </CardContent>
-            </Card>
-
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-1">
-              <Card className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <h3 className="mb-3 text-sm font-black uppercase tracking-wide text-blue-700">Click target</h3>
-                  <p className="leading-7 text-gray-700">{guide.clickTarget}</p>
+                      <h2 className="mb-4 text-2xl font-black text-blue-700">Step {index + 1}</h2>
+                      <p className="mb-6 text-lg leading-8 text-gray-700">{step}</p>
+                      <div className="space-y-4">
+                        <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4">
+                          <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-blue-700">Click target</h3>
+                          <p className="text-sm leading-6 text-gray-700">
+                            {index === 0 ? guide.clickTarget : highlight.label}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-orange-100 bg-orange-50/60 p-4">
+                          <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-orange-600">Check result</h3>
+                          <p className="text-sm leading-6 text-gray-700">
+                            {index === guide.steps.length - 1 ? guide.checkResult : "The highlighted part of the interface should update or become the focus of the next step."}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <FakeAppScreenshot highlights={[highlight]} />
+                  </div>
                 </CardContent>
               </Card>
-              <Card className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <h3 className="mb-3 text-sm font-black uppercase tracking-wide text-orange-600">Check result</h3>
-                  <p className="leading-7 text-gray-700">{guide.checkResult}</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <div>
-            <FakeAppScreenshot highlights={guide.highlights} />
-            <div className="mt-6 rounded-2xl border border-blue-100 bg-white p-5 text-sm leading-7 text-gray-600 shadow-sm">
-              This mock screenshot uses fake course data and fake user names. The orange circles show the parts of the
-              interface referenced by the tutorial steps.
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 

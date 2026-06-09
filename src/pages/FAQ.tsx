@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { HelpCircle, Mail, Search } from "lucide-react";
+import { Mail, Search } from "lucide-react";
 
 const faqItems = [
   {
@@ -101,10 +101,6 @@ const FAQ = () => {
 
       <section className="bg-gradient-to-br from-blue-700 to-blue-800 py-12 text-white">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-4 inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-orange-100">
-            <HelpCircle className="mr-2 h-4 w-4" />
-            Help Center
-          </div>
           <h1 className="text-4xl font-black lg:text-5xl">Search answers quickly</h1>
           <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-blue-100">
             Search by topic, role, or workflow. The answers stay grounded in the current Canvas-first product story.
