@@ -10,16 +10,14 @@ const Header = () => {
 
   const navigation = [
     { name: "Home", href: "/" },
-    { name: "Features", href: "/features" },
-    { name: "About", href: "/about" },
-    { name: "FAQ", href: "/faq" },
-    { name: "Guides", href: "/guides" },
+    { name: "Help Center", href: "/help" },
     { name: "Contact", href: "/contact" },
   ];
 
   const isActivePage = (href: string) => {
     if (href === "/" && location.pathname === "/") return true;
     if (href !== "/" && location.pathname === href) return true;
+    if (href === "/help" && ["/faq", "/guides"].includes(location.pathname)) return true;
     return false;
   };
 

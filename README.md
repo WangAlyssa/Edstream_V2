@@ -13,13 +13,12 @@ EdStream V2 is a Vite + React + TypeScript marketing and guide site for EdStream
 
 ## Site structure
 
-- `/` - Product overview, simple animated mockup, and core positioning
-- `/features` - Four core feature areas: course channels, requests, file sharing, and organized media
-- `/guides` - Instructor and student guides with step-by-step workflow notes
-- `/faq` - Conservative FAQ copy for pilots and institutional review
-- `/about` - Grounded product story and principles
+- `/` - Home page with hero, about/pain-solution story, and feature demos
+- `/help` - Help Center with searchable FAQ plus instructor/student slide-style guides
 - `/contact` - Contact and pilot inquiry page
 - `/privacy` and `/terms` - Policy pages
+
+Legacy routes such as `/features`, `/about`, `/faq`, and `/guides` redirect into the simplified structure so old links do not break.
 
 ## Content principles
 
@@ -28,8 +27,9 @@ The site should stay Canvas-first, simple, and accurate.
 - Keep the original blue/orange EdStream theme and Lato typography.
 - Prefer concrete workflows over broad enterprise claims.
 - Do not claim certifications, uptime guarantees, end-to-end encryption, institution counts, or adoption metrics unless they are verified.
-- Guides can later become slide decks, short demos, GIFs, or a Mintlify docs site, but the public webpage should not link to unfinished or placeholder experiences.
-- Feature copy should focus on what a course team can understand quickly: channels, requests, files, and media organization.
+- The main navigation should stay small: Home, Help Center, Contact.
+- Guides use web-based slide previews now. Replace those card links with real Google Slides, Canva, or Mintlify links when the decks are ready.
+- Feature copy should focus on what a course team can understand quickly: 1-Click Channels, Seamless File Sharing, Automated Media Sorting, Centralized Requests, and Community.
 
 ## Prerequisites
 
@@ -73,7 +73,7 @@ npm run preview
 
 This is a client-side React Router app. The `public/_redirects` file rewrites all routes to `/index.html` for static hosts that support Netlify-style redirects.
 
-For other static hosts, configure fallback routing so paths like `/features`, `/about`, and `/contact` return `index.html`.
+For other static hosts, configure fallback routing so paths like `/help`, `/contact`, and legacy redirects return `index.html`.
 
 ## Troubleshooting
 

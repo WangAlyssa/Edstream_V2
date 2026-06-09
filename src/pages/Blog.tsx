@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -10,187 +10,297 @@ import {
   ClipboardCheck,
   FileText,
   GraduationCap,
+  HelpCircle,
   MessageSquare,
+  Search,
   Settings,
   Users,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 
-const instructorGuides = [
+const faqItems = [
   {
-    title: "How to add EdStream to your course",
-    steps: [
-      "Confirm your institution has enabled the EdStream Canvas tool.",
-      "Open the Canvas course where you want EdStream available.",
-      "Add EdStream to the course navigation and publish the course tool link.",
-      "Review instructor, TA, and student roles before inviting students to use it.",
-    ],
+    category: "General",
+    question: "What is EdStream?",
+    answer:
+      "EdStream is a Canvas-focused communication layer for courses. It adds Slack-like channels, shared materials, and structured student requests to the course experience.",
   },
   {
-    title: "Basic primer",
-    steps: [
-      "Use channels for conversations that need a clear audience.",
-      "Use requests for extension, attendance, or regrade workflows.",
-      "Use files and media tabs to help students find shared course materials.",
-    ],
+    category: "General",
+    question: "Is EdStream replacing Canvas?",
+    answer:
+      "No. Canvas remains the system for assignments, grades, and course structure. EdStream focuses on real-time course communication and student support workflows.",
   },
   {
-    title: "How to start",
-    steps: [
-      "Create an announcements channel first.",
-      "Add one Q&A channel for general student questions.",
-      "Add project or lab channels only when they match the course structure.",
-      "Post a short welcome message explaining where students should ask for help.",
-    ],
+    category: "Instructors",
+    question: "How do instructors create channels?",
+    answer:
+      "Instructors choose a channel purpose, set visibility and posting permissions, and invite the relevant course roles such as students, TAs, or staff.",
+  },
+  {
+    category: "Instructors",
+    question: "Can I control who can send messages?",
+    answer:
+      "Yes. Channels can be designed around course roles, for example announcement channels for instructors and open Q&A channels for the class.",
+  },
+  {
+    category: "Requests",
+    question: "What are centralized requests?",
+    answer:
+      "Requests help move repeated workflows such as extensions, attendance notes, and regrade questions out of scattered email threads and into one review queue.",
+  },
+  {
+    category: "Files",
+    question: "How does file sharing work?",
+    answer:
+      "Files are shared in context inside a channel, so handouts, PDFs, and slides stay connected to the conversation where they were posted.",
+  },
+  {
+    category: "Media",
+    question: "What does media sorting mean?",
+    answer:
+      "Channel details can group shared photos, videos, and files into simple tabs, making it easier to revisit whiteboard photos, lab media, and project materials.",
+  },
+  {
+    category: "Students",
+    question: "How do students use EdStream?",
+    answer:
+      "Students open EdStream from Canvas, join the course channels, ask questions in the right place, review shared materials, and submit requests when enabled.",
+  },
+  {
+    category: "Mobile",
+    question: "Does EdStream have mobile apps?",
+    answer:
+      "EdStream has iOS and Android app listings so students can follow course communication from mobile devices as well as the web.",
+  },
+  {
+    category: "Rollout",
+    question: "Where should a course team start?",
+    answer:
+      "Start with one announcement channel, one Q&A channel, and one request type. Add project or lab channels only when the course structure needs them.",
   },
 ];
 
-const functionGuides = [
+const guideDecks = [
   {
-    icon: MessageSquare,
-    title: "Channels",
-    steps: ["Choose a channel purpose", "Set who can post", "Invite the relevant course roles"],
+    group: "For Instructors",
+    title: "Basic Primer",
+    href: "#basic-primer-slides",
+    icon: BookOpen,
+    slides: ["What EdStream is", "Channels vs requests", "Where files live", "Recommended first setup"],
   },
   {
+    group: "For Instructors",
+    title: "How to Start",
+    href: "#how-to-start-slides",
+    icon: GraduationCap,
+    slides: ["Open your Canvas course", "Create core channels", "Post a welcome note", "Invite students to ask questions"],
+  },
+  {
+    group: "For Instructors",
+    title: "Functions: Step-by-step Guides",
+    href: "#function-slides",
+    icon: Settings,
+    slides: ["Create a channel", "Share a file", "Review a request", "Find media later"],
+  },
+  {
+    group: "For Instructors",
+    title: "How to Add EdStream to Your Course",
+    href: "#add-course-slides",
     icon: ClipboardCheck,
-    title: "Requests",
-    steps: ["Pick the request type", "Ask for the minimum required context", "Respond and update the status"],
+    slides: ["Confirm EdStream is enabled", "Add it to navigation", "Check roles", "Publish the course link"],
   },
   {
-    icon: FileText,
-    title: "Files",
-    steps: ["Share files in the relevant channel", "Name files clearly", "Point students to the media/file tab later"],
+    group: "For Students",
+    title: "Student Quick Start",
+    href: "#student-slides",
+    icon: Users,
+    slides: ["Open from Canvas", "Join course channels", "Ask in the right place", "Submit requests", "Find shared files"],
   },
 ];
 
-const studentGuide = [
-  "Open EdStream from your Canvas course navigation.",
-  "Join the channels your instructor has created for the class.",
-  "Ask course questions in the right channel so answers are easy to find.",
-  "Submit requests from the request area when your course team enables it.",
-  "Check channel files and media before asking classmates to resend materials.",
+const workflowCards = [
+  {
+    id: "basic-primer-slides",
+    title: "Basic Primer",
+    icon: MessageSquare,
+    steps: ["EdStream lives next to Canvas coursework.", "Channels keep conversations organized.", "Requests keep repeated student needs trackable.", "Files stay attached to the course context."],
+  },
+  {
+    id: "how-to-start-slides",
+    title: "How to Start",
+    icon: GraduationCap,
+    steps: ["Create #announcements.", "Create #general-q-and-a.", "Create project or lab channels only when needed.", "Post a short welcome guide for students."],
+  },
+  {
+    id: "function-slides",
+    title: "Functions Step-by-Step",
+    icon: Settings,
+    steps: ["Click create channel.", "Choose visibility and posting roles.", "Share files in the relevant channel.", "Review request status from the request queue."],
+  },
+  {
+    id: "add-course-slides",
+    title: "How to Add EdStream to Your Course",
+    icon: ClipboardCheck,
+    steps: ["Ask your institution to enable the EdStream Canvas tool.", "Open Canvas course settings.", "Add EdStream to course navigation.", "Confirm students and TAs can see the tool."],
+  },
+  {
+    id: "student-slides",
+    title: "For Students",
+    icon: Users,
+    steps: ["Open EdStream from Canvas.", "Use the channel list to find the right conversation.", "Check files/media before asking for a resend.", "Submit requests only when your course team enables them."],
+  },
 ];
 
 const Blog = () => {
+  const [query, setQuery] = useState("");
+
   useEffect(() => {
-    document.title = "Guides - EdStream";
+    document.title = "Help Center - EdStream";
   }, []);
 
+  const filteredFaq = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return faqItems;
+
+    return faqItems.filter((item) =>
+      `${item.category} ${item.question} ${item.answer}`.toLowerCase().includes(normalized),
+    );
+  }, [query]);
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-[#fbf7f4] text-[#2f4156]">
       <Header />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-6 inline-flex items-center rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm">
-            <BookOpen className="mr-2 h-5 w-5 text-white" />
-            <span className="font-bold text-white">EdStream guides</span>
+      <section className="bg-[#fbf7f4] py-20">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-6 inline-flex items-center rounded-full border border-[#eadfd8] bg-white px-4 py-2 text-sm font-bold text-[#728096] shadow-sm">
+            <HelpCircle className="mr-2 h-4 w-4 text-[#567cbd]" />
+            Help Center
           </div>
-          <h1 className="text-4xl font-black leading-tight text-white lg:text-6xl">
-            Start with the
-            <span className="block bg-gradient-to-r from-orange-300 to-orange-100 bg-clip-text text-transparent">
-              everyday workflows
-            </span>
+          <h1 className="font-['Playfair_Display'] text-5xl font-bold leading-tight text-[#2f4156] lg:text-6xl">
+            FAQ, guides, and slide-style walkthroughs
           </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-xl leading-8 text-blue-100">
-            Short, practical guides for instructors and students. Start here before moving into deeper documentation.
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#728096]">
+            Search common questions, then jump into instructor or student guides. The guide cards are structured like
+            slide decks so they can later be replaced with real Google Slides or Mintlify links.
           </p>
         </div>
       </section>
 
-      <section className="-mt-10 py-20">
+      <section className="pb-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <Card className="border border-[#eadfd8] bg-white shadow-xl">
+            <CardContent className="p-6 lg:p-8">
+              <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <h2 className="font-['Playfair_Display'] text-3xl font-bold text-[#2f4156]">Search FAQ</h2>
+                  <p className="mt-2 text-[#728096]">Try keywords like “requests”, “files”, “students”, or “Canvas”.</p>
+                </div>
+                <div className="relative w-full lg:max-w-md">
+                  <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#728096]" />
+                  <input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Search Help Center..."
+                    className="w-full rounded-full border border-[#eadfd8] bg-[#fbf7f4] py-3 pl-12 pr-4 text-[#2f4156] outline-none transition focus:border-[#567cbd] focus:ring-4 focus:ring-[#567cbd]/10"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {filteredFaq.map((item) => (
+                  <div key={item.question} className="rounded-2xl border border-[#eadfd8] bg-[#fbf7f4] p-5">
+                    <span className="mb-3 inline-flex rounded-full bg-white px-3 py-1 text-xs font-black uppercase tracking-wide text-[#567cbd]">
+                      {item.category}
+                    </span>
+                    <h3 className="mb-3 text-lg font-black text-[#2f4156]">{item.question}</h3>
+                    <p className="leading-7 text-[#728096]">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+
+              {filteredFaq.length === 0 && (
+                <div className="rounded-2xl bg-[#fbf7f4] p-8 text-center text-[#728096]">
+                  No FAQ matches that keyword yet. Try another term or contact us.
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="bg-white py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-            <Card className="border-0 bg-white/90 shadow-xl backdrop-blur dark:bg-gray-800/90">
-              <CardContent className="p-8">
-                <div className="mb-8 flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white">
-                    <GraduationCap className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <h2 className="text-3xl font-black text-blue-600 dark:text-blue-300">For instructors</h2>
-                    <p className="text-gray-600 dark:text-gray-300">Setup, primer, and first-week launch checklist.</p>
-                  </div>
-                </div>
+          <div className="mb-12 text-center">
+            <p className="mb-3 text-sm font-black uppercase tracking-[0.25em] text-[#567cbd]">Guides</p>
+            <h2 className="font-['Playfair_Display'] text-4xl font-bold text-[#2f4156] lg:text-5xl">
+              Jump to a slide-style tutorial
+            </h2>
+          </div>
 
-                <div className="space-y-6">
-                  {instructorGuides.map((guide) => (
-                    <div key={guide.title} className="rounded-2xl border border-blue-100 p-5 dark:border-gray-700">
-                      <h3 className="mb-4 text-xl font-black text-gray-900 dark:text-white">{guide.title}</h3>
-                      <ol className="space-y-3">
-                        {guide.steps.map((step, index) => (
-                          <li key={step} className="flex gap-3 text-gray-600 dark:text-gray-300">
-                            <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-sm font-black text-orange-600 dark:bg-orange-900/50 dark:text-orange-300">
-                              {index + 1}
-                            </span>
-                            <span>{step}</span>
-                          </li>
-                        ))}
-                      </ol>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {guideDecks.map((deck) => {
+              const Icon = deck.icon;
+              return (
+                <a key={deck.title} href={deck.href} className="group block rounded-3xl border border-[#eadfd8] bg-[#fbf7f4] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+                  <div className="mb-5 flex items-center justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#567cbd] text-white">
+                      <Icon className="h-6 w-6" />
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 bg-gradient-to-br from-blue-50 to-orange-50 shadow-xl dark:from-gray-800 dark:to-gray-900">
-              <CardContent className="p-8">
-                <div className="mb-8 flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-500 text-white">
-                    <Users className="h-7 w-7" />
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-[#728096]">{deck.group}</span>
                   </div>
-                  <div>
-                    <h2 className="text-3xl font-black text-blue-600 dark:text-blue-300">For students</h2>
-                    <p className="text-gray-600 dark:text-gray-300">A short primer for the first visit.</p>
+                  <h3 className="mb-4 text-2xl font-black text-[#2f4156]">{deck.title}</h3>
+                  <div className="mb-5 flex gap-2 overflow-hidden">
+                    {deck.slides.slice(0, 4).map((slide, index) => (
+                      <div key={slide} className="min-h-20 min-w-[8rem] rounded-xl bg-white p-3 text-xs font-bold text-[#728096] shadow-sm">
+                        <span className="mb-2 block text-[#FA4616]">Slide {index + 1}</span>
+                        {slide}
+                      </div>
+                    ))}
                   </div>
-                </div>
-
-                <ul className="space-y-4">
-                  {studentGuide.map((step) => (
-                    <li key={step} className="flex gap-3 rounded-xl bg-white/80 p-4 text-gray-700 shadow-sm dark:bg-gray-800 dark:text-gray-200">
-                      <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-500" />
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+                  <span className="inline-flex items-center font-black text-[#567cbd]">
+                    Open slide guide <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
+                  </span>
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <section className="bg-gray-50 py-20 dark:bg-gray-800">
+      <section className="bg-[#fbf7f4] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-12 max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center rounded-full bg-orange-100 px-4 py-2 text-sm font-bold text-orange-600 dark:bg-orange-900/40 dark:text-orange-300">
-              <Settings className="mr-2 h-4 w-4" />
-              Functions step-by-step
-            </div>
-            <h2 className="text-3xl font-black text-blue-600 dark:text-blue-300 lg:text-4xl">
-              Keep each workflow small
-            </h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-              These are the product walkthroughs that can later become slide decks, short demos, or full documentation pages.
+          <div className="mb-12 text-center">
+            <h2 className="font-['Playfair_Display'] text-4xl font-bold text-[#2f4156]">Slide previews</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-[#728096]">
+              My suggestion: keep these as web-based slide previews now, then replace each button with a Google Slides,
+              Canva, or Mintlify link once the real decks are ready.
             </p>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            {functionGuides.map((guide) => {
-              const Icon = guide.icon;
+          <div className="space-y-8">
+            {workflowCards.map((deck) => {
+              const Icon = deck.icon;
               return (
-                <Card key={guide.title} className="border-0 bg-white shadow-lg dark:bg-gray-900">
-                  <CardContent className="p-8">
-                    <Icon className="mb-5 h-10 w-10 text-orange-500" />
-                    <h3 className="mb-5 text-2xl font-black text-blue-600 dark:text-blue-300">{guide.title}</h3>
-                    <ol className="space-y-3">
-                      {guide.steps.map((step, index) => (
-                        <li key={step} className="flex gap-3 text-gray-600 dark:text-gray-300">
-                          <span className="font-black text-blue-600 dark:text-blue-300">{index + 1}.</span>
-                          <span>{step}</span>
-                        </li>
+                <Card key={deck.id} id={deck.id} className="scroll-mt-28 border border-[#eadfd8] bg-white shadow-lg">
+                  <CardContent className="p-6 lg:p-8">
+                    <div className="mb-6 flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2f4156] text-white">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h3 className="font-['Playfair_Display'] text-3xl font-bold text-[#2f4156]">{deck.title}</h3>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                      {deck.steps.map((step, index) => (
+                        <div key={step} className="rounded-2xl border border-[#eadfd8] bg-[#fbf7f4] p-5">
+                          <div className="mb-4 flex items-center justify-between">
+                            <span className="text-xs font-black uppercase tracking-wide text-[#728096]">Step</span>
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FA4616] text-sm font-black text-white">{index + 1}</span>
+                          </div>
+                          <p className="font-bold leading-7 text-[#2f4156]">{step}</p>
+                        </div>
                       ))}
-                    </ol>
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -199,25 +309,15 @@ const Blog = () => {
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-black text-blue-600 dark:text-blue-300 lg:text-4xl">
-            Have a course workflow to test?
-          </h2>
-          <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-300">
-            Start with one course, one announcement channel, one Q&A channel, and one request type. Then expand only
-            where the course needs it.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button asChild className="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 text-base font-bold text-white hover:from-orange-600 hover:to-orange-700">
-              <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
-                Request a pilot <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button asChild variant="outline" className="border-blue-200 px-8 py-6 text-base font-bold text-blue-600 hover:bg-blue-50">
-              <Link to="/features">Review features</Link>
-            </Button>
+      <section className="bg-[#2f4156] py-16 text-white">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-4 text-center sm:px-6 lg:flex-row lg:text-left">
+          <div>
+            <h2 className="font-['Playfair_Display'] text-3xl font-bold">Need a real slide deck link?</h2>
+            <p className="mt-2 text-white/70">Create the slide deck in Google Slides or Canva, then paste the public link into these guide cards.</p>
           </div>
+          <Button asChild className="rounded-full bg-[#FA4616] px-8 py-6 font-bold text-white hover:bg-orange-600">
+            <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">Ask for help</a>
+          </Button>
         </div>
       </section>
 
