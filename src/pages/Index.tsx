@@ -78,7 +78,7 @@ const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" |
 };
 
 const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
-  <div className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-2xl">
+  <div className="relative h-full overflow-hidden bg-white">
     <div className="flex h-12 items-center bg-blue-700 px-4 text-white">
       <div className="mr-4 h-5 w-5 rounded border border-white/70" />
       <div className="mx-auto flex h-8 w-full max-w-xs items-center rounded-full bg-white/15 px-4 text-sm text-blue-100">
@@ -86,7 +86,7 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
         Search course
       </div>
     </div>
-    <div className={`grid ${compact ? "h-[280px] grid-cols-[132px_1fr]" : "h-[360px] grid-cols-[170px_1fr]"}`}>
+    <div className={`grid ${compact ? "h-[280px] grid-cols-[132px_1fr]" : "h-[330px] grid-cols-[150px_1fr]"}`}>
       <aside className="bg-blue-800 p-4 text-white">
         <div className="mb-3 flex items-center justify-between text-sm font-bold">
           <span># Channels</span>
@@ -103,7 +103,7 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
           Prof. Rivera
         </div>
         {!compact && (
-          <div className="absolute bottom-0 left-0 hidden w-[170px] grid-cols-3 gap-1 bg-blue-950 p-2 text-[11px] text-blue-100 lg:grid">
+          <div className="absolute bottom-0 left-0 hidden w-[150px] grid-cols-3 gap-1 bg-blue-950 p-2 text-[10px] text-blue-100 lg:grid">
             <span className="rounded bg-white/10 px-1 py-2 text-center">Courses</span>
             <span className="rounded px-1 py-2 text-center">Communities</span>
             <span className="rounded px-1 py-2 text-center">DMs</span>
@@ -173,11 +173,15 @@ const PhoneMockup = () => (
 );
 
 const HeroMockup = () => (
-  <div className="relative mx-auto max-w-[680px] pb-16 pr-10 pt-4">
-    <div className="origin-center scale-[0.98]">
-      <DesktopChatMockup />
+  <div className="relative mx-auto h-[560px] max-w-[650px]">
+    <div className="absolute left-0 top-0 w-[590px] max-w-[88%]">
+      <div className="overflow-hidden rounded-[1.6rem] border-[10px] border-gray-950 bg-white shadow-2xl">
+        <DesktopChatMockup />
+      </div>
+      <div className="mx-auto h-16 w-40 bg-gray-950" />
+      <div className="mx-auto h-4 w-72 rounded bg-gray-950" />
     </div>
-    <div className="absolute bottom-0 right-0 hidden sm:block">
+    <div className="absolute bottom-3 right-0 hidden sm:block">
       <PhoneMockup />
     </div>
   </div>
@@ -185,7 +189,7 @@ const HeroMockup = () => (
 
 const Cursor = ({ style }: { style: CSSProperties }) => (
   <MousePointer2
-    className="demo-cursor-float absolute z-30 h-5 w-5 fill-white text-blue-950 transition-all duration-700 ease-in-out"
+    className="demo-cursor-float absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-700 ease-in-out"
     style={style}
   />
 );
@@ -198,38 +202,32 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
     return () => window.clearInterval(timer);
   }, []);
 
-  const targets: Record<FeatureId, Array<{ left: string; top: string; width: string; height: string }>> = {
+  const cursorPositions: Record<FeatureId, Array<CSSProperties>> = {
     channels: [
-      { left: "22%", top: "15%", width: "32px", height: "32px" },
-      { left: "45%", top: "45%", width: "210px", height: "48px" },
-      { left: "54%", top: "67%", width: "190px", height: "46px" },
+      { left: "27%", top: "16%" },
+      { left: "55%", top: "49%" },
+      { left: "62%", top: "72%" },
     ],
     files: [
-      { left: "76%", top: "74%", width: "34px", height: "34px" },
-      { left: "42%", top: "34%", width: "220px", height: "120px" },
-      { left: "44%", top: "72%", width: "240px", height: "38px" },
+      { left: "77%", top: "77%" },
+      { left: "54%", top: "43%" },
+      { left: "75%", top: "71%" },
     ],
     media: [
-      { left: "82%", top: "18%", width: "34px", height: "30px" },
-      { left: "43%", top: "30%", width: "70px", height: "32px" },
-      { left: "62%", top: "30%", width: "60px", height: "32px" },
+      { left: "84%", top: "21%" },
+      { left: "48%", top: "34%" },
+      { left: "66%", top: "34%" },
     ],
     requests: [
-      { left: "42%", top: "27%", width: "150px", height: "30px" },
-      { left: "58%", top: "61%", width: "85px", height: "40px" },
-      { left: "58%", top: "61%", width: "85px", height: "40px" },
+      { left: "47%", top: "31%" },
+      { left: "65%", top: "65%" },
+      { left: "65%", top: "65%" },
     ],
     community: [
-      { left: "25%", top: "84%", width: "50px", height: "34px" },
-      { left: "42%", top: "31%", width: "130px", height: "78px" },
-      { left: "60%", top: "31%", width: "130px", height: "78px" },
+      { left: "26%", top: "88%" },
+      { left: "49%", top: "37%" },
+      { left: "68%", top: "37%" },
     ],
-  };
-
-  const activeTarget = targets[id][step];
-  const cursorStyle = {
-    left: `calc(${activeTarget.left} + ${activeTarget.width} - 2px)`,
-    top: `calc(${activeTarget.top} + ${activeTarget.height} - 2px)`,
   };
 
   return (
@@ -325,11 +323,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           </main>
         </div>
       </div>
-      <div
-        className="demo-highlight-pulse pointer-events-none absolute z-20 rounded-xl border-2 border-orange-500 bg-orange-500/10 transition-all duration-700 ease-in-out"
-        style={activeTarget}
-      />
-      <Cursor style={cursorStyle} />
+      <Cursor style={cursorPositions[id][step]} />
     </div>
   );
 };

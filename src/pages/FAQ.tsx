@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, HelpCircle, Search } from "lucide-react";
+import { HelpCircle, Mail, Search } from "lucide-react";
 
 const faqItems = [
   {
@@ -128,7 +126,7 @@ const FAQ = () => {
                 />
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="mx-auto max-w-3xl space-y-5">
                 {filteredFaq.map((item) => (
                   <div key={item.question} className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
                     <span className="mb-4 inline-flex rounded-full bg-orange-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-orange-600">
@@ -151,16 +149,19 @@ const FAQ = () => {
       </section>
 
       <section className="bg-gradient-to-r from-blue-700 to-blue-800 py-16 text-white">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-4 text-center sm:px-6 lg:flex-row lg:text-left">
-          <div>
-            <h2 className="text-3xl font-black">Need step-by-step screenshots?</h2>
-            <p className="mt-2 text-blue-100">Open the Guides page for orange-circle click walkthroughs.</p>
-          </div>
-          <Button asChild className="rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 font-bold text-white hover:from-orange-600 hover:to-orange-700">
-            <Link to="/guides">
-              View Guides <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <Mail className="mx-auto mb-5 h-9 w-9 text-orange-300" />
+          <h2 className="text-3xl font-black">Troubleshooting</h2>
+          <p className="mt-4 leading-8 text-blue-100">
+            If you cannot find an answer, contact the EdStream team with your course name, role, Canvas context, and the
+            workflow you are trying to complete.
+          </p>
+          <a
+            href="mailto:info@edstream.io"
+            className="mt-6 inline-flex rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-4 font-black text-white shadow-lg transition hover:from-orange-600 hover:to-orange-700"
+          >
+            info@edstream.io
+          </a>
         </div>
       </section>
 

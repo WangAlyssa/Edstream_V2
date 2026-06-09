@@ -57,12 +57,13 @@ const Header = () => {
 
           {/* Login Button */}
           <div className="hidden md:flex items-center gap-3">
+            <div className="h-8 w-px bg-gray-200" />
             <a
               href="https://apps.apple.com/us/app/edstream/id6736952355"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Download EdStream on the App Store"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-100 bg-white text-blue-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50 hover:shadow-md"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-50 hover:text-blue-700"
             >
               <Apple className="h-5 w-5" />
             </a>
@@ -71,7 +72,7 @@ const Header = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Get EdStream on Google Play"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-100 bg-white text-blue-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50 hover:shadow-md"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-50 hover:text-blue-700"
             >
               <Play className="h-4 w-4 fill-current" />
             </a>
