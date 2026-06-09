@@ -18,6 +18,8 @@ const guideSections: Array<{
   title: string;
   description: string;
   steps: string[];
+  clickTarget: string;
+  checkResult: string;
   highlights: Highlight[];
 }> = [
   {
@@ -31,6 +33,8 @@ const guideSections: Array<{
       "Use the main message area for announcements, class Q&A, and shared files.",
       "Tell students which channel to use for general questions versus project work.",
     ],
+    clickTarget: "Click # General in the channel list to show the main course conversation.",
+    checkResult: "You should see the course header, member count, recent messages, and message composer.",
     highlights: [
       { label: "Course channels", className: "left-[5%] top-[17%] h-20 w-28" },
       { label: "Class conversation", className: "left-[43%] top-[26%] h-24 w-44" },
@@ -47,6 +51,8 @@ const guideSections: Array<{
       "Post one welcome message that tells students where to ask for help.",
       "Pin or repeat the channel guidance during the first week of class.",
     ],
+    clickTarget: "Click the + button next to Channels, then enter the channel name and posting permissions.",
+    checkResult: "The new channel should appear in the sidebar and be visible to the intended course roles.",
     highlights: [
       { label: "Create channel", className: "left-[27%] top-[13%] h-10 w-10" },
       { label: "Welcome message", className: "left-[43%] top-[74%] h-14 w-44" },
@@ -63,6 +69,8 @@ const guideSections: Array<{
       "Confirm the result appears in the main course workspace.",
       "Use one workflow at a time before adding more channels or request types.",
     ],
+    clickTarget: "Click the relevant workflow area: channel details, file card, request queue, or community tab.",
+    checkResult: "The action panel should update without sending students away from the course workspace.",
     highlights: [
       { label: "Choose workflow", className: "left-[5%] top-[38%] h-20 w-28" },
       { label: "Action panel", className: "left-[59%] top-[30%] h-28 w-32" },
@@ -79,6 +87,8 @@ const guideSections: Array<{
       "Publish the EdStream link after confirming instructor, TA, and student roles.",
       "Open the student view to confirm the link is visible before announcing it.",
     ],
+    clickTarget: "Click Course Navigation in Canvas settings, then move EdStream into the visible course tools.",
+    checkResult: "Students should see EdStream in the Canvas course navigation and open into the correct course space.",
     highlights: [
       { label: "Course navigation", className: "left-[5%] top-[62%] h-14 w-28" },
       { label: "Publish link", className: "left-[43%] top-[18%] h-16 w-40" },
@@ -95,6 +105,8 @@ const guideSections: Array<{
       "Ask questions in the message composer and check shared files before asking for a resend.",
       "Use requests only for workflows your course team has enabled.",
     ],
+    clickTarget: "Click the course channel that best matches your question before typing a message.",
+    checkResult: "Your message should appear in the correct course channel, where classmates and course staff can respond.",
     highlights: [
       { label: "Pick a channel", className: "left-[5%] top-[25%] h-14 w-28" },
       { label: "Write message", className: "left-[43%] top-[76%] h-14 w-44" },
@@ -240,6 +252,16 @@ const Blog = () => {
                         </li>
                       ))}
                     </ol>
+                    <div className="mt-6 grid gap-4 md:grid-cols-2">
+                      <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4">
+                        <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-blue-700">Click target</h3>
+                        <p className="text-sm leading-6 text-gray-700">{guide.clickTarget}</p>
+                      </div>
+                      <div className="rounded-2xl border border-orange-100 bg-orange-50/60 p-4">
+                        <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-orange-600">Check result</h3>
+                        <p className="text-sm leading-6 text-gray-700">{guide.checkResult}</p>
+                      </div>
+                    </div>
                     <Button className="mt-8 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700" asChild>
                       <a href={`#${guide.id}`}>Open {guide.title} link</a>
                     </Button>

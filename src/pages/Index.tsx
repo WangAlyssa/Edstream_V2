@@ -150,7 +150,7 @@ const DesktopChatMockup = ({ compact = false }: { compact?: boolean }) => (
 );
 
 const PhoneMockup = () => (
-  <div className="w-[210px] rounded-[2.1rem] border-[9px] border-gray-950 bg-white p-4 shadow-2xl">
+  <div className="w-[232px] rounded-[2.25rem] border-[9px] border-gray-950 bg-white p-4 shadow-2xl">
     <div className="mx-auto mb-4 h-4 w-16 rounded-b-xl bg-black" />
     <div className="mb-5 flex items-center justify-between">
       <span className="text-lg font-black text-blue-700">EdStream</span>
@@ -191,10 +191,13 @@ const HeroMockup = () => (
 );
 
 const DemoCursor = ({ position }: { position: CSSProperties }) => (
-  <MousePointer2
-    className="demo-cursor-float pointer-events-none absolute z-30 h-4 w-4 fill-white text-blue-950 transition-all duration-1000 ease-in-out"
+  <div
+    className="pointer-events-none absolute z-30 transition-all duration-1000 ease-in-out"
     style={position}
-  />
+  >
+    <span className="absolute left-1 top-1 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 demo-cursor-click" />
+    <MousePointer2 className="demo-cursor-float h-4 w-4 fill-white text-blue-950" />
+  </div>
 );
 
 const FeatureDemo = ({ id }: { id: FeatureId }) => {
