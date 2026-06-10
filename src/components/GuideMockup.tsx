@@ -111,11 +111,8 @@ const BottomNav = ({
   </HighlightWrap>
 );
 
-const DEMO_BG = "#1E212B";
-const DEMO_NAV = "#0A1240";
-
 const AppTopBar = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
-  <div className="flex h-[10%] min-h-[28px] flex-shrink-0 items-center px-3 text-white" style={{ backgroundColor: DEMO_NAV }}>
+  <div className="flex h-[10%] min-h-[28px] flex-shrink-0 items-center bg-[#2d3a8c] px-3 text-white">
     <div className="mr-2 h-3.5 w-3.5 rounded border border-white/50" />
     <HighlightWrap active={highlight === "search-bar"} label={label} className="mx-auto w-full max-w-[55%]">
       <div className="flex h-5 items-center rounded-full bg-[#1e2868]/60 px-3 text-[8px] text-blue-100">
@@ -140,7 +137,7 @@ const Sidebar = ({
   showBottomNav?: boolean;
 }) => (
   <HighlightWrap active={highlight === "sidebar"} label={label} className="h-full">
-    <aside className="relative flex h-full flex-col p-2 text-white" style={{ backgroundColor: DEMO_NAV }}>
+    <aside className="relative flex h-full flex-col bg-[#2d3a8c] p-2 text-white">
       <HighlightWrap active={highlight === "channels-section"} label={label}>
         <div className="mb-1">
           <div className="mb-1.5 flex items-center justify-between text-[8px] font-bold">
@@ -255,26 +252,26 @@ const ChannelChatScene = ({
     <AppTopBar highlight={highlight} label={label} />
     <div className={`grid min-h-0 flex-1 ${showDetails ? "grid-cols-[22%_1fr_26%]" : "grid-cols-[22%_1fr]"}`}>
       <Sidebar activeChannel={channelName} channels={channels} highlight={highlight} label={label} />
-      <main className="flex min-h-0 flex-col p-2.5" style={{ backgroundColor: DEMO_BG }}>
-        <div className="mb-2 flex items-center justify-between border-b border-white/10 pb-1.5">
+      <main className="flex min-h-0 flex-col p-2.5">
+        <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-1.5">
           <div>
-            <h3 className="text-xs font-black text-white">{channelName}</h3>
+            <h3 className="text-xs font-black text-gray-800">{channelName}</h3>
             <p className="text-[7px] text-gray-400">Intro to Biology • 24 members</p>
           </div>
           <HighlightWrap active={highlight === "channel-details-info"} label={label}>
-            <span className="rounded-full bg-orange-500 px-1.5 py-0.5 text-[7px] font-bold text-white">i</span>
+            <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[7px] font-bold text-blue-600">i</span>
           </HighlightWrap>
         </div>
         <div className="min-h-0 flex-1 space-y-1.5 overflow-hidden">
           <HighlightWrap active={highlight === "welcome-message-area"} label={label}>
-            <div className="text-[8px] leading-relaxed text-gray-300">
-              <span className="font-bold text-white">{INSTRUCTOR}</span>
+            <div className="text-[8px] leading-relaxed text-gray-600">
+              <span className="font-bold text-gray-800">{INSTRUCTOR}</span>
               <span className="ml-1 text-[7px] text-gray-400">9:02 AM</span>
               <p className="mt-0.5">Welcome! Use this channel for general course questions.</p>
             </div>
           </HighlightWrap>
-          <div className="text-[8px] leading-relaxed text-gray-300">
-            <span className="font-bold text-white">{STUDENT}</span>
+          <div className="text-[8px] leading-relaxed text-gray-600">
+            <span className="font-bold text-gray-800">{STUDENT}</span>
             <span className="ml-1 text-[7px] text-gray-400">9:15 AM</span>
             <p className="mt-0.5">Where should I submit an extension request?</p>
           </div>
@@ -292,44 +289,6 @@ const ChannelChatScene = ({
       {showDetails && <ChannelDetailsPanel highlight={highlight} label={label} filesTab={filesTab} />}
     </div>
   </div>
-);
-
-const BottomNavScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
-  <div className="flex h-full flex-col">
-    <AppTopBar highlight={highlight} label={label} />
-    <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
-      <Sidebar highlight={highlight} label={label} showBottomNav />
-      <main className="flex flex-col p-3" style={{ backgroundColor: DEMO_BG }}>
-        <p className="mb-2 text-[9px] font-bold text-white">Switch between course workspaces</p>
-        <div className="grid flex-1 grid-cols-3 gap-2 text-center text-[8px] text-gray-400">
-          <div className="rounded-lg border border-white/10 bg-white/90 p-2 text-gray-600">
-            <BookOpen className="mx-auto mb-1 h-4 w-4 text-blue-600" />
-            Courses
-            <p className="mt-1 text-[7px]">Return to your class channels</p>
-          </div>
-          <div className="rounded-lg border border-white/10 bg-white/90 p-2 text-gray-600">
-            <UsersIcon />
-            Communities
-            <p className="mt-1 text-[7px]">Browse study groups</p>
-          </div>
-          <div className="rounded-lg border border-white/10 bg-white/90 p-2 text-gray-600">
-            <Inbox className="mx-auto mb-1 h-4 w-4 text-blue-600" />
-            DMs
-            <p className="mt-1 text-[7px]">Private messages</p>
-          </div>
-        </div>
-      </main>
-    </div>
-  </div>
-);
-
-const UsersIcon = () => (
-  <svg className="mx-auto mb-1 h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-    <circle cx="9" cy="7" r="4" />
-    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-  </svg>
 );
 
 const CanvasCourseHomeScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => {
@@ -401,7 +360,7 @@ const CreateChannelModal = ({ highlight, label }: { highlight: GuideHighlightId;
     <AppTopBar highlight={highlight} label={label} />
     <div className="relative grid min-h-0 flex-1 grid-cols-[22%_1fr]">
       <Sidebar highlight={highlight} label={label} />
-      <main className="relative" style={{ backgroundColor: DEMO_BG }}>
+      <main className="relative bg-gray-100/60">
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 p-4">
           <div className="w-full max-w-[45%] rounded-xl bg-white p-3 shadow-2xl">
             <div className="mb-2 flex items-center justify-between text-[9px] font-black text-gray-800">
@@ -428,7 +387,7 @@ const RequestScene = ({ highlight, label }: { highlight: GuideHighlightId; label
     <AppTopBar highlight={highlight} label={label} />
     <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
       <Sidebar highlight={highlight} label={label} />
-      <main className="flex items-center justify-center p-4" style={{ backgroundColor: DEMO_BG }}>
+      <main className="flex items-center justify-center p-4">
         <HighlightWrap active={highlight === "request-btn"} label={label}>
           <div className="w-full max-w-[50%] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg">
             <div className="mb-1.5 inline-block rounded-full bg-orange-50 px-2 py-0.5 text-[7px] font-bold text-orange-600">
@@ -527,15 +486,15 @@ const MessageReplyScene = ({ highlight, label }: { highlight: GuideHighlightId; 
     <AppTopBar highlight={highlight} label={label} />
     <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
       <Sidebar highlight={highlight} label={label} />
-      <main className="flex min-h-0 flex-col p-2.5" style={{ backgroundColor: DEMO_BG }}>
-        <div className="mb-2 border-b border-white/10 pb-1.5">
-          <h3 className="text-xs font-black text-white"># General</h3>
+      <main className="flex min-h-0 flex-col p-2.5">
+        <div className="mb-2 border-b border-gray-100 pb-1.5">
+          <h3 className="text-xs font-black text-gray-800"># General</h3>
           <p className="text-[7px] text-gray-400">Intro to Biology · 24 members</p>
         </div>
         <div className="min-h-0 flex-1">
           <div className="relative pr-16">
-            <div className="text-[8px] leading-relaxed text-gray-300">
-              <span className="font-bold text-white">{STUDENT}</span>
+            <div className="text-[8px] leading-relaxed text-gray-600">
+              <span className="font-bold text-gray-800">{STUDENT}</span>
               <span className="ml-1 text-[7px] text-gray-400">9:15 AM</span>
               <p className="mt-0.5">Where should I submit an extension request?</p>
             </div>
@@ -568,9 +527,9 @@ const MessageThreadScene = ({ highlight, label }: { highlight: GuideHighlightId;
     <AppTopBar highlight={highlight} label={label} />
     <div className="grid min-h-0 flex-1 grid-cols-[18%_1fr_28%]">
       <Sidebar highlight={highlight} label={label} />
-      <main className="flex min-h-0 flex-col border-r border-white/10 p-2 opacity-60" style={{ backgroundColor: DEMO_BG }}>
-        <div className="mb-2 text-xs font-black text-white"># General</div>
-        <div className="text-[8px] text-gray-400">{STUDENT}: Where should I submit an extension request?</div>
+      <main className="flex min-h-0 flex-col border-r border-gray-100 p-2 opacity-60">
+        <div className="mb-2 text-xs font-black text-gray-800"># General</div>
+        <div className="text-[8px] text-gray-500">{STUDENT}: Where should I submit an extension request?</div>
         <div className="mt-auto flex items-center gap-1 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[7px] text-gray-400">
           Type your message here...
         </div>
@@ -599,7 +558,7 @@ const CanvasEnableScene = ({ highlight, label }: { highlight: GuideHighlightId; 
 
 const sceneRenderers: Record<GuideScene, (props: { highlight: GuideHighlightId; label: string }) => ReactNode> = {
   "canvas-course-home": (props) => <CanvasCourseHomeScene {...props} />,
-  "bottom-nav": (props) => <BottomNavScene {...props} />,
+  "bottom-nav": (props) => <ChannelChatScene {...props} />,
   "channel-general": (props) => <ChannelChatScene {...props} />,
   "sidebar-overview": (props) => <ChannelChatScene {...props} highlight="sidebar" />,
   "channel-composer": (props) => <ChannelChatScene {...props} />,
@@ -624,10 +583,8 @@ const sceneRenderers: Record<GuideScene, (props: { highlight: GuideHighlightId; 
 };
 
 const GuideMockup = ({ scene, highlight, highlightLabel }: GuideMockupProps) => (
-  <div className="relative w-full overflow-hidden rounded-xl p-3 shadow-xl" style={{ backgroundColor: DEMO_BG }}>
-    <div className="overflow-hidden rounded-lg">
-      <MockupFrame>{sceneRenderers[scene]({ highlight, label: highlightLabel })}</MockupFrame>
-    </div>
+  <div className="relative w-full overflow-hidden rounded-xl border border-blue-100 bg-white shadow-xl">
+    <MockupFrame>{sceneRenderers[scene]({ highlight, label: highlightLabel })}</MockupFrame>
   </div>
 );
 
