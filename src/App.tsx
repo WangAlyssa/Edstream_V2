@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
+import Features from "./pages/Features";
+import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
 import GuideTutorial from "./pages/GuideTutorial";
@@ -26,12 +28,12 @@ const App = () => (
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/guides" element={<Blog />} />
             <Route path="/guides/:guideId" element={<GuideTutorial />} />
-            <Route path="/help" element={<FAQ />} />
-            <Route path="/features" element={<Navigate to="/" replace />} />
-            <Route path="/about" element={<Navigate to="/" replace />} />
-            <Route path="/faq" element={<Navigate to="/help" replace />} />
+            <Route path="/help" element={<Navigate to="/faq" replace />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />

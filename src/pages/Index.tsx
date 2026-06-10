@@ -1,493 +1,215 @@
-import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { FeaturesSection } from "@/components/FeatureDemo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  ArrowRight,
-  CheckCircle,
-  ClipboardCheck,
-  FileText,
-  Image,
-  MessageSquare,
-  MousePointer2,
-  Plus,
-  Search,
-  Send,
-  Users,
-} from "lucide-react";
+import { MessageSquare, Users, Zap, CheckCircle, Smartphone, ArrowRight, Clock, Shield } from "lucide-react";
 
-type FeatureId = "channels" | "files" | "media" | "requests" | "community";
+const ChannelCreationMockup = () => {
+  const [step, setStep] = useState(0);
+  const [channels, setChannels] = useState(["# 课程公告", "# 期末复习"]);
 
-const features: Array<{
-  id: FeatureId;
-  title: string;
-  description: string;
-  bullets: string[];
-}> = [
-  {
-    id: "channels",
-    title: "1-Click Channels",
-    description:
-      "Create announcement, lab, project, or staff-only channels from a course workspace so communication stays organized.",
-    bullets: ["Channel visibility", "Posting permissions", "Course-role context"],
-  },
-  {
-    id: "files",
-    title: "Seamless File Sharing",
-    description:
-      "Share PDFs, slides, and handouts directly in the class conversation so students can preview materials in context.",
-    bullets: ["Inline file cards", "Preview-first workflow", "Course materials near the discussion"],
-  },
-  {
-    id: "media",
-    title: "Automated Media Sorting",
-    description:
-      "Collect shared photos, videos, and files into channel details so students can revisit materials after the chat moves on.",
-    bullets: ["Photos / videos / files tabs", "Channel-level library", "Useful for labs and projects"],
-  },
-  {
-    id: "requests",
-    title: "Centralized Requests",
-    description:
-      "Move repeated student requests out of email and into a structured queue with clear pending, approved, and denied states.",
-    bullets: ["Extension requests", "Attendance notes", "Regrade questions"],
-  },
-  {
-    id: "community",
-    title: "Community",
-    description:
-      "Give students course-aware spaces for peer questions, project groups, and broader class community without leaving Canvas.",
-    bullets: ["Course Q&A", "Project groups", "Communities tab"],
-  },
-];
-
-const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" | "orange" | "gray" }) => {
-  const colorMap = {
-    blue: "bg-blue-100 text-blue-700",
-    orange: "bg-orange-100 text-orange-700",
-    gray: "bg-gray-100 text-gray-700",
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setStep((prev) => {
+        if (prev === 4) {
+          setChannels(["# 课程公告", "# 期末复习"]);
+          return 0;
+        }
+        if (prev === 2) {
+          setChannels(["# 课程公告", "# 期末复习", "# 小组项目-01 🟢"]);
+        }
+        return prev + 1;
+      });
+    }, 1500);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${colorMap[color]}`}>
-      {label}
+    <div className="w-full bg-[#1e1e2d] text-gray-300 rounded-xl shadow-2xl p-4 font-mono text-xs overflow-hidden border border-gray-700 relative h-64 flex">
+      <div className="w-1/3 border-r border-gray-700 pr-3 flex flex-col justify-between">
+        <div>
+          <div className="text-white font-bold mb-4 flex items-center gap-1.5 text-[11px] text-orange-400">
+            <MessageSquare className="h-3 w-3" /> EdStream Hub
+          </div>
+          <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Canvas 课程频道</div>
+          <div className="space-y-1.5">
+            {channels.map((ch, idx) => (
+              <div key={idx} className={`px-2 py-1 rounded transition-all duration-300 ${idx === channels.length - 1 && step >= 3 ? "bg-blue-600/30 text-white font-semibold" : "text-gray-400"}`}>
+                {ch}
+              </div>
+            ))}
+          </div>
+        </div>
+        <button className={`w-full py-1 text-center border rounded border-dashed text-[10px] transition-all flex items-center justify-center gap-1 ${step === 1 ? "bg-orange-500 text-white border-transparent scale-105" : "border-gray-600 text-gray-500"}`}>
+          <span>+ 创建新频道</span>
+        </button>
+      </div>
+
+      <div className="w-2/3 pl-3 flex flex-col justify-between relative">
+        <div className="border-b border-gray-800 pb-2 mb-2 flex items-center justify-between">
+          <span className="text-white font-bold">{step >= 3 ? "# 小组项目-01" : "# 课程公告"}</span>
+          <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">Canvas 已同步</span>
+        </div>
+
+        <div className="flex-1 flex items-center justify-center text-center px-4">
+          {step === 0 && <p className="text-gray-500 italic animate-pulse">准备就绪：主讲教师一键管理...</p>}
+          {step === 1 && <p className="text-orange-400 font-semibold animate-bounce">1. 触发 Canvas 接口创建频道...</p>}
+          {step === 2 && <p className="text-blue-400 font-semibold">2. 输入频道名称中: "小组项目-01"</p>}
+          {step === 3 && <p className="text-green-400 font-semibold animate-pulse">3. 🎉 频道创建成功！全班无缝接入</p>}
+          {step === 4 && <p className="text-gray-400">正在同步 Canvas 学生花名册权限...</p>}
+        </div>
+
+        <div
+          className="absolute w-3 h-3 bg-white rounded-full border border-black pointer-events-none transition-all duration-1000 shadow-lg"
+          style={{
+            left: step === 1 ? "25%" : step === 2 ? "50%" : "85%",
+            top: step === 1 ? "85%" : step === 2 ? "60%" : "20%",
+            opacity: step === 4 ? 0 : 0.8,
+            transform: step === 1 ? "scale(0.8)" : "scale(1)"
+          }}
+        />
+      </div>
     </div>
   );
 };
 
-const DesktopChatMockup = () => (
-  <div className="relative flex h-full flex-col overflow-hidden bg-[#eef0f4]">
-    <div className="flex h-[9%] min-h-[32px] flex-shrink-0 items-center bg-[#2d3a8c] px-3 text-white sm:px-4">
-      <div className="mr-2 h-3.5 w-3.5 flex-shrink-0 rounded border border-white/60 sm:mr-3 sm:h-4 sm:w-4" />
-      <div className="mx-auto flex h-6 w-full max-w-md items-center rounded-full bg-[#1e2868]/80 px-3 text-[10px] text-blue-100 sm:h-7 sm:text-xs">
-        <Search className="mr-1.5 h-3 w-3 flex-shrink-0 sm:mr-2 sm:h-3.5 sm:w-3.5" />
-        Search
-      </div>
-    </div>
-    <div className="grid min-h-0 flex-1 grid-cols-[minmax(72px,18%)_1fr]">
-      <aside className="flex min-h-0 flex-col bg-[#2d3a8c] px-2 py-2.5 text-white sm:px-3 sm:py-3">
-        <div className="mb-1.5 flex items-center justify-between text-[10px] font-bold sm:text-xs">
-          <span className="truncate"># Channels</span>
-          <Plus className="h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5" />
-        </div>
-        {["# General", "# Peer Mentors", "# Project Lab"].map((channel, index) => (
-          <div
-            key={channel}
-            className={`mb-0.5 truncate rounded px-2 py-1 text-[10px] sm:mb-1 sm:px-2.5 sm:py-1.5 sm:text-xs ${
-              index === 0 ? "bg-white/15" : "text-blue-100"
-            }`}
-          >
-            {channel}
-          </div>
-        ))}
-        <div className="mt-3 text-[10px] font-bold sm:text-xs">Direct messages</div>
-        <div className="mt-1 flex items-center gap-1.5 truncate rounded bg-white/10 px-2 py-1 text-[10px] sm:py-1.5 sm:text-xs">
-          <FakeAvatar label="JP" color="orange" />
-          <span className="truncate">Jamie Park</span>
-        </div>
-        <div className="mt-auto shrink-0 pt-2">
-          <div className="grid grid-cols-3 gap-1 rounded-md bg-[#1a2258] p-1">
-            <div className="rounded bg-white/15 py-1.5 text-center text-[8px] leading-none sm:text-[9px]">Courses</div>
-            <div className="rounded py-1.5 text-center text-[8px] leading-none text-blue-100/80 sm:text-[9px]">
-              Communities
-            </div>
-            <div className="rounded py-1.5 text-center text-[8px] leading-none text-blue-100/80 sm:text-[9px]">DMs</div>
-          </div>
-        </div>
-      </aside>
-      <main className="flex min-h-0 flex-col bg-white p-3 sm:p-4">
-        <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-2 sm:mb-3">
-          <div>
-            <h3 className="text-sm font-black text-gray-800 sm:text-base"># General</h3>
-            <p className="text-[9px] text-gray-400 sm:text-[10px]">Intro to Biology · 24 members</p>
-          </div>
-          <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[9px] font-bold text-blue-600 sm:text-[10px]">i</span>
-        </div>
-        <div className="min-h-0 flex-1 space-y-2.5 overflow-hidden sm:space-y-3">
-          <div className="flex gap-2 sm:gap-2.5">
-            <FakeAvatar label="DM" />
-            <div className="min-w-0">
-              <div className="text-[10px] font-black text-gray-900 sm:text-xs">
-                Dr. Morgan
-                <span className="ml-1 rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-bold text-blue-700 sm:text-[10px]">
-                  Instructor
-                </span>
-              </div>
-              <p className="mt-0.5 text-[10px] leading-relaxed text-gray-600 sm:text-xs">
-                Hi @everyone, welcome to our class! Post questions here.
-              </p>
-              <div className="mt-1 flex gap-1.5 text-[9px] sm:text-[10px]">
-                <span className="rounded-full bg-orange-50 px-2 py-0.5">👍 12</span>
-                <span className="rounded-full bg-blue-50 px-2 py-0.5">💬 4</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-2 sm:gap-2.5">
-            <FakeAvatar label="AK" color="gray" />
-            <div className="min-w-0">
-              <div className="text-[10px] font-black text-gray-900 sm:text-xs">Alex Kim</div>
-              <p className="mt-0.5 text-[10px] leading-relaxed text-gray-600 sm:text-xs">
-                Can someone explain the project checkpoint?
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="mt-2 flex shrink-0 items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-2 text-[10px] text-gray-400 sm:px-3 sm:py-2.5 sm:text-xs">
-          <Plus className="h-3.5 w-3.5 flex-shrink-0 text-blue-600 sm:h-4 sm:w-4" />
-          <span className="flex-1">Type your message here...</span>
-          <Send className="h-3.5 w-3.5 flex-shrink-0 text-blue-600 sm:h-4 sm:w-4" />
-        </div>
-      </main>
-    </div>
-  </div>
-);
-
-const PhoneMockup = () => (
-  <div className="w-full rounded-[2rem] border-[7px] border-gray-950 bg-white p-3 shadow-2xl sm:rounded-[2.25rem] sm:border-[8px] sm:p-3.5">
-    <div className="mx-auto mb-4 h-4 w-16 rounded-b-xl bg-black" />
-    <div className="mb-5 flex items-center justify-between">
-      <span className="text-lg font-black text-blue-700">EdStream</span>
-      <span className="text-gray-400">≡</span>
-    </div>
-    {[
-      ["DM", "Dr. Morgan", "Reminder: lab notes are posted in # General."],
-      ["AK", "Alex Kim", "Where can I find the review PDF?"],
-    ].map(([initials, name, text]) => (
-      <div key={name} className="mb-3 rounded-xl border p-3 shadow-sm">
-        <div className="mb-2 flex items-center gap-2">
-          <FakeAvatar label={initials} />
-          <span className="text-xs font-black text-gray-900">{name}</span>
-        </div>
-        <p className="text-[11px] leading-4 text-gray-500">{text}</p>
-      </div>
-    ))}
-    <div className="mt-5 flex justify-around text-blue-600">● ○ ◒ ◐</div>
-  </div>
-);
-
-const HeroMockup = () => (
-  <div className="relative w-full lg:pl-2">
-    <div className="w-full">
-      <div className="rounded-xl bg-gray-950 p-2 shadow-2xl sm:rounded-2xl sm:p-2.5">
-        <div className="aspect-[16/10] overflow-hidden rounded-md bg-white sm:rounded-lg">
-          <DesktopChatMockup />
-        </div>
-        <div className="mx-auto mt-2 h-2 w-2 rounded-full bg-gray-800 sm:mt-2.5 sm:h-2.5 sm:w-2.5" />
-      </div>
-      <div className="mx-auto h-10 w-28 bg-gray-950 sm:h-12 sm:w-32" />
-      <div className="mx-auto h-2.5 w-48 rounded-sm bg-gray-950 sm:h-3 sm:w-56" />
-    </div>
-    <div className="absolute -bottom-4 right-0 hidden w-[28%] max-w-[200px] sm:block lg:-right-6 lg:max-w-[220px]">
-      <PhoneMockup />
-    </div>
-  </div>
-);
-
-const DemoCursor = ({ position }: { position: CSSProperties }) => (
-  <div
-    className="pointer-events-none absolute z-30 transition-all duration-1000 ease-in-out"
-    style={position}
-  >
-    <span className="absolute left-1 top-1 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 demo-cursor-click" />
-    <MousePointer2 className="demo-cursor-float h-4 w-4 fill-white text-blue-950" />
-  </div>
-);
-
-const FeatureDemo = ({ id }: { id: FeatureId }) => {
-  const [step, setStep] = useState(0);
-  const frameRef = useRef<HTMLDivElement>(null);
-  const [cursorPosition, setCursorPosition] = useState<CSSProperties>({
-    left: "50%",
-    top: "50%",
-    opacity: 0,
-  });
+const ExtensionApprovalMockup = () => {
+  const [isApproved, setIsApproved] = useState(false);
 
   useEffect(() => {
-    const timer = window.setInterval(() => setStep((current) => (current + 1) % 3), 2300);
-    return () => window.clearInterval(timer);
+    const timer = setInterval(() => {
+      setIsApproved((prev) => !prev);
+    }, 3000);
+    return () => clearInterval(timer);
   }, []);
 
-  useLayoutEffect(() => {
-    const updateCursor = () => {
-      const frame = frameRef.current;
-      const target = frame?.querySelector(`[data-demo-target="${step}"]`) as HTMLElement | null;
-
-      if (!frame || !target) {
-        setCursorPosition((current) => ({ ...current, opacity: 0 }));
-        return;
-      }
-
-      const frameRect = frame.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-
-      setCursorPosition({
-        left: targetRect.left - frameRect.left + targetRect.width * 0.72,
-        top: targetRect.top - frameRect.top + targetRect.height * 0.72,
-        opacity: 1,
-      });
-    };
-
-    const animationFrame = window.requestAnimationFrame(updateCursor);
-    window.addEventListener("resize", updateCursor);
-
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", updateCursor);
-    };
-  }, [id, step]);
-
   return (
-    <div ref={frameRef} className="relative overflow-hidden rounded-3xl border border-blue-100 bg-white p-5 shadow-xl">
-      <div className="relative overflow-hidden rounded-2xl border bg-white">
-        <div className="flex h-11 items-center bg-blue-700 px-4 text-white">
-          <div className="mr-4 h-5 w-5 rounded border border-white/70" />
-          <div className="mx-auto flex h-7 w-full max-w-xs items-center rounded-full bg-white/15 px-3 text-xs text-blue-100">
-            <Search className="mr-2 h-3 w-3" />
-            Search
+    <div className="w-full h-64 [perspective:1000px] font-sans">
+      <div className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${isApproved ? "[transform:rotateY(180deg)]" : ""}`}>
+
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] bg-white dark:bg-gray-800 rounded-xl p-5 border-2 border-orange-200 shadow-xl flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="px-2 py-0.5 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full flex items-center gap-1">
+                <Clock className="h-3 w-3" /> 待处理请求
+              </span>
+              <span className="text-xs text-gray-400">作业 3 延期申请</span>
+            </div>
+            <h4 className="font-bold text-gray-900 dark:text-white text-base">学生：张同学 (ID: 20260824)</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-100 italic">
+              "老师您好，由于突发胃肠炎就医，希望能申请将作业截止日期延后 24 小时，附就医证明..."
+            </p>
+          </div>
+          <div className="flex gap-3 mt-4">
+            <button className="flex-1 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+              拒绝请求
+            </button>
+            <button className="flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold shadow-md transform scale-105 animate-pulse">
+              一键批准 ⚡
+            </button>
           </div>
         </div>
-        <div className="grid min-h-[300px] grid-cols-[135px_1fr]">
-          <aside className="bg-blue-800 p-3 text-white">
-            <div className="mb-3 flex items-center justify-between text-xs font-bold">
-              <span># Channels</span>
-              <span
-                data-demo-target={id === "channels" ? "0" : undefined}
-                className={`relative rounded transition-colors duration-500 ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}
-              >
-                <Plus className="h-4 w-4" />
-              </span>
+
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl p-6 shadow-xl [transform:rotateY(180deg)] flex flex-col justify-between items-center text-center">
+          <div className="my-auto space-y-3">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
+              <CheckCircle className="h-6 w-6 text-white" />
             </div>
-            {["# General", "# Peer Mentors", "# Project"].map((item, index) => (
-              <div key={item} className={`mb-2 rounded px-2 py-1.5 text-xs ${index === 0 ? "bg-white/15" : "text-blue-100"}`}>
-                {item}
-              </div>
-            ))}
-            <div className="mt-8 text-xs font-bold">Direct messages</div>
-            <div className="mt-2 rounded bg-white/15 px-2 py-2 text-xs">Dr. Morgan</div>
-            {id === "community" && (
-              <div className="absolute bottom-0 left-0 grid w-[135px] grid-cols-3 bg-blue-950 p-1 text-[9px] text-blue-100">
-                <span className="rounded px-1 py-2 text-center">Courses</span>
-                <span className={`rounded px-1 py-2 text-center ${step > 0 ? "bg-white/15" : ""}`}>Communities</span>
-                <span className="rounded px-1 py-2 text-center">DMs</span>
-              </div>
-            )}
-          </aside>
-          <main className="relative p-4">
-            {id === "channels" && (
-              <div className="mx-auto max-w-xs rounded-2xl bg-white p-5 shadow-2xl">
-                <h4 className="mb-4 text-lg font-black text-blue-700">Create Channel</h4>
-                <div className="mb-3 grid grid-cols-2 gap-3 text-xs">
-                  <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Visibility</span><b>Private</b></div>
-                  <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Who can send</span><b>Everyone</b></div>
-                </div>
-                <div
-                  data-demo-target="1"
-                  className={`relative mb-4 rounded-lg bg-orange-50 p-3 text-sm font-black text-blue-700 transition-all duration-500 ${step === 1 ? "ring-2 ring-blue-200" : ""}`}
-                >
-                  # project-group-alpha
-                </div>
-                <button
-                  data-demo-target="2"
-                  className={`relative w-full rounded-lg py-3 text-sm font-black text-white transition-colors duration-500 ${step === 2 ? "bg-orange-500" : "bg-blue-600"}`}
-                >
-                  Create Channel
-                </button>
-              </div>
-            )}
-            {id === "files" && (
-              <div className="relative space-y-4">
-                <div className="rounded-xl border bg-gray-50 p-4 text-sm text-gray-500">Share a course handout in # General</div>
-                <div className="flex gap-3">
-                  <FakeAvatar label="PI" />
-                  <div>
-                    <div className="text-xs font-black text-gray-900">Dr. Morgan</div>
-                    <p className="mt-1 text-xs text-gray-500">Here is the course welcome packet for everyone.</p>
-                    <div
-                      data-demo-target="1"
-                      className={`relative mt-2 flex items-center gap-3 rounded-xl border bg-white p-3 shadow-md transition-all duration-500 ${step > 0 ? "ring-2 ring-orange-200" : ""}`}
-                    >
-                      <FileText className="h-7 w-7 flex-shrink-0 text-orange-500" />
-                      <div>
-                        <h4 className="text-sm font-black text-blue-700">Welcome-to-EdStream.pdf</h4>
-                        <p className="text-[10px] text-gray-400">248 KB · PDF</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {step >= 2 && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-blue-950/25 backdrop-blur-[1px]">
-                    <div
-                      data-demo-target="2"
-                      className="mx-3 w-full max-w-[240px] rounded-2xl bg-white shadow-2xl ring-1 ring-blue-100"
-                    >
-                      <div className="flex items-center justify-between border-b px-4 py-2.5">
-                        <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-orange-500" />
-                          <span className="text-xs font-black text-blue-700">Welcome-to-EdStream.pdf</span>
-                        </div>
-                        <span className="text-xs text-gray-400">✕</span>
-                      </div>
-                      <div className="space-y-2.5 p-4 text-xs leading-5 text-gray-600">
-                        <h5 className="text-sm font-black text-blue-700">Welcome to EdStream</h5>
-                        <p>
-                          EdStream is your Canvas-aware course communication workspace — channels, files, and student
-                          requests in one place.
-                        </p>
-                        <p>
-                          Start with <span className="font-bold text-blue-700"># General</span> for announcements, share
-                          handouts inline, and keep materials attached to the conversation.
-                        </p>
-                        <div className="rounded-lg bg-blue-50 px-3 py-2 font-bold text-blue-700">
-                          Tip: Click any file card to preview without leaving the channel.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div data-demo-target="0" className="relative flex items-center rounded-xl border bg-gray-50 px-3 py-2 text-xs text-gray-400">
-                  Type message <Plus className="ml-auto h-4 w-4 text-blue-600" />
-                </div>
-              </div>
-            )}
-            {id === "media" && (
-              <div>
-                <div className="mb-4 flex items-center justify-between">
-                  <h4 className="font-black text-blue-700">Channel Details</h4>
-                  <span
-                    data-demo-target={id === "media" ? "0" : undefined}
-                    className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : "bg-blue-50 text-blue-700"}`}
-                  >
-                    i
-                  </span>
-                </div>
-                <div className="mb-4 flex gap-2">
-                  {["Photos", "Videos", "Files"].map((tab, index) => (
-                    <span
-                      key={tab}
-                      data-demo-target={id === "media" && index === step ? String(step) : undefined}
-                      className={`relative rounded-full px-3 py-1 text-xs font-black transition-colors duration-500 ${index === step ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}
-                    >
-                      {tab}
-                    </span>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[1, 2, 3, 4].map((item) => <div key={item} className="h-20 rounded-xl bg-gradient-to-br from-blue-100 to-orange-100 p-3 text-xs font-bold text-blue-700">Course media {item}</div>)}
-                </div>
-              </div>
-            )}
-            {id === "requests" && (
-              <div className="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-xl">
-                <div data-demo-target="0" className="mb-3 rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-orange-600">Extension request</div>
-                <p className="text-sm text-gray-500">Student requests more time for Project Checkpoint 2.</p>
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <button className="rounded-lg border py-2 text-sm font-bold text-gray-500">Deny</button>
-                  <button
-                    data-demo-target={step > 0 ? String(step) : undefined}
-                    className={`relative rounded-lg py-2 text-sm font-bold text-white transition-colors duration-500 ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}
-                  >
-                    {step === 2 ? "Approved" : "Approve"}
-                  </button>
-                </div>
-              </div>
-            )}
-            {id === "community" && (
-              <div>
-                <h4 className="mb-4 text-xl font-black text-blue-700">Communities</h4>
-                <div className="grid grid-cols-2 gap-3">
-                  {["Study Group", "Project Teams", "Peer Mentors", "Exam Review"].map((community, index) => (
-                    <div
-                      key={community}
-                      data-demo-target={id === "community" && index === step ? String(step) : undefined}
-                      className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${index === step ? "bg-orange-50 text-orange-700" : "bg-gray-50 text-gray-600"}`}
-                    >
-                      {community}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </main>
+            <h4 className="font-bold text-xl">审批已送达！</h4>
+            <p className="text-sm text-blue-100 max-w-xs">
+              系统已自动更改该生在 Canvas 中的专属截止日期，并通过微信/Push实时通知学生。
+            </p>
+          </div>
+          <div className="text-[10px] text-blue-200/60 uppercase tracking-wider">
+            自动生成合规审计日志 • 100% 教师自主可控
+          </div>
         </div>
+
       </div>
-      <DemoCursor position={cursorPosition} />
     </div>
   );
 };
 
 const Index = () => {
-  useEffect(() => {
-    document.title = "EdStream - Canvas Course Communication";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans selection:bg-orange-500 selection:text-white">
       <Header />
 
-      <section className="overflow-hidden bg-gradient-to-br from-blue-50 via-white to-orange-50 py-20 lg:py-28">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-10 lg:px-8">
-          <div>
-            <div className="mb-7 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-bold text-blue-700">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Built for Canvas course communities
-            </div>
-            <h1 className="text-5xl font-black leading-tight text-blue-700 lg:text-6xl">
-              Elevate your
-              <span className="block bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                campus & team
-              </span>
-              communication.
-            </h1>
-            <p className="mt-7 max-w-xl text-lg leading-8 text-gray-600">
-              Streamline discussions, connect peers, and foster collaborative learning. EdStream is a modern workspace
-              designed for Canvas-based courses.
-            </p>
-            <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-              <Button asChild className="rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 font-bold text-white shadow-lg hover:from-orange-600 hover:to-orange-700">
-                <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-28 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            <div className="text-left space-y-6">
+              <div className="inline-flex items-center px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold tracking-wide">
+                🎨 专为高校打造的智能教学社群生态
+              </div>
+              <h1 className="text-4xl lg:text-6xl font-extrabold text-blue-600 dark:text-blue-300 leading-tight">
+                Cultivating Campus <br />
+                <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                  Communities
+                </span>
+              </h1>
+              <p className="text-xl lg:text-2xl text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
+                连接 · 沟通 · 协同。 <br />
+                一切无缝内置于 Canvas 内部。
+              </p>
+              <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
+                EdStream 是一款深度嵌入 Canvas LMS 的全集成实时群聊与学术协同工具。拒绝混乱零散的邮件流与死板的传统讨论版，将类似 Slack 的高效沟通与自动化的教学教务流程完美融入师生日常。
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all w-full sm:w-52"
+                  asChild
+                >
+                  <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                    申请接入 EdStream <ArrowRight className="h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-4 pt-6 opacity-85 hover:opacity-100 transition-opacity">
+                <a href="https://apps.apple.com/us/app/edstream/id6736952355" target="_blank" rel="noopener noreferrer" className="transform hover:scale-105 transition-transform">
+                  <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" className="h-10 object-contain" />
                 </a>
-              </Button>
+                <a href="https://play.google.com/store/apps/details?id=com.edstreamchat.app" target="_blank" rel="noopener noreferrer" className="transform hover:scale-105 transition-transform">
+                  <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play" className="h-14 object-contain -my-2" />
+                </a>
+              </div>
             </div>
+
+            <div className="relative space-y-6">
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/10 to-orange-400/10 rounded-2xl blur-3xl -z-10" />
+              <ChannelCreationMockup />
+              <ExtensionApprovalMockup />
+            </div>
+
           </div>
-          <HeroMockup />
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 md:grid-cols-3">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800/50 border-y border-gray-100 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">为什么高校沟通总是充满断层？</h2>
+            <p className="text-gray-500 text-base">目前师生在传统 Canvas 和日常沟通中普遍面临的零散困境：</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              ["The pain", "Course communication gets split across Canvas inbox, email, discussion boards, and outside group chats."],
-              ["The solution", "EdStream creates one Canvas-aware place for channels, class files, and student requests."],
-              ["Why it matters", "Students know where to ask. Instructors know where to respond. Materials stay attached to the course."],
-            ].map(([title, copy]) => (
-              <Card key={title} className="border-l-4 border-l-orange-500 shadow-lg">
-                <CardContent className="p-8">
-                  <h2 className="mb-4 text-2xl font-black text-blue-700">{title}</h2>
-                  <p className="leading-7 text-gray-600">{copy}</p>
+              "传统 Canvas 收件箱与课程割裂，容易漏看重要通知",
+              "各大课程讨论版犹如\u201c水贴\u201d，师生难以维持实时即时问答",
+              "无数作业延期、病假缓考申请散落在庞杂的日常邮件堆里",
+              "师生缺乏统一的答疑与 Office Hours 预约和在线协作平台",
+              "学生被迫在校外组建混乱的临时社交群，存在隐私和数据合规风险",
+              "助教和老师需要耗费大量时间，重复手动梳理各种教务沟通文档"
+            ].map((challenge, index) => (
+              <Card key={index} className="border-l-4 border-l-orange-500 bg-white dark:bg-gray-800 hover:shadow-md transition-all">
+                <CardContent className="p-6">
+                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">{challenge}</p>
                 </CardContent>
               </Card>
             ))}
@@ -495,48 +217,102 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-16 max-w-3xl text-center">
-            <p className="mb-3 text-sm font-black uppercase tracking-[0.25em] text-orange-500">Features</p>
-            <h2 className="text-4xl font-black text-blue-700 lg:text-5xl">Five workflows shown with realistic demos</h2>
-            <p className="mt-4 text-lg text-gray-600">Each demo uses fake names and course data while matching the real app layout.</p>
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">核心模块，精简归一</h2>
+            <p className="text-gray-500 text-base">不做臃肿的拼凑，只做对现代化高校教学最实用的功能。</p>
           </div>
-          <div className="space-y-16">
-            {features.map((feature, index) => (
-              <div key={feature.id} className="grid items-center gap-10 lg:grid-cols-2">
-                <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                  <h3 className="mb-5 text-3xl font-black text-blue-700">{feature.title}</h3>
-                  <p className="mb-6 text-lg leading-8 text-gray-600">{feature.description}</p>
-                  <ul className="space-y-3">
-                    {feature.bullets.map((bullet) => (
-                      <li key={bullet} className="flex gap-3 text-gray-700">
-                        <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-500" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <FeatureDemo id={feature.id} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-300">
+                <MessageSquare className="h-6 w-6" />
               </div>
-            ))}
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold">内置式即时学术沙龙</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  学生无需切换到第三方软件，直接在 Canvas 侧边栏进入专属实时沟通频道，支持代码高亮、多媒体文档分享和作业主题线索聚合。
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400">
+                <Zap className="h-6 w-6" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold">自动化特殊教务流审批</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  作业延期、缓考等特殊申请实现表单式线上收录。教师在面板一键准允后，系统自动同步修改 Canvas 中的对应节点，大幅削减行政开销。
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-300">
+                <Users className="h-6 w-6" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold">Canvas LTI 深度权限互通</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  完美基于标准 LTI 协议进行身份鉴权。无需师生重新注册或管理新密码，自动读取班级成员名册，完美保障教学边界与合规性。
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400">
+                <Smartphone className="h-6 w-6" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold">全功能原生双端移动 App</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  全面支持 iOS 和 Android 原生系统，确保师生在外出、通勤时也能通过安全的 Push 通知接收关键教务通答疑答复，不错过任何学术动态。
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-gradient-to-r from-blue-700 to-blue-800 py-20 text-white">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <Users className="mx-auto mb-5 h-10 w-10 text-orange-300" />
-          <h2 className="text-4xl font-black">Ready to map this to your course?</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-blue-100">
-            Start with one course, one Q&A channel, one announcement channel, and one request workflow.
+      <FeaturesSection />
+
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-orange-50 dark:from-gray-800 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300">安全、合规、稳健的学术生态系统</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center max-w-4xl mx-auto">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm space-y-2">
+              <Shield className="h-8 w-8 text-blue-600 mx-auto" />
+              <h4 className="font-bold text-base">符合 FERPA 联邦隐私规范</h4>
+              <p className="text-xs text-gray-500">所有涉及学生的教学记录、聊天文件和审批数据均实施端到端加密存储，杜绝校外第三方非法获取。</p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm space-y-2">
+              <CheckCircle className="h-8 w-8 text-orange-500 mx-auto" />
+              <h4 className="font-bold text-base">教师绝对控制与管理权</h4>
+              <p className="text-xs text-gray-500">提供完整的内容行为审计日志，教师可根据需要随时开启或关闭指定社群频道，完全服务于教学实体。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <h2 className="text-3xl lg:text-4xl font-bold">即刻为您的课程注入即时沟通活力</h2>
+          <p className="text-base text-blue-100 max-w-2xl mx-auto">
+            加入学术数字化沟通重构行列，让学生的课程参与率与老师的沟通效率得到双重跨越。
           </p>
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button asChild className="rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 font-bold text-white hover:from-orange-600 hover:to-orange-700">
-              <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">Request a pilot</a>
-            </Button>
-            <Button asChild variant="outline" className="rounded-xl border-white bg-transparent px-8 py-6 font-bold text-white hover:bg-white hover:text-blue-700">
-              <Link to="/guides">Open Guides</Link>
+          <div className="pt-4">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold px-10 py-6 text-lg rounded-xl shadow-xl transform hover:scale-105 transition-all"
+              asChild
+            >
+              <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
+                立即申请 Pilot 试点计划
+              </a>
             </Button>
           </div>
         </div>
