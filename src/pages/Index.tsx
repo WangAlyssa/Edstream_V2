@@ -1,214 +1,132 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageSquare, Users, Zap, CheckCircle, Smartphone, ArrowRight, Clock, Shield } from "lucide-react";
-
-const ChannelCreationMockup = () => {
-  const [step, setStep] = useState(0);
-  const [channels, setChannels] = useState(["# Announcements", "# Final Review"]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setStep((prev) => {
-        if (prev === 4) {
-          setChannels(["# Announcements", "# Final Review"]);
-          return 0;
-        }
-        if (prev === 2) {
-          setChannels(["# Announcements", "# Final Review", "# project-group-01 🟢"]);
-        }
-        return prev + 1;
-      });
-    }, 1500);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <div className="w-full bg-[#1e1e2d] text-gray-300 rounded-xl shadow-2xl p-4 font-mono text-xs overflow-hidden border border-gray-700 relative h-64 flex">
-      <div className="w-1/3 border-r border-gray-700 pr-3 flex flex-col justify-between">
-        <div>
-          <div className="text-white font-bold mb-4 flex items-center gap-1.5 text-[11px] text-orange-400">
-            <MessageSquare className="h-3 w-3" /> EdStream Hub
-          </div>
-          <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Canvas Course Channels</div>
-          <div className="space-y-1.5">
-            {channels.map((ch, idx) => (
-              <div key={idx} className={`px-2 py-1 rounded transition-all duration-300 ${idx === channels.length - 1 && step >= 3 ? "bg-blue-600/30 text-white font-semibold" : "text-gray-400"}`}>
-                {ch}
-              </div>
-            ))}
-          </div>
-        </div>
-        <button className={`w-full py-1 text-center border rounded border-dashed text-[10px] transition-all flex items-center justify-center gap-1 ${step === 1 ? "bg-orange-500 text-white border-transparent scale-105" : "border-gray-600 text-gray-500"}`}>
-          <span>+ Create New Channel</span>
-        </button>
-      </div>
-
-      <div className="w-2/3 pl-3 flex flex-col justify-between relative">
-        <div className="border-b border-gray-800 pb-2 mb-2 flex items-center justify-between">
-          <span className="text-white font-bold">{step >= 3 ? "# project-group-01" : "# Announcements"}</span>
-          <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">Canvas Synced</span>
-        </div>
-
-        <div className="flex-1 flex items-center justify-center text-center px-4">
-          {step === 0 && <p className="text-gray-500 italic animate-pulse">Ready: instructors manage channels in one click...</p>}
-          {step === 1 && <p className="text-orange-400 font-semibold animate-bounce">1. Triggering Canvas API to create channel...</p>}
-          {step === 2 && <p className="text-blue-400 font-semibold">2. Entering channel name: "project-group-01"</p>}
-          {step === 3 && <p className="text-green-400 font-semibold animate-pulse">3. 🎉 Channel created! Class connected seamlessly</p>}
-          {step === 4 && <p className="text-gray-400">Syncing Canvas roster permissions...</p>}
-        </div>
-
-        <div
-          className="absolute w-3 h-3 bg-white rounded-full border border-black pointer-events-none transition-all duration-1000 shadow-lg"
-          style={{
-            left: step === 1 ? "25%" : step === 2 ? "50%" : "85%",
-            top: step === 1 ? "85%" : step === 2 ? "60%" : "20%",
-            opacity: step === 4 ? 0 : 0.8,
-            transform: step === 1 ? "scale(0.8)" : "scale(1)"
-          }}
-        />
-      </div>
-    </div>
-  );
-};
-
-const ExtensionApprovalMockup = () => {
-  const [isApproved, setIsApproved] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIsApproved((prev) => !prev);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <div className="w-full h-64 [perspective:1000px] font-sans">
-      <div className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${isApproved ? "[transform:rotateY(180deg)]" : ""}`}>
-
-        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] bg-white dark:bg-gray-800 rounded-xl p-5 border-2 border-orange-200 shadow-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="px-2 py-0.5 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full flex items-center gap-1">
-                <Clock className="h-3 w-3" /> Pending Request
-              </span>
-              <span className="text-xs text-gray-400">Assignment 3 Extension</span>
-            </div>
-            <h4 className="font-bold text-gray-900 dark:text-white text-base">Student: Alex Chen (ID: 20260824)</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-100 italic">
-              "Hi Professor, due to a medical emergency I am requesting a 24-hour extension on Assignment 3. Medical documentation attached..."
-            </p>
-          </div>
-          <div className="flex gap-3 mt-4">
-            <button className="flex-1 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-500 hover:bg-gray-50 transition-colors">
-              Deny Request
-            </button>
-            <button className="flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold shadow-md transform scale-105 animate-pulse">
-              Approve Instantly ⚡
-            </button>
-          </div>
-        </div>
-
-        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl p-6 shadow-xl [transform:rotateY(180deg)] flex flex-col justify-between items-center text-center">
-          <div className="my-auto space-y-3">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-              <CheckCircle className="h-6 w-6 text-white" />
-            </div>
-            <h4 className="font-bold text-xl">Approval Delivered!</h4>
-            <p className="text-sm text-blue-100 max-w-xs">
-              Canvas due date updated automatically. Student notified via push notification in real time.
-            </p>
-          </div>
-          <div className="text-[10px] text-blue-200/60 uppercase tracking-wider">
-            Compliance audit log generated • 100% instructor controlled
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-};
+import { Users, CheckCircle, Star, Smartphone } from "lucide-react";
 
 const Index = () => {
+  const benefits = [
+    {
+      image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2339&q=80",
+      title: "Streamlined Communication",
+      description: "Manage thousands of student interactions efficiently with intelligent routing and automated workflows."
+    },
+    {
+      image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80",
+      title: "Enhanced Collaboration", 
+      description: "Build meaningful learning communities within courses and facilitate peer-to-peer support."
+    },
+    {
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80",
+      title: "Experiential Learning",
+      description: "Connect classroom learning with real-world applications and foster long-term academic relationships."
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
-
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-28 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            <div className="text-left space-y-6">
-              <div className="inline-flex items-center px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold tracking-wide">
-                Integrated messaging and collaboration for Canvas LMS
-              </div>
-              <h1 className="text-4xl lg:text-6xl font-extrabold text-blue-600 dark:text-blue-300 leading-tight">
-                Cultivating Campus <br />
-                <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                  Communities
-                </span>
+      
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Content */}
+            <div className="text-left">
+              <h1 className="text-5xl lg:text-6xl font-bold text-blue-600 dark:text-blue-300 mb-6 leading-tight">
+                Cultivating Campus Communities
               </h1>
-              <p className="text-xl lg:text-2xl text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
-                Connect · Communicate · Collaborate. <br />
-                All seamlessly built into Canvas.
+              <p className="text-2xl lg:text-3xl text-orange-500 dark:text-orange-400 mb-6 font-medium">
+                Connect. Communicate. Collaborate. <br />
+                All within Canvas.
               </p>
-              <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
-                EdStream is an integrated messaging and collaboration tool designed specifically for educational institutions using Canvas LMS. It centralizes course-related communications, streamlines administrative tasks, and provides tools for building stronger academic communities.
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 leading-relaxed">
+                EdStream is an integrated messaging and collaboration tool that transforms how educational communities interact within Canvas LMS. Streamline course communications, enhance student engagement, and build stronger academic connections—all from one unified platform.
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all w-full sm:w-52"
+              
+              <div className="flex flex-col sm:flex-row gap-6 mb-12">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 text-white font-bold px-12 py-8 text-xl shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 w-60 rounded-xl border-2 border-transparent dark:border-orange-400/30"
                   asChild
                 >
-                  <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                    Get EdStream <ArrowRight className="h-4 w-4" />
+                  <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
+                    Get EdStream
                   </a>
                 </Button>
               </div>
 
-              <div className="flex items-center gap-4 pt-6 opacity-85 hover:opacity-100 transition-opacity">
-                <a href="https://apps.apple.com/us/app/edstream/id6736952355" target="_blank" rel="noopener noreferrer" className="transform hover:scale-105 transition-transform">
-                  <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" className="h-10 object-contain" />
+              {/* Mobile App Downloads */}
+              <div className="flex items-end">
+                <a 
+                  href="https://apps.apple.com/us/app/edstream/id6736952355"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transform hover:scale-105 transition-transform duration-200"
+                >
+                  <img 
+                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                    alt="Download on the App Store"
+                    className="w-[200px] h-[60px] object-contain"
+                  />
                 </a>
-                <a href="https://play.google.com/store/apps/details?id=com.edstreamchat.app" target="_blank" rel="noopener noreferrer" className="transform hover:scale-105 transition-transform">
-                  <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play" className="h-14 object-contain -my-2" />
+                <a 
+                  href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transform hover:scale-105 transition-transform duration-200 -mb-2"
+                >
+                  <img 
+                    src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                    alt="Get it on Google Play"
+                    className="w-[260px] h-[78px] object-contain"
+                  />
                 </a>
               </div>
             </div>
 
-            <div className="relative space-y-6">
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/10 to-orange-400/10 rounded-2xl blur-3xl -z-10" />
-              <ChannelCreationMockup />
-              <ExtensionApprovalMockup />
+            {/* Right Column - Visual */}
+            <div className="relative">
+              <div className="bg-gradient-to-br from-blue-100 to-orange-100 dark:from-gray-700 dark:to-gray-800 rounded-2xl p-8 shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
+                  alt="Students collaborating on campus"
+                  className="w-full h-auto rounded-xl shadow-lg"
+                />
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -left-4 w-20 h-20 bg-orange-500 dark:bg-orange-600 rounded-full opacity-20"></div>
+              <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-blue-600 dark:bg-blue-400 rounded-full opacity-20"></div>
             </div>
-
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50 dark:bg-gray-800/50 border-y border-gray-100 dark:border-gray-800">
+      {/* Problem Statement */}
+      <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">Why Is Campus Communication So Fragmented?</h2>
-            <p className="text-gray-500 text-base">Common challenges instructors and students face with traditional Canvas workflows:</p>
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold text-blue-600 dark:text-blue-300 mb-8">
+              The Communication Challenge
+            </h2>
+            <p className="text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Educational institutions currently juggle multiple fragmented communication channels
+            </p>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              "Canvas inbox and course tools feel disconnected, making it easy to miss important notices",
-              "Discussion boards become noisy threads where real-time Q&A is hard to sustain",
-              "Extension and accommodation requests get buried in scattered email chains",
-              "No unified place for office hours, peer collaboration, and course-wide Q&A",
-              "Students form off-platform group chats that raise privacy and compliance risks",
-              "Instructors and TAs spend hours manually tracking communication and admin requests"
+              "Canvas inbox messages scattered across courses",
+              "Separate discussion boards for each class",
+              "Email threads for extension requests and accommodations",
+              "Independent systems for office hours scheduling",
+              "Disconnected platforms for student support",
+              "Administrative burden for both instructors and students"
             ].map((challenge, index) => (
-              <Card key={index} className="border-l-4 border-l-orange-500 bg-white dark:bg-gray-800 hover:shadow-md transition-all">
-                <CardContent className="p-6">
-                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">{challenge}</p>
+              <Card key={index} className="border-l-4 border-l-orange-500 dark:border-l-orange-400 hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 bg-white dark:bg-gray-700 hover:border-l-orange-600 dark:hover:border-l-orange-300">
+                <CardContent className="p-8">
+                  <p className="text-gray-700 dark:text-gray-200 font-medium text-xl leading-relaxed">{challenge}</p>
                 </CardContent>
               </Card>
             ))}
@@ -216,99 +134,231 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Solution Section */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold text-blue-600 dark:text-blue-300 mb-8">
+              Introducing EdStream
+            </h2>
+            <p className="text-2xl text-gray-600 dark:text-gray-300 leading-relaxed">
+              One Platform. Seamless Communication. Stronger Communities.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {benefits.map((benefit, index) => (
+              <Card key={index} className="text-center group hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <CardContent className="p-10">
+                  <div className="w-32 h-32 mx-auto mb-8 rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-blue-50 to-orange-50 dark:from-gray-600 dark:to-gray-700 p-4 flex items-center justify-center group-hover:shadow-2xl transition-shadow duration-300">
+                    <img 
+                      src={benefit.image}
+                      alt={benefit.title}
+                      className="w-full h-full object-cover rounded-lg group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors duration-300">{benefit.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-xl">{benefit.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-orange-50 dark:from-gray-800 dark:to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-blue-600 dark:text-blue-300 mb-6">
+              Transform Your Educational Experience
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="hover:shadow-xl transition-shadow duration-300 border-2 border-white dark:border-gray-600 bg-white dark:bg-gray-800">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-300 mb-6">For Large Enrollment Courses</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Manage thousands of student interactions efficiently</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Reduce administrative overhead with automated workflows</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Ensure no student request goes unnoticed</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-xl transition-shadow duration-300 border-2 border-white dark:border-gray-600 bg-white dark:bg-gray-800">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-300 mb-6">Enhanced Collaboration</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Build meaningful learning communities within courses</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Facilitate peer-to-peer support and mentorship</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Create structured spaces for academic collaboration</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-xl transition-shadow duration-300 border-2 border-white dark:border-gray-600 bg-white dark:bg-gray-800">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-300 mb-6">Experiential Learning</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Connect classroom learning with real-world applications</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Support project-based and collaborative learning initiatives</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-200 text-lg">Foster long-term academic relationships beyond single courses</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof */}
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">Core Modules, Unified in One Place</h2>
-            <p className="text-gray-500 text-base">No bloated add-ons—only the features modern higher-ed teaching actually needs.</p>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-blue-600 dark:text-blue-300 mb-6">
+              Trusted by Leading Educational Institutions
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-300">
-                <MessageSquare className="h-6 w-6" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold">Real-Time Course Communication</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Students access dedicated channels directly from Canvas—no third-party apps required. Share files, code snippets, and assignment threads in one place.
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <Card className="text-center hover:shadow-xl transition-shadow duration-300 border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <CardContent className="p-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Star className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-300 mb-4">UF IT Partnership</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                  Strategic partnership with the University of Florida IT department, supporting homegrown educational technology solutions.
                 </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400">
-                <Zap className="h-6 w-6" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold">Automated Extension & Accommodation Workflows</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Extension and accommodation requests are submitted through structured forms. Instructors approve with one click and Canvas updates automatically.
+            <Card className="text-center hover:shadow-xl transition-shadow duration-300 border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <CardContent className="p-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Users className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-300 mb-4">5,000+ Students</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                  Currently supporting over 5,000 students across multiple large enrollment courses in our fall pilot program.
                 </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-300">
-                <Users className="h-6 w-6" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold">Canvas LTI Deep Integration</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Built on standard LTI authentication. No separate accounts or passwords—roster sync and role-based access stay within your course boundaries.
+            <Card className="text-center hover:shadow-xl transition-shadow duration-300 border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <CardContent className="p-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <CheckCircle className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-300 mb-4">Institution-Ready</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                  Approved for university-wide rollout and positioned to become the go-to platform for course communication.
                 </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400">
-                <Smartphone className="h-6 w-6" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold">Native iOS & Android Apps</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Full mobile support with secure push notifications so instructors and students never miss critical course updates on the go.
-                </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-r from-blue-50 to-orange-50 dark:from-gray-800 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800">
+      {/* App Download Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300">Secure, Compliant, and Institution-Ready</h2>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 rounded-full text-white mb-6 shadow-lg">
+              <Smartphone className="h-10 w-10" />
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-blue-600 dark:text-blue-300 mb-6">
+              Stay Connected On-the-Go
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+              Access EdStream's full functionality from your mobile device. Send messages, manage communications, and stay connected with your educational community wherever you are.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center max-w-4xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm space-y-2">
-              <Shield className="h-8 w-8 text-blue-600 mx-auto" />
-              <h4 className="font-bold text-base">FERPA-Aligned Privacy Standards</h4>
-              <p className="text-xs text-gray-500">Student records, chat files, and approval data are encrypted and kept within institutional control.</p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm space-y-2">
-              <CheckCircle className="h-8 w-8 text-orange-500 mx-auto" />
-              <h4 className="font-bold text-base">Full Instructor Control</h4>
-              <p className="text-xs text-gray-500">Complete audit trails and the ability to open or close channels as needed—always in service of the course.</p>
-            </div>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <a 
+              href="https://apps.apple.com/us/app/edstream/id6736952355"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block hover:scale-105 transition-transform duration-200"
+            >
+              <img 
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                alt="Download on the App Store"
+                className="w-[200px] h-[60px] object-contain"
+              />
+            </a>
+            <a 
+              href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block hover:scale-105 transition-transform duration-200"
+            >
+              <img 
+                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                alt="Get it on Google Play"
+                className="w-[260px] h-[78px] object-contain"
+              />
+            </a>
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <h2 className="text-3xl lg:text-4xl font-bold">Bring Real-Time Communication to Your Courses</h2>
-          <p className="text-base text-blue-100 max-w-2xl mx-auto">
-            Join institutions rethinking academic communication—boost student engagement and instructor efficiency at the same time.
+      {/* Final CTA */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-gray-800 dark:to-gray-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-8">
+            Ready to Transform Your Course Communication?
+          </h2>
+          <p className="text-xl text-blue-100 dark:text-gray-300 mb-10 leading-relaxed">
+            Join the growing community of educators and students who are revolutionizing how academic communities connect and collaborate.
           </p>
-          <div className="pt-4">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold px-10 py-6 text-lg rounded-xl shadow-xl transform hover:scale-105 transition-all"
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 text-white font-semibold px-8 py-6 text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 w-48 border-2 border-transparent dark:border-orange-400/30"
               asChild
             >
               <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
-                Apply for a Pilot Program
+                Get EdStream
+              </a>
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-2 border-white dark:border-gray-400 text-white dark:text-gray-200 hover:bg-white hover:text-blue-600 dark:hover:bg-gray-200 dark:hover:text-gray-900 font-semibold px-8 py-6 text-lg bg-transparent shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 w-48"
+              asChild
+            >
+              <a href="https://mintlify.com" target="_blank" rel="noopener noreferrer">
+                View Documentation
               </a>
             </Button>
           </div>

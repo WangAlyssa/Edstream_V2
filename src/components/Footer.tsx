@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Mail, ExternalLink, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const LOGO_SRC = `${import.meta.env.BASE_URL}lovable-uploads/8f4a6de0-da43-4b0b-8550-2d2f9c1c4e5b.png`;
+
 const Footer = () => {
   const quickLinks = [
     { name: "Features", href: "/features" },
@@ -28,9 +30,9 @@ const Footer = () => {
             <div className="lg:col-span-2">
               <Link to="/" className="inline-flex items-center space-x-3 mb-6 hover:opacity-80 transition-all duration-300 hover:scale-105">
                 <img
-                  src="/Edstream_V2/logo.svg"
+                  src={LOGO_SRC}
                   alt="EdStream Logo"
-                  className="logo-image w-10 h-10 transition-transform duration-300"
+                  className="w-10 h-10 dark:brightness-0 dark:invert transition-transform duration-300"
                 />
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">EdStream</span>
               </Link>
