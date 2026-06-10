@@ -20,7 +20,6 @@ const Header = () => {
   const isActivePage = (href: string) => {
     if (href === "/" && location.pathname === "/") return true;
     if (href !== "/" && location.pathname === href) return true;
-    if (href === "/guides" && location.pathname.startsWith("/guides")) return true;
     return false;
   };
 
@@ -28,6 +27,7 @@ const Header = () => {
     <header className="bg-white/70 dark:bg-gray-900/90 backdrop-blur-lg shadow-lg border-b border-gray-100 dark:border-gray-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
+          {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-all duration-300 hover:scale-105">
               <img
@@ -39,6 +39,7 @@ const Header = () => {
             </Link>
           </div>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-2">
             {navigation.map((item) => (
               <Link
@@ -55,8 +56,9 @@ const Header = () => {
             ))}
           </nav>
 
+          {/* Login Button */}
           <div className="hidden md:flex">
-            <Button
+            <Button 
               asChild
               className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 transition-all duration-200 font-bold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform"
             >
@@ -66,6 +68,7 @@ const Header = () => {
             </Button>
           </div>
 
+          {/* Mobile menu button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
@@ -77,6 +80,7 @@ const Header = () => {
           </div>
         </div>
 
+        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden bg-white dark:bg-gray-900/95 shadow-lg rounded-lg mx-4 mb-4 border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
             <div className="px-4 py-4 space-y-2">
@@ -95,8 +99,8 @@ const Header = () => {
                 </Link>
               ))}
               <div className="pt-2">
-                <Button
-                  asChild
+                <Button 
+                  asChild 
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 font-bold py-3 rounded-lg shadow-lg border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform transition-all duration-200"
                 >
                   <a href="https://app.edstream.io" target="_blank" rel="noopener noreferrer">

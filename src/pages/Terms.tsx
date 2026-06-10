@@ -168,8 +168,8 @@ const Terms = () => {
                     <p className="text-gray-600">EdStream collects and uses data as described in our Privacy Policy, which is incorporated into these Terms of Service by reference.</p>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-blue mb-2">Student Privacy</h3>
-                    <p className="text-gray-600">EdStream is designed for educational contexts and should be reviewed under each institution's student privacy and data governance requirements.</p>
+                    <h3 className="text-lg font-semibold text-blue mb-2">FERPA Compliance</h3>
+                    <p className="text-gray-600">EdStream complies with the Family Educational Rights and Privacy Act (FERPA) and treats student data as educational records subject to institutional privacy policies.</p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-blue mb-2">Institutional Access</h3>
@@ -185,7 +185,7 @@ const Terms = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="text-lg font-semibold text-blue mb-2">Platform Availability</h3>
-                    <p className="text-gray-600 text-sm">EdStream strives to provide reliable access but does not guarantee uninterrupted service. Planned maintenance will be announced in advance when possible.</p>
+                    <p className="text-gray-600 text-sm">EdStream strives to maintain 99.9% uptime but does not guarantee uninterrupted service. Planned maintenance will be announced in advance when possible.</p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-blue mb-2">Service Modifications</h3>
@@ -246,7 +246,7 @@ const Terms = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-blue mb-2">Educational Regulations</h3>
-                    <p className="text-gray-600">Institutions are responsible for reviewing EdStream under applicable educational regulations, accessibility requirements, University of Florida policies where relevant, and local institutional policies.</p>
+                    <p className="text-gray-600">EdStream complies with applicable educational regulations including FERPA, Section 504, ADA, University of Florida policies, and institutional policies.</p>
                   </div>
                 </div>
               </CardContent>

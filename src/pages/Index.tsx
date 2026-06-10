@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { FeaturesSection } from "@/components/FeatureDemo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageSquare, Users, Zap, CheckCircle, Smartphone, ArrowRight, Clock, Shield } from "lucide-react";
 
 const ChannelCreationMockup = () => {
   const [step, setStep] = useState(0);
-  const [channels, setChannels] = useState(["# 课程公告", "# 期末复习"]);
+  const [channels, setChannels] = useState(["# Announcements", "# Final Review"]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setStep((prev) => {
         if (prev === 4) {
-          setChannels(["# 课程公告", "# 期末复习"]);
+          setChannels(["# Announcements", "# Final Review"]);
           return 0;
         }
         if (prev === 2) {
-          setChannels(["# 课程公告", "# 期末复习", "# 小组项目-01 🟢"]);
+          setChannels(["# Announcements", "# Final Review", "# project-group-01 🟢"]);
         }
         return prev + 1;
       });
@@ -33,7 +32,7 @@ const ChannelCreationMockup = () => {
           <div className="text-white font-bold mb-4 flex items-center gap-1.5 text-[11px] text-orange-400">
             <MessageSquare className="h-3 w-3" /> EdStream Hub
           </div>
-          <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Canvas 课程频道</div>
+          <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Canvas Course Channels</div>
           <div className="space-y-1.5">
             {channels.map((ch, idx) => (
               <div key={idx} className={`px-2 py-1 rounded transition-all duration-300 ${idx === channels.length - 1 && step >= 3 ? "bg-blue-600/30 text-white font-semibold" : "text-gray-400"}`}>
@@ -43,22 +42,22 @@ const ChannelCreationMockup = () => {
           </div>
         </div>
         <button className={`w-full py-1 text-center border rounded border-dashed text-[10px] transition-all flex items-center justify-center gap-1 ${step === 1 ? "bg-orange-500 text-white border-transparent scale-105" : "border-gray-600 text-gray-500"}`}>
-          <span>+ 创建新频道</span>
+          <span>+ Create New Channel</span>
         </button>
       </div>
 
       <div className="w-2/3 pl-3 flex flex-col justify-between relative">
         <div className="border-b border-gray-800 pb-2 mb-2 flex items-center justify-between">
-          <span className="text-white font-bold">{step >= 3 ? "# 小组项目-01" : "# 课程公告"}</span>
-          <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">Canvas 已同步</span>
+          <span className="text-white font-bold">{step >= 3 ? "# project-group-01" : "# Announcements"}</span>
+          <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">Canvas Synced</span>
         </div>
 
         <div className="flex-1 flex items-center justify-center text-center px-4">
-          {step === 0 && <p className="text-gray-500 italic animate-pulse">准备就绪：主讲教师一键管理...</p>}
-          {step === 1 && <p className="text-orange-400 font-semibold animate-bounce">1. 触发 Canvas 接口创建频道...</p>}
-          {step === 2 && <p className="text-blue-400 font-semibold">2. 输入频道名称中: "小组项目-01"</p>}
-          {step === 3 && <p className="text-green-400 font-semibold animate-pulse">3. 🎉 频道创建成功！全班无缝接入</p>}
-          {step === 4 && <p className="text-gray-400">正在同步 Canvas 学生花名册权限...</p>}
+          {step === 0 && <p className="text-gray-500 italic animate-pulse">Ready: instructors manage channels in one click...</p>}
+          {step === 1 && <p className="text-orange-400 font-semibold animate-bounce">1. Triggering Canvas API to create channel...</p>}
+          {step === 2 && <p className="text-blue-400 font-semibold">2. Entering channel name: "project-group-01"</p>}
+          {step === 3 && <p className="text-green-400 font-semibold animate-pulse">3. 🎉 Channel created! Class connected seamlessly</p>}
+          {step === 4 && <p className="text-gray-400">Syncing Canvas roster permissions...</p>}
         </div>
 
         <div
@@ -93,21 +92,21 @@ const ExtensionApprovalMockup = () => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="px-2 py-0.5 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full flex items-center gap-1">
-                <Clock className="h-3 w-3" /> 待处理请求
+                <Clock className="h-3 w-3" /> Pending Request
               </span>
-              <span className="text-xs text-gray-400">作业 3 延期申请</span>
+              <span className="text-xs text-gray-400">Assignment 3 Extension</span>
             </div>
-            <h4 className="font-bold text-gray-900 dark:text-white text-base">学生：张同学 (ID: 20260824)</h4>
+            <h4 className="font-bold text-gray-900 dark:text-white text-base">Student: Alex Chen (ID: 20260824)</h4>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-100 italic">
-              "老师您好，由于突发胃肠炎就医，希望能申请将作业截止日期延后 24 小时，附就医证明..."
+              "Hi Professor, due to a medical emergency I am requesting a 24-hour extension on Assignment 3. Medical documentation attached..."
             </p>
           </div>
           <div className="flex gap-3 mt-4">
             <button className="flex-1 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-500 hover:bg-gray-50 transition-colors">
-              拒绝请求
+              Deny Request
             </button>
             <button className="flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold shadow-md transform scale-105 animate-pulse">
-              一键批准 ⚡
+              Approve Instantly ⚡
             </button>
           </div>
         </div>
@@ -117,13 +116,13 @@ const ExtensionApprovalMockup = () => {
             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
               <CheckCircle className="h-6 w-6 text-white" />
             </div>
-            <h4 className="font-bold text-xl">审批已送达！</h4>
+            <h4 className="font-bold text-xl">Approval Delivered!</h4>
             <p className="text-sm text-blue-100 max-w-xs">
-              系统已自动更改该生在 Canvas 中的专属截止日期，并通过微信/Push实时通知学生。
+              Canvas due date updated automatically. Student notified via push notification in real time.
             </p>
           </div>
           <div className="text-[10px] text-blue-200/60 uppercase tracking-wider">
-            自动生成合规审计日志 • 100% 教师自主可控
+            Compliance audit log generated • 100% instructor controlled
           </div>
         </div>
 
@@ -143,7 +142,7 @@ const Index = () => {
 
             <div className="text-left space-y-6">
               <div className="inline-flex items-center px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold tracking-wide">
-                🎨 专为高校打造的智能教学社群生态
+                Integrated messaging and collaboration for Canvas LMS
               </div>
               <h1 className="text-4xl lg:text-6xl font-extrabold text-blue-600 dark:text-blue-300 leading-tight">
                 Cultivating Campus <br />
@@ -152,11 +151,11 @@ const Index = () => {
                 </span>
               </h1>
               <p className="text-xl lg:text-2xl text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
-                连接 · 沟通 · 协同。 <br />
-                一切无缝内置于 Canvas 内部。
+                Connect · Communicate · Collaborate. <br />
+                All seamlessly built into Canvas.
               </p>
               <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
-                EdStream 是一款深度嵌入 Canvas LMS 的全集成实时群聊与学术协同工具。拒绝混乱零散的邮件流与死板的传统讨论版，将类似 Slack 的高效沟通与自动化的教学教务流程完美融入师生日常。
+                EdStream is an integrated messaging and collaboration tool designed specifically for educational institutions using Canvas LMS. It centralizes course-related communications, streamlines administrative tasks, and provides tools for building stronger academic communities.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
@@ -166,7 +165,7 @@ const Index = () => {
                   asChild
                 >
                   <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                    申请接入 EdStream <ArrowRight className="h-4 w-4" />
+                    Get EdStream <ArrowRight className="h-4 w-4" />
                   </a>
                 </Button>
               </div>
@@ -194,18 +193,18 @@ const Index = () => {
       <section className="py-20 bg-gray-50 dark:bg-gray-800/50 border-y border-gray-100 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">为什么高校沟通总是充满断层？</h2>
-            <p className="text-gray-500 text-base">目前师生在传统 Canvas 和日常沟通中普遍面临的零散困境：</p>
+            <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">Why Is Campus Communication So Fragmented?</h2>
+            <p className="text-gray-500 text-base">Common challenges instructors and students face with traditional Canvas workflows:</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              "传统 Canvas 收件箱与课程割裂，容易漏看重要通知",
-              "各大课程讨论版犹如\u201c水贴\u201d，师生难以维持实时即时问答",
-              "无数作业延期、病假缓考申请散落在庞杂的日常邮件堆里",
-              "师生缺乏统一的答疑与 Office Hours 预约和在线协作平台",
-              "学生被迫在校外组建混乱的临时社交群，存在隐私和数据合规风险",
-              "助教和老师需要耗费大量时间，重复手动梳理各种教务沟通文档"
+              "Canvas inbox and course tools feel disconnected, making it easy to miss important notices",
+              "Discussion boards become noisy threads where real-time Q&A is hard to sustain",
+              "Extension and accommodation requests get buried in scattered email chains",
+              "No unified place for office hours, peer collaboration, and course-wide Q&A",
+              "Students form off-platform group chats that raise privacy and compliance risks",
+              "Instructors and TAs spend hours manually tracking communication and admin requests"
             ].map((challenge, index) => (
               <Card key={index} className="border-l-4 border-l-orange-500 bg-white dark:bg-gray-800 hover:shadow-md transition-all">
                 <CardContent className="p-6">
@@ -220,8 +219,8 @@ const Index = () => {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">核心模块，精简归一</h2>
-            <p className="text-gray-500 text-base">不做臃肿的拼凑，只做对现代化高校教学最实用的功能。</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">Core Modules, Unified in One Place</h2>
+            <p className="text-gray-500 text-base">No bloated add-ons—only the features modern higher-ed teaching actually needs.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -230,9 +229,9 @@ const Index = () => {
                 <MessageSquare className="h-6 w-6" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-bold">内置式即时学术沙龙</h3>
+                <h3 className="text-lg font-bold">Real-Time Course Communication</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  学生无需切换到第三方软件，直接在 Canvas 侧边栏进入专属实时沟通频道，支持代码高亮、多媒体文档分享和作业主题线索聚合。
+                  Students access dedicated channels directly from Canvas—no third-party apps required. Share files, code snippets, and assignment threads in one place.
                 </p>
               </div>
             </div>
@@ -242,9 +241,9 @@ const Index = () => {
                 <Zap className="h-6 w-6" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-bold">自动化特殊教务流审批</h3>
+                <h3 className="text-lg font-bold">Automated Extension & Accommodation Workflows</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  作业延期、缓考等特殊申请实现表单式线上收录。教师在面板一键准允后，系统自动同步修改 Canvas 中的对应节点，大幅削减行政开销。
+                  Extension and accommodation requests are submitted through structured forms. Instructors approve with one click and Canvas updates automatically.
                 </p>
               </div>
             </div>
@@ -254,9 +253,9 @@ const Index = () => {
                 <Users className="h-6 w-6" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-bold">Canvas LTI 深度权限互通</h3>
+                <h3 className="text-lg font-bold">Canvas LTI Deep Integration</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  完美基于标准 LTI 协议进行身份鉴权。无需师生重新注册或管理新密码，自动读取班级成员名册，完美保障教学边界与合规性。
+                  Built on standard LTI authentication. No separate accounts or passwords—roster sync and role-based access stay within your course boundaries.
                 </p>
               </div>
             </div>
@@ -266,9 +265,9 @@ const Index = () => {
                 <Smartphone className="h-6 w-6" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-bold">全功能原生双端移动 App</h3>
+                <h3 className="text-lg font-bold">Native iOS & Android Apps</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                  全面支持 iOS 和 Android 原生系统，确保师生在外出、通勤时也能通过安全的 Push 通知接收关键教务通答疑答复，不错过任何学术动态。
+                  Full mobile support with secure push notifications so instructors and students never miss critical course updates on the go.
                 </p>
               </div>
             </div>
@@ -276,23 +275,21 @@ const Index = () => {
         </div>
       </section>
 
-      <FeaturesSection />
-
       <section className="py-20 bg-gradient-to-r from-blue-50 to-orange-50 dark:from-gray-800 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300">安全、合规、稳健的学术生态系统</h2>
+            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300">Secure, Compliant, and Institution-Ready</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center max-w-4xl mx-auto">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm space-y-2">
               <Shield className="h-8 w-8 text-blue-600 mx-auto" />
-              <h4 className="font-bold text-base">符合 FERPA 联邦隐私规范</h4>
-              <p className="text-xs text-gray-500">所有涉及学生的教学记录、聊天文件和审批数据均实施端到端加密存储，杜绝校外第三方非法获取。</p>
+              <h4 className="font-bold text-base">FERPA-Aligned Privacy Standards</h4>
+              <p className="text-xs text-gray-500">Student records, chat files, and approval data are encrypted and kept within institutional control.</p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm space-y-2">
               <CheckCircle className="h-8 w-8 text-orange-500 mx-auto" />
-              <h4 className="font-bold text-base">教师绝对控制与管理权</h4>
-              <p className="text-xs text-gray-500">提供完整的内容行为审计日志，教师可根据需要随时开启或关闭指定社群频道，完全服务于教学实体。</p>
+              <h4 className="font-bold text-base">Full Instructor Control</h4>
+              <p className="text-xs text-gray-500">Complete audit trails and the ability to open or close channels as needed—always in service of the course.</p>
             </div>
           </div>
         </div>
@@ -300,9 +297,9 @@ const Index = () => {
 
       <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <h2 className="text-3xl lg:text-4xl font-bold">即刻为您的课程注入即时沟通活力</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold">Bring Real-Time Communication to Your Courses</h2>
           <p className="text-base text-blue-100 max-w-2xl mx-auto">
-            加入学术数字化沟通重构行列，让学生的课程参与率与老师的沟通效率得到双重跨越。
+            Join institutions rethinking academic communication—boost student engagement and instructor efficiency at the same time.
           </p>
           <div className="pt-4">
             <Button
@@ -311,7 +308,7 @@ const Index = () => {
               asChild
             >
               <a href="https://forms.gle/LM3stfsN3DfZecSd8" target="_blank" rel="noopener noreferrer">
-                立即申请 Pilot 试点计划
+                Apply for a Pilot Program
               </a>
             </Button>
           </div>
