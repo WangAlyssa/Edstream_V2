@@ -37,18 +37,22 @@ const HighlightWrap = ({
   children,
   className = "",
   labelPosition = "below",
+  rounded = "rounded-md",
 }: {
   active: boolean;
   label: string;
   children: ReactNode;
   className?: string;
   labelPosition?: "below" | "right";
+  rounded?: string;
 }) => (
   <div className={`relative ${className}`}>
     {children}
     {active && (
       <>
-        <div className="demo-highlight-pulse pointer-events-none absolute inset-0 z-10 rounded-md border-[3px] border-orange-500 bg-orange-400/15" />
+        <div
+          className={`demo-highlight-pulse pointer-events-none absolute inset-0 z-10 border-2 border-orange-500 bg-orange-500/10 ring-1 ring-orange-400/40 ${rounded}`}
+        />
         <span
           className={`absolute z-20 rounded-lg bg-orange-500 px-2 py-1 text-center text-[9px] font-bold leading-tight text-white shadow-lg ${
             labelPosition === "right"
@@ -382,32 +386,60 @@ const CreateChannelModal = ({ highlight, label }: { highlight: GuideHighlightId;
   </div>
 );
 
-const RequestScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
-  <div className="flex h-full flex-col">
-    <AppTopBar highlight={highlight} label={label} />
-    <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
-      <Sidebar highlight={highlight} label={label} />
-      <main className="flex items-center justify-center p-4">
-        <HighlightWrap active={highlight === "request-btn"} label={label}>
-          <div className="w-full max-w-[50%] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg">
-            <div className="mb-1.5 inline-block rounded-full bg-orange-50 px-2 py-0.5 text-[7px] font-bold text-orange-600">
-              Extension request
-            </div>
-            <p className="mb-3 text-[8px] text-gray-500">A student requests more time for Project Checkpoint 2.</p>
-            <div className="grid grid-cols-2 gap-2">
-              <button type="button" className="rounded-lg border py-1 text-[8px] font-bold text-gray-500">
-                Deny
-              </button>
-              <button type="button" className="rounded-lg bg-[#2d3a8c] py-1 text-[8px] font-bold text-white">
-                Approve
-              </button>
-            </div>
-          </div>
-        </HighlightWrap>
-      </main>
+const RequestCard = () => (
+  <div className="w-full rounded-2xl border border-gray-200 bg-white p-3.5 shadow-xl">
+    <div className="mb-2 inline-flex rounded-full bg-orange-100 px-2.5 py-0.5 text-[7px] font-bold text-orange-700">
+      Extension request
+    </div>
+    <p className="mb-3 text-[8px] leading-snug text-gray-600">
+      A student requests more time for Project Checkpoint 2.
+    </p>
+    <div className="grid grid-cols-2 gap-2">
+      <button type="button" className="rounded-lg border border-gray-200 bg-white py-1.5 text-[8px] font-bold text-gray-500">
+        Deny
+      </button>
+      <button type="button" className="rounded-lg bg-[#2d3a8c] py-1.5 text-[8px] font-bold text-white">
+        Approve
+      </button>
     </div>
   </div>
 );
+
+const RequestScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => {
+  const isSubmitVariant = label === "Submit request";
+
+  return (
+    <div className="flex h-full flex-col">
+      <AppTopBar highlight={highlight} label={label} />
+      <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
+        <Sidebar highlight={highlight} label={label} />
+        <main className="flex flex-col items-center justify-center gap-2 p-4">
+          {isSubmitVariant ? (
+            <>
+              <div className="w-full max-w-[52%]">
+                <RequestCard />
+              </div>
+              <HighlightWrap active={highlight === "request-btn"} label={label} rounded="rounded-lg">
+                <button
+                  type="button"
+                  className="rounded-lg bg-orange-500 px-5 py-1.5 text-[8px] font-bold text-white shadow-md"
+                >
+                  Submit request
+                </button>
+              </HighlightWrap>
+            </>
+          ) : (
+            <div className="w-full max-w-[52%]">
+              <HighlightWrap active={highlight === "request-btn"} label={label} rounded="rounded-2xl">
+                <RequestCard />
+              </HighlightWrap>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+};
 
 const CanvasSettingsScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
   <div className="flex h-full flex-col bg-gray-50">
