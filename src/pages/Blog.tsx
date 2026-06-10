@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GuideMockup from "@/components/GuideMockup";
@@ -16,35 +16,17 @@ const roleLabel: Record<GuideRole, string> = {
 const readTime = (steps: number) => `${Math.max(steps * 2, 5)} min read`;
 
 const Blog = () => {
+  const [activeRole, setActiveRole] = useState<GuideRole>("instructor");
+
   useEffect(() => {
     document.title = "EdStream Guides - EdStream";
   }, []);
 
   const featuredGuide = guideSections[0];
-  const recentGuides = guideSections.slice(1);
 
-  const categories = useMemo(
-    () => [
-      {
-        name: "Instructor Guides",
-        description: "Step-by-step walkthroughs for setting up channels, files, requests, and Canvas navigation.",
-        icon: <GraduationCap className="h-6 w-6" />,
-        count: guideSections.filter((guide) => guide.role === "instructor").length,
-      },
-      {
-        name: "Student Guides",
-        description: "Quick-start resources for asking questions, finding files, and using course requests.",
-        icon: <Users className="h-6 w-6" />,
-        count: guideSections.filter((guide) => guide.role === "student").length,
-      },
-      {
-        name: "Canvas Setup",
-        description: "Add EdStream to course navigation and confirm visibility for each role.",
-        icon: <BookOpen className="h-6 w-6" />,
-        count: 1,
-      },
-    ],
-    [],
+  const visibleGuides = useMemo(
+    () => guideSections.filter((guide) => guide.role === activeRole),
+    [activeRole],
   );
 
   return (
@@ -78,7 +60,7 @@ const Blog = () => {
             <h2 className="text-3xl font-bold text-blue mb-4">Featured Guide</h2>
           </div>
 
-          <Card className="mb-12 hover:shadow-lg transition-shadow border-l-4 border-l-orange">
+          <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-orange">
             <CardContent className="p-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
@@ -128,119 +110,59 @@ const Blog = () => {
       </section>
 
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-blue mb-4">Recent Guides</h2>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-blue mb-4">Step-by-Step Guides</h2>
+            <p className="text-gray-600">
+              Choose your role to see the guides that apply to you. Each opens as its own page with screenshots and short instructions.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {recentGuides.map((guide) => (
-              <Card key={guide.id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-10 h-10 bg-gradient-orange rounded-lg flex items-center justify-center text-white">
-                      {guide.role === "instructor" ? (
-                        <GraduationCap className="h-5 w-5" />
-                      ) : (
-                        <Users className="h-5 w-5" />
-                      )}
-                    </div>
-                    <span className="bg-blue text-white px-3 py-1 text-sm font-semibold rounded-full">
-                      {roleLabel[guide.role]}
-                    </span>
+          <div className="mx-auto mb-10 grid max-w-md grid-cols-2 rounded-2xl bg-white p-2 shadow-lg border border-gray-100">
+            {[
+              { value: "instructor" as const, label: "For Instructor", icon: GraduationCap },
+              { value: "student" as const, label: "For Student", icon: Users },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const active = activeRole === tab.value;
+              return (
+                <button
+                  key={tab.value}
+                  type="button"
+                  onClick={() => setActiveRole(tab.value)}
+                  className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 ${
+                    active
+                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {visibleGuides.map((guide, index) => (
+              <Link key={guide.id} to={`/guides/${guide.id}`} className="group block">
+                <div className="flex aspect-[16/3] min-h-[88px] items-center gap-5 rounded-2xl border border-gray-100 bg-white px-5 shadow-lg transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-2xl sm:gap-8 sm:px-8">
+                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white sm:h-11 sm:w-11">
+                    {index + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-bold text-blue sm:text-xl group-hover:text-orange transition-colors">
+                      {guide.title}
+                    </h3>
+                    <p className="mt-1 truncate text-sm text-gray-600 sm:text-base">{guide.description}</p>
                   </div>
-
-                  <h3 className="text-xl font-bold text-blue mb-3 hover:text-orange transition-colors">
-                    {guide.title}
-                  </h3>
-
-                  <p className="text-gray-600 mb-4 line-clamp-3">{guide.description}</p>
-
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {guide.steps.length} steps
-                      </div>
-                      <div className="flex items-center">
-                        <User className="h-4 w-4 mr-1" />
-                        EdStream Team
-                      </div>
-                    </div>
-                    <span>{readTime(guide.steps.length)}</span>
+                  <div className="hidden flex-shrink-0 text-sm text-gray-400 sm:block">
+                    {guide.steps.length} steps
                   </div>
-
-                  <Button asChild variant="ghost" className="text-blue hover:text-orange p-0">
-                    <Link to={`/guides/${guide.id}`}>
-                      Read More <ArrowRight className="h-4 w-4 ml-2" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-blue mb-6">Browse by Category</h2>
-            <p className="text-xl text-gray-600">Explore guides tailored to your role and setup needs</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.map((category) => (
-              <Card key={category.name} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-gradient-blue rounded-lg flex items-center justify-center text-white mx-auto mb-4">
-                    {category.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-blue mb-3">{category.name}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{category.description}</p>
-                  <p className="text-sm font-semibold text-orange">{category.count} guides</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <Card>
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-blue mb-4">All Step-by-Step Guides</h3>
-                <p className="text-gray-600 mb-6">
-                  Open any guide below for screenshot-based walkthroughs covering instructor setup, student onboarding, and Canvas integration.
-                </p>
-                <div className="space-y-3">
-                  {guideSections.map((guide) => (
-                    <Link
-                      key={guide.id}
-                      to={`/guides/${guide.id}`}
-                      className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 text-blue hover:border-orange hover:text-orange transition-colors"
-                    >
-                      <span className="font-semibold">{guide.title}</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  ))}
+                  <ArrowRight className="h-5 w-5 flex-shrink-0 text-blue transition-transform duration-300 group-hover:translate-x-1 group-hover:text-orange" />
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-blue mb-4">Request Topics</h3>
-                <p className="text-gray-600 mb-6">
-                  Have a specific topic you would like covered? Suggest guide topics that would be valuable for the EdStream community.
-                </p>
-                <Button className="border-orange text-orange hover:bg-orange hover:text-white" variant="outline" asChild>
-                  <Link to="/contact">Suggest Topics</Link>
-                </Button>
-              </CardContent>
-            </Card>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
