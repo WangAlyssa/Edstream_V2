@@ -20,6 +20,7 @@ const Header = () => {
   const isActivePage = (href: string) => {
     if (href === "/" && location.pathname === "/") return true;
     if (href !== "/" && location.pathname === href) return true;
+    if (href === "/guides" && location.pathname.startsWith("/guides")) return true;
     return false;
   };
 
