@@ -251,56 +251,6 @@ export const guideSections: GuideSection[] = [
     ],
   },
   {
-    id: "add-course",
-    role: "instructor",
-    title: "How to Add EdStream to Your Course",
-    description: "Add EdStream to Canvas course navigation and confirm visibility.",
-    overview:
-      "This guide is written for course teams working with an institution where EdStream has already been enabled.",
-    steps: [
-      {
-        instruction: "Ask your institution or Canvas administrator to enable the EdStream Canvas tool.",
-        detail:
-          "Before students can see EdStream, your institution must enable the LTI tool at the admin level. Once enabled, course teams can add it to individual courses.",
-        scene: "canvas-enable",
-        highlight: "canvas-edstream-link",
-        highlightLabel: "Enable EdStream",
-      },
-      {
-        instruction: "Open Course Navigation in the Canvas course settings.",
-        detail:
-          "Course Navigation controls which links appear in the left menu for students. This is where you decide whether EdStream is visible in the course.",
-        scene: "canvas-settings",
-        highlight: "canvas-navigation-menu",
-        highlightLabel: "Course Navigation",
-      },
-      {
-        instruction: "Move EdStream into the visible navigation list and save your changes.",
-        detail:
-          "Drag EdStream from the hidden list into the enabled list so it appears alongside Home, Assignments, and other course tools students already use.",
-        scene: "canvas-settings",
-        highlight: "canvas-edstream-link",
-        highlightLabel: "Move EdStream",
-      },
-      {
-        instruction: "Save changes and confirm instructor, TA, and student roles can open the tool.",
-        detail:
-          "Save the navigation settings, then open EdStream yourself to confirm it loads the correct course space for each role.",
-        scene: "canvas-settings",
-        highlight: "save-btn",
-        highlightLabel: "Save changes",
-      },
-      {
-        instruction: "Open the student view before announcing the tool to the class.",
-        detail:
-          "Switch to Student View in Canvas and confirm EdStream shows in the course menu — the same link students will click on day one.",
-        scene: "canvas-course-home",
-        highlight: "canvas-edstream-link",
-        highlightLabel: "Student view",
-      },
-    ],
-  },
-  {
     id: "student-start",
     role: "student",
     title: "Student Quick Start",

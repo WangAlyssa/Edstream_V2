@@ -37,27 +37,23 @@ const HighlightWrap = ({
   children,
   className = "",
   labelPosition = "below",
-  rounded = "rounded-md",
 }: {
   active: boolean;
   label: string;
   children: ReactNode;
   className?: string;
   labelPosition?: "below" | "right";
-  rounded?: string;
 }) => (
   <div className={`relative ${className}`}>
     {children}
     {active && (
       <>
-        <div
-          className={`demo-highlight-pulse pointer-events-none absolute inset-0 z-10 border-2 border-orange-500 bg-orange-500/10 ring-1 ring-orange-400/40 ${rounded}`}
-        />
+        <div className="demo-highlight-pulse pointer-events-none absolute inset-0 z-10 box-border rounded-lg border-[2.5px] border-orange-500 bg-orange-500/20" />
         <span
-          className={`absolute z-20 rounded-lg bg-orange-500 px-2 py-1 text-center text-[9px] font-bold leading-tight text-white shadow-lg ${
+          className={`absolute z-20 whitespace-nowrap rounded-md bg-orange-500 px-2.5 py-1 text-center text-[9px] font-bold leading-tight text-white shadow-md ${
             labelPosition === "right"
-              ? "left-full top-1/2 ml-2 w-max max-w-[7rem] -translate-y-1/2"
-              : "left-1/2 top-full mt-1.5 w-max max-w-[9rem] -translate-x-1/2"
+              ? "left-full top-1/2 ml-2 -translate-y-1/2"
+              : "left-1/2 top-[calc(100%+6px)] -translate-x-1/2"
           }`}
         >
           {label}
@@ -386,60 +382,53 @@ const CreateChannelModal = ({ highlight, label }: { highlight: GuideHighlightId;
   </div>
 );
 
-const RequestCard = () => (
-  <div className="w-full rounded-2xl border border-gray-200 bg-white p-3.5 shadow-xl">
-    <div className="mb-2 inline-flex rounded-full bg-orange-100 px-2.5 py-0.5 text-[7px] font-bold text-orange-700">
-      Extension request
-    </div>
-    <p className="mb-3 text-[8px] leading-snug text-gray-600">
-      A student requests more time for Project Checkpoint 2.
-    </p>
-    <div className="grid grid-cols-2 gap-2">
-      <button type="button" className="rounded-lg border border-gray-200 bg-white py-1.5 text-[8px] font-bold text-gray-500">
-        Deny
-      </button>
-      <button type="button" className="rounded-lg bg-[#2d3a8c] py-1.5 text-[8px] font-bold text-white">
-        Approve
-      </button>
+const RequestScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
+  <div className="flex h-full flex-col">
+    <AppTopBar highlight={highlight} label={label} />
+    <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
+      <Sidebar highlight={highlight} label={label} />
+      <main className="flex items-center justify-center bg-gray-50/50 p-4">
+        <HighlightWrap active={highlight === "request-btn"} label={label} className="w-[48%]">
+          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+            <div className="flex items-center gap-1.5 border-b border-orange-100 bg-orange-50 px-3 py-2">
+              <span className="rounded bg-orange-500 px-1.5 py-0.5 text-[6px] font-bold uppercase tracking-wide text-white">
+                Pending
+              </span>
+              <span className="text-[8px] font-bold text-orange-700">Extension request</span>
+            </div>
+            <div className="p-3">
+              <div className="mb-2 flex items-center gap-1.5">
+                <Avatar label="AK" />
+                <div>
+                  <div className="text-[8px] font-bold text-gray-800">{STUDENT}</div>
+                  <div className="text-[7px] text-gray-400">Submitted today · 9:15 AM</div>
+                </div>
+              </div>
+              <div className="mb-2 rounded-md border border-gray-100 bg-gray-50 px-2 py-1.5">
+                <div className="text-[7px] font-bold text-gray-400">Assignment</div>
+                <div className="text-[8px] font-bold text-gray-800">Project Checkpoint 2</div>
+              </div>
+              <p className="mb-3 text-[7px] leading-relaxed text-gray-500">
+                Requests an additional 48 hours to finish the checkpoint.
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  className="rounded-lg border border-gray-200 bg-white py-1.5 text-[8px] font-bold text-gray-500"
+                >
+                  Deny
+                </button>
+                <button type="button" className="rounded-lg bg-[#2d3a8c] py-1.5 text-[8px] font-bold text-white">
+                  Approve
+                </button>
+              </div>
+            </div>
+          </div>
+        </HighlightWrap>
+      </main>
     </div>
   </div>
 );
-
-const RequestScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => {
-  const isSubmitVariant = label === "Submit request";
-
-  return (
-    <div className="flex h-full flex-col">
-      <AppTopBar highlight={highlight} label={label} />
-      <div className="grid min-h-0 flex-1 grid-cols-[22%_1fr]">
-        <Sidebar highlight={highlight} label={label} />
-        <main className="flex flex-col items-center justify-center gap-2 p-4">
-          {isSubmitVariant ? (
-            <>
-              <div className="w-full max-w-[52%]">
-                <RequestCard />
-              </div>
-              <HighlightWrap active={highlight === "request-btn"} label={label} rounded="rounded-lg">
-                <button
-                  type="button"
-                  className="rounded-lg bg-orange-500 px-5 py-1.5 text-[8px] font-bold text-white shadow-md"
-                >
-                  Submit request
-                </button>
-              </HighlightWrap>
-            </>
-          ) : (
-            <div className="w-full max-w-[52%]">
-              <HighlightWrap active={highlight === "request-btn"} label={label} rounded="rounded-2xl">
-                <RequestCard />
-              </HighlightWrap>
-            </div>
-          )}
-        </main>
-      </div>
-    </div>
-  );
-};
 
 const CanvasSettingsScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
   <div className="flex h-full flex-col bg-gray-50">

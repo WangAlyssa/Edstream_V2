@@ -13,12 +13,14 @@ const Header = () => {
     { name: "Features", href: "/features" },
     { name: "About", href: "/about" },
     { name: "FAQ", href: "/faq" },
+    { name: "Guides", href: "/guides" },
     { name: "Contact", href: "/contact" },
   ];
 
   const isActivePage = (href: string) => {
     if (href === "/" && location.pathname === "/") return true;
     if (href !== "/" && location.pathname === href) return true;
+    if (href === "/guides" && location.pathname.startsWith("/guides")) return true;
     return false;
   };
 
