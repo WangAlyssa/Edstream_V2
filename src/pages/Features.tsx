@@ -1,108 +1,15 @@
 import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FeatureDemo, { type FeatureId } from "@/components/FeatureDemo";
+import FeatureDemo, { features } from "@/components/FeatureDemo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageSquare, Settings, Users, Zap, BarChart3, Shield, Smartphone, CheckCircle, GraduationCap, BookOpen } from "lucide-react";
+import { MessageSquare, Settings, Users, Zap, BarChart3, Shield, CheckCircle } from "lucide-react";
 
 const Features = () => {
   useEffect(() => {
     document.title = "Features - EdStream";
   }, []);
-
-  const instructorFeatures: Array<{
-    icon: React.ReactElement;
-    title: string;
-    description: string;
-    demoId?: FeatureId;
-  }> = [
-    {
-      icon: <MessageSquare className="h-8 w-8" />,
-      title: "Unified Communication Hub",
-      description: "Manage all student messages, questions, and requests in one central inbox. No more juggling between Canvas messages, emails, and discussion boards.",
-      demoId: "channels",
-    },
-    {
-      icon: <Settings className="h-8 w-8" />,
-      title: "Smart Extension & Accommodation Management",
-      description: "Process extension requests with one click. Automatically track accommodation requirements and generate compliance documentation.",
-      demoId: "requests",
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Automated Workflows",
-      description: "Set up automated responses for common student questions. Flag urgent communications and route messages to the right place automatically.",
-      demoId: "files",
-    },
-    {
-      icon: <BarChart3 className="h-8 w-8" />,
-      title: "Analytics & Insights",
-      description: "Track response times, monitor student engagement, and identify communication patterns to improve your course management.",
-      demoId: "media",
-    },
-  ];
-
-  const studentFeatures: Array<{
-    icon: React.ReactElement;
-    title: string;
-    description: string;
-    demoId?: FeatureId;
-  }> = [
-    {
-      icon: <MessageSquare className="h-8 w-8" />,
-      title: "Easy Communication",
-      description: "Send messages to instructors and classmates through one simple interface within Canvas. No separate logins or platforms to remember.",
-      demoId: "channels",
-    },
-    {
-      icon: <Users className="h-8 w-8" />,
-      title: "Community Building",
-      description: "Join study groups, connect with peers, and participate in structured collaboration opportunities that extend your learning beyond the classroom.",
-      demoId: "community",
-    },
-    {
-      icon: <Smartphone className="h-8 w-8" />,
-      title: "Mobile-First Design",
-      description: "Stay connected on any device with full mobile functionality. Receive push notifications for important messages and compose messages offline.",
-    },
-    {
-      icon: <GraduationCap className="h-8 w-8" />,
-      title: "Mentorship & Networking",
-      description: "Connect with alumni and participate in mentorship programs designed to support your academic journey.",
-    },
-  ];
-
-  const renderFeatureRow = (
-    feature: (typeof instructorFeatures)[number],
-    index: number,
-    gradient: string,
-  ) => (
-    <div
-      key={feature.title}
-      className={`grid grid-cols-1 items-center gap-8 ${feature.demoId ? "lg:grid-cols-2" : ""}`}
-    >
-      <Card className={`shadow-xl border-0 bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 ${feature.demoId && index % 2 === 1 ? "lg:order-2" : ""}`}>
-        <CardContent className="p-8">
-          <div className="flex items-center mb-6">
-            <div
-              className="w-16 h-16 rounded-lg flex items-center justify-center mr-4"
-              style={{ background: gradient }}
-            >
-              {React.cloneElement(feature.icon, { className: "h-8 w-8 text-white" })}
-            </div>
-            <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-300">{feature.title}</h3>
-          </div>
-          <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">{feature.description}</p>
-        </CardContent>
-      </Card>
-      {feature.demoId && (
-        <div className={index % 2 === 1 ? "lg:order-1" : ""}>
-          <FeatureDemo id={feature.demoId} />
-        </div>
-      )}
-    </div>
-  );
 
   const beforeAfter = {
     before: [
@@ -168,44 +75,38 @@ const Features = () => {
         </div>
       </section>
 
-      {/* For Instructors Section */}
+      {/* Core Workflows */}
       <section className="py-20 -mt-10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full mb-6">
-              <BookOpen className="h-5 w-5 text-white mr-2" />
-              <span className="text-white font-medium">For Instructors</span>
-            </div>
+          <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">
-              Streamline Your Course Management
+              Core Workflows
             </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Five EdStream workflows with interactive demos — each using sample course data while matching the real app layout.
+            </p>
           </div>
-          
-          <div className="space-y-16">
-            {instructorFeatures.map((feature, index) =>
-              renderFeatureRow(feature, index, "linear-gradient(135deg, #0021A5 0%, #003DD6 100%)"),
-            )}
-          </div>
-        </div>
-      </section>
 
-      {/* For Students Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full mb-6">
-              <Users className="h-5 w-5 text-white mr-2" />
-              <span className="text-white font-medium">For Students</span>
-            </div>
-            <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">
-              Connect and Collaborate Seamlessly
-            </h2>
-          </div>
-          
           <div className="space-y-16">
-            {studentFeatures.map((feature, index) =>
-              renderFeatureRow(feature, index, "linear-gradient(135deg, #FA4616 0%, #FF6B3D 100%)"),
-            )}
+            {features.map((feature, index) => (
+              <div key={feature.id} className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+                <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                  <h3 className="mb-5 text-2xl font-bold text-blue-600 dark:text-blue-300">{feature.title}</h3>
+                  <p className="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-300">{feature.description}</p>
+                  <ul className="space-y-3">
+                    {feature.bullets.map((bullet) => (
+                      <li key={bullet} className="flex gap-3 text-gray-700 dark:text-gray-300">
+                        <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-500" />
+                        <span className="text-lg">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                  <FeatureDemo id={feature.id} />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
