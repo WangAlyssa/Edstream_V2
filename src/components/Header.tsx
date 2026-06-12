@@ -44,10 +44,10 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`font-bold text-lg px-4 py-2 rounded-lg transition-all duration-200 ${
+                className={`font-bold text-lg px-4 py-2 transition-colors duration-200 ${
                   isActivePage(item.href)
-                    ? 'text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-700'
-                    : 'text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'
                 }`}
               >
                 {item.name}
@@ -89,10 +89,10 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`block px-4 py-3 font-bold text-lg rounded-lg transition-all duration-200 ${
+                  className={`block px-4 py-3 font-bold text-lg transition-colors duration-200 ${
                     isActivePage(item.href)
-                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/50 border-l-4 border-orange-500 dark:border-orange-400'
-                      : 'text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : 'text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
