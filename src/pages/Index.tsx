@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import AppStoreBadge from "@/components/AppStoreBadge";
+import StoreBadges from "@/components/StoreBadges";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, CheckCircle, Star, Smartphone } from "lucide-react";
@@ -59,28 +59,7 @@ const Index = () => {
               </div>
 
               {/* Mobile App Downloads */}
-              <div className="flex flex-wrap items-center gap-4">
-                <a 
-                  href="https://apps.apple.com/us/app/edstream/id6736952355"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block transition-transform duration-200 hover:scale-105"
-                >
-                  <AppStoreBadge />
-                </a>
-                <a 
-                  href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block transition-transform duration-200 hover:scale-105"
-                >
-                  <img 
-                    src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                    alt="Get it on Google Play"
-                    className="h-[78px] w-[260px] object-contain"
-                  />
-                </a>
-              </div>
+              <StoreBadges />
             </div>
 
             {/* Right Column - Visual */}
@@ -300,28 +279,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
-              href="https://apps.apple.com/us/app/edstream/id6736952355"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block transition-transform duration-200 hover:scale-105"
-            >
-              <AppStoreBadge />
-            </a>
-            <a 
-              href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block transition-transform duration-200 hover:scale-105"
-            >
-              <img 
-                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                alt="Get it on Google Play"
-                className="h-[78px] w-[260px] object-contain"
-              />
-            </a>
-          </div>
+          <StoreBadges className="justify-center" />
         </div>
       </section>
 
