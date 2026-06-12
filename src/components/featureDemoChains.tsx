@@ -1,14 +1,11 @@
 import type { ReactNode } from "react";
 import {
-  CanvasChannelChatFrame,
-  CanvasCourseHomeFrame,
-  ChannelDetailsEmptyFrame,
-  ChannelThreadFrame,
+  CommunityBrowseFrame,
   CreateRequestFrame,
-  MessageReplyFrame,
+  FeatureChannelBrowseFrame,
+  MediaDetailsFocusFrame,
   RequestsInstructorFrame,
   RequestsStudentFrame,
-  StandaloneChannelFrame,
 } from "@/components/figma/FigmaFrames";
 import {
   FigmaChannelHeader,
@@ -16,6 +13,7 @@ import {
   FigmaDateDivider,
   FigmaMessageRow,
   FigmaStandaloneShell,
+  FigmaTag,
   type FigmaScale,
 } from "@/components/figma/FigmaMockParts";
 import { FIGMA_WORLD } from "@/components/figma/figmaAssets";
@@ -23,372 +21,337 @@ import { FIGMA_WORLD } from "@/components/figma/figmaAssets";
 export type FeatureId = "channels" | "files" | "media" | "requests" | "community";
 
 export type DemoStepDef = {
-  /** Visible UI state for this beat in the workflow */
   scene: string;
-  /** Element the cursor clicks to advance */
   trigger: string;
-  /** Human-readable intent */
   userAction: string;
-  /** What the UI shows after the click */
   expectedResponse: string;
-  /** Why the response follows from the action */
   reason: string;
   render: (scale: FigmaScale) => ReactNode;
 };
 
 const W = FIGMA_WORLD;
 
+const FileCard = ({ fileTarget }: { fileTarget?: string }) => (
+  <div
+    data-demo-target={fileTarget}
+    className="relative mt-1.5 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2.5 py-2 shadow-sm ring-2 ring-orange-200"
+  >
+    <span className="text-lg text-orange-500">📄</span>
+    <div>
+      <div className="text-[11px] font-bold text-gray-900">{W.files.project}</div>
+      <div className="text-[9px] text-gray-500">PDF · 248 KB</div>
+    </div>
+  </div>
+);
+
 const FilePreviewOverlay = ({ closeDemoTarget }: { closeDemoTarget: string }) => (
-  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-4">
-    <div className="w-full max-w-[240px] rounded-xl bg-white shadow-2xl">
-      <div className="flex items-center justify-between border-b px-3 py-2 text-[10px] font-bold text-gray-800">
+  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-6">
+    <div className="w-full max-w-[320px] rounded-xl bg-white shadow-2xl">
+      <div className="flex items-center justify-between border-b px-4 py-2.5 text-[11px] font-bold text-gray-800">
         {W.files.project}
         <button
           type="button"
-          className="flex h-5 w-5 items-center justify-center rounded-full border border-gray-200 text-gray-500"
+          className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-500"
           data-demo-target={closeDemoTarget}
         >
           ×
         </button>
       </div>
-      <div className="space-y-2 p-3 text-[10px] leading-relaxed text-gray-600">
-        <h5 className="text-[11px] font-bold text-gray-900">Project Outline</h5>
-        <p>Preview of shared file attached to the channel message.</p>
+      <div className="space-y-2 p-4 text-[11px] leading-relaxed text-gray-600">
+        <div className="rounded-lg bg-gray-50 p-4 text-center text-gray-400">Project Outline — page 1 of 4</div>
+        <p className="font-semibold text-gray-800">Week 3 deliverables and grading rubric.</p>
       </div>
     </div>
   </div>
 );
 
-const FilesAttachScene = ({ scale, sendTarget }: { scale: FigmaScale; sendTarget: string }) => (
-  <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
-    <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
-    <div className="min-h-0 flex-1 overflow-y-auto">
-      <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
-        Sharing materials for this week&apos;s lab.
+const channelBody = (scale: FigmaScale, lines: Array<{ name: string; photo: "maya" | "jordan" | "sofia"; text: ReactNode }>) => (
+  <>
+    <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
+    {lines.map((line) => (
+      <FigmaMessageRow key={line.name} scale={scale} photo={line.photo} name={line.name} relaxed>
+        {line.text}
       </FigmaMessageRow>
-    </div>
-    <div className="mt-auto flex-shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm">
-      <div className={`min-h-[36px] px-2.5 py-2 text-gray-700 text-[11px]`}>
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-orange-200 bg-orange-50 px-2 py-1">
-          <span className="text-orange-500">📄</span>
-          <span className="font-semibold">{W.files.project}</span>
-        </span>
-      </div>
-      <FigmaComposer scale={scale} sendDemoTarget={sendTarget} />
-    </div>
-  </FigmaStandaloneShell>
-);
-
-const FilesCardScene = ({
-  scale,
-  fileTarget,
-  infoTarget,
-}: {
-  scale: FigmaScale;
-  fileTarget?: string;
-  infoTarget?: string;
-}) => (
-  <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
-    <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" infoDemoTarget={infoTarget} />
-    <div className="min-h-0 flex-1 overflow-y-auto">
-      <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
-        Here is the project outline for this week.
-        <div
-          data-demo-target={fileTarget}
-          className="relative mt-1.5 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm"
-        >
-          <span className="text-orange-500">📄</span>
-          <span className="text-[10px] font-bold text-gray-800">{W.files.project}</span>
-        </div>
-      </FigmaMessageRow>
-    </div>
-    <FigmaComposer scale={scale} />
-  </FigmaStandaloneShell>
-);
-
-const MediaEmptyScene = ({ scale, infoTarget }: { scale: FigmaScale; infoTarget: string }) => (
-  <FigmaStandaloneShell scale={scale} activeChannel="demo-123">
-    <FigmaChannelHeader scale={scale} title={W.channels.office} members="1 Member" infoDemoTarget={infoTarget} />
-    <div className="flex min-h-0 flex-1 items-center justify-center text-sm text-gray-400">No messages found</div>
-    <FigmaComposer scale={scale} />
-  </FigmaStandaloneShell>
-);
-
-const InstructorCourseScene = ({ scale, requestsTarget }: { scale: FigmaScale; requestsTarget: string }) => (
-  <FigmaStandaloneShell
-    scale={scale}
-    activeChannel="renamed-general"
-    requestsDemoTarget={requestsTarget}
-    requestsNotify
-    topBarUserLabel={W.people.instructor}
-  >
-    <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
-    <div className="min-h-0 flex-1 overflow-y-auto">
-      <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
-        Lab materials are posted in the channel details.
-      </FigmaMessageRow>
-    </div>
-    <FigmaComposer scale={scale} />
-  </FigmaStandaloneShell>
+    ))}
+  </>
 );
 
 export const FEATURE_DEMO_CHAINS: Record<FeatureId, DemoStepDef[]> = {
   channels: [
     {
-      scene: "canvas-course-home",
+      scene: "channel-discussion",
       trigger: "0",
-      userAction: 'Click "Ed Stream Chat" in Canvas course navigation',
-      expectedResponse: "Ed Stream workspace opens with the course channel loaded",
-      reason: "Ed Stream Chat is the LTI entry point that launches the embedded workspace",
-      render: (scale) => <CanvasCourseHomeFrame scale={scale} edStreamDemoTarget="0" />,
+      userAction: "Click # project-team-alpha in the channel list",
+      expectedResponse: "Project team channel opens with its own conversation",
+      reason: "Selecting a channel in the sidebar switches the main view to that channel",
+      render: (scale) => (
+        <FeatureChannelBrowseFrame
+          scale={scale}
+          activeChannel="renamed-general"
+          channelClickTargetId="guided"
+          channelClickDemoTarget="0"
+          title={W.channels.discussion}
+          members="5 Members"
+          body={channelBody(scale, [
+            { name: W.people.primaryStudent, photo: "maya", text: <>Welcome to <FigmaTag type="page" scale={scale} /> — post lab questions here.</> },
+          ])}
+        />
+      ),
     },
     {
-      scene: "canvas-channel-chat",
+      scene: "channel-project",
       trigger: "1",
-      userAction: 'Click "1 reply" under a channel message',
-      expectedResponse: "Thread panel slides open beside the channel conversation",
-      reason: "Reply links open the inline thread view for that message",
-      render: (scale) => <CanvasChannelChatFrame scale={scale} replyDemoTarget="1" />,
+      userAction: "Click # study-group in the channel list",
+      expectedResponse: "Study group channel opens",
+      reason: "Each channel row loads a distinct course conversation",
+      render: (scale) => (
+        <FeatureChannelBrowseFrame
+          scale={scale}
+          activeChannel="guided"
+          channelClickTargetId="random"
+          channelClickDemoTarget="1"
+          title={W.channels.project}
+          members="4 Members"
+          body={channelBody(scale, [
+            { name: W.people.jordan, photo: "jordan", text: <>Sprint board updated — check tasks for <FigmaTag type="page" scale={scale} />.</> },
+          ])}
+        />
+      ),
     },
     {
-      scene: "canvas-thread-open",
+      scene: "channel-study",
       trigger: "2",
-      userAction: "Click the thread panel close control",
-      expectedResponse: "Thread panel closes; channel chat remains visible",
-      reason: "Closing the thread dismisses the side panel without leaving the channel",
-      render: (scale) => <ChannelThreadFrame scale={scale} closeDemoTarget="2" />,
-    },
-    {
-      scene: "canvas-channel-chat-again",
-      trigger: "3",
-      userAction: 'Click "1 reply" on the same message again',
-      expectedResponse: "Thread panel reopens on the selected message",
-      reason: "Reply links always reopen the thread for that message",
-      render: (scale) => <CanvasChannelChatFrame scale={scale} replyDemoTarget="3" />,
+      userAction: "Click # course-discussion to switch back",
+      expectedResponse: "Course discussion channel reopens",
+      reason: "Instructors and students jump between course channels in one click",
+      render: (scale) => (
+        <FeatureChannelBrowseFrame
+          scale={scale}
+          activeChannel="random"
+          channelClickTargetId="renamed-general"
+          channelClickDemoTarget="2"
+          title={W.channels.study}
+          members="6 Members"
+          body={channelBody(scale, [
+            { name: W.people.sofia, photo: "sofia", text: "Review session Saturday 2pm — bring practice problems." },
+          ])}
+        />
+      ),
     },
   ],
 
   files: [
     {
-      scene: "channel-composer",
+      scene: "file-card-in-chat",
       trigger: "0",
-      userAction: "Click the paperclip attachment control in the composer",
-      expectedResponse: "File picker attaches a document to the draft message",
-      reason: "The paperclip opens attachment selection and stages the file in the composer",
-      render: (scale) => <CanvasChannelChatFrame scale={scale} attachDemoTarget="0" />,
+      userAction: "Click the shared file card in the message",
+      expectedResponse: "In-app file preview opens over the channel",
+      reason: "File cards in chat are the primary share affordance",
+      render: (scale) => (
+        <FigmaStandaloneShell scale={scale} activeChannel="renamed-general" hideMessages>
+          <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
+          <div className="min-h-0 flex-1 overflow-hidden">
+            <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+            <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
+              Here is the project outline for this week.
+              <FileCard fileTarget="0" />
+            </FigmaMessageRow>
+          </div>
+          <FigmaComposer scale={scale} />
+        </FigmaStandaloneShell>
+      ),
     },
     {
-      scene: "channel-send-attachment",
+      scene: "file-preview-open",
       trigger: "1",
-      userAction: "Click send to post the message with attachment",
-      expectedResponse: "Message appears in channel with an inline file card",
-      reason: "Sending publishes the draft and renders uploaded files as clickable cards",
-      render: (scale) => <FilesAttachScene scale={scale} sendTarget="1" />,
-    },
-    {
-      scene: "channel-file-card",
-      trigger: "2",
-      userAction: "Click the file card in the message",
-      expectedResponse: "In-app file preview overlay opens",
-      reason: "File cards are preview affordances for shared attachments",
-      render: (scale) => <FilesCardScene scale={scale} fileTarget="2" />,
-    },
-    {
-      scene: "file-preview",
-      trigger: "3",
-      userAction: "Click close on the preview overlay",
-      expectedResponse: "Preview closes; user returns to the channel with the file card still visible",
-      reason: "Closing the preview dismisses the modal layer only",
+      userAction: "Click close on the preview",
+      expectedResponse: "Preview closes; file card remains in the channel message",
+      reason: "Preview is an overlay — the shared file stays in context",
       render: (scale) => (
         <div className="relative h-full">
-          <FilesCardScene scale={scale} />
-          <FilePreviewOverlay closeDemoTarget="3" />
+          <FigmaStandaloneShell scale={scale} activeChannel="renamed-general" hideMessages>
+            <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
+            <div className="min-h-0 flex-1 overflow-hidden">
+              <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+              <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
+                Here is the project outline for this week.
+                <FileCard />
+              </FigmaMessageRow>
+            </div>
+            <FigmaComposer scale={scale} />
+          </FigmaStandaloneShell>
+          <FilePreviewOverlay closeDemoTarget="1" />
         </div>
       ),
     },
     {
-      scene: "channel-before-details",
-      trigger: "4",
-      userAction: "Click the channel info icon in the header",
-      expectedResponse: "Channel Details panel opens beside the conversation",
-      reason: "The info icon toggles the channel details side panel",
-      render: (scale) => <FilesCardScene scale={scale} infoTarget="4" />,
-    },
-    {
-      scene: "channel-details-before-docs",
-      trigger: "5",
-      userAction: 'Click the "Docs" tab in Channel Details',
-      expectedResponse: "Docs tab lists the uploaded project outline",
-      reason: "Files shared in chat are indexed under Channel Details → Docs",
+      scene: "file-card-visible",
+      trigger: "2",
+      userAction: "Click the file card again to reopen preview",
+      expectedResponse: "File preview opens again",
+      reason: "Students can reopen shared files any time from the inline card",
       render: (scale) => (
-        <ChannelDetailsEmptyFrame scale={scale} activeTab="photos" docsTabDemoTarget="5" />
-      ),
-    },
-    {
-      scene: "channel-details-docs",
-      trigger: "6",
-      userAction: "Click the channel info icon to close Channel Details",
-      expectedResponse: "Details panel closes; channel returns to normal chat view",
-      reason: "Info toggles the details panel closed, completing the file-sharing workflow",
-      render: (scale) => (
-        <ChannelDetailsEmptyFrame scale={scale} activeTab="docs" showSharedDoc infoDemoTarget="6" />
+        <FigmaStandaloneShell scale={scale} activeChannel="renamed-general" hideMessages>
+          <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
+          <div className="min-h-0 flex-1 overflow-hidden">
+            <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+            <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
+              Here is the project outline for this week.
+              <FileCard fileTarget="2" />
+            </FigmaMessageRow>
+          </div>
+          <FigmaComposer scale={scale} />
+        </FigmaStandaloneShell>
       ),
     },
   ],
 
   media: [
     {
-      scene: "empty-channel",
+      scene: "media-channel",
       trigger: "0",
       userAction: "Click the channel info icon",
-      expectedResponse: "Channel Details panel opens on the Photos tab",
-      reason: "Info opens the details panel; Photos is the default shared-media tab",
-      render: (scale) => <MediaEmptyScene scale={scale} infoTarget="0" />,
+      expectedResponse: "Channel Details opens with Photos grid populated",
+      reason: "Shared chat photos are auto-collected under Channel Details → Photos",
+      render: (scale) => (
+        <MediaDetailsFocusFrame scale={scale} showDetails={false} infoDemoTarget="0" />
+      ),
     },
     {
-      scene: "details-photos",
+      scene: "media-photos-grid",
       trigger: "1",
-      userAction: 'Click the "Videos" tab in Channel Details',
-      expectedResponse: "Videos library view is shown in the panel",
-      reason: "Tab controls switch the shared-media category inside Channel Details",
+      userAction: 'Click the "Videos" tab',
+      expectedResponse: "Sorted video clips appear in the media library",
+      reason: "Videos shared in chat are grouped separately from photos",
       render: (scale) => (
-        <ChannelDetailsEmptyFrame scale={scale} activeTab="photos" videosTabDemoTarget="1" />
+        <MediaDetailsFocusFrame scale={scale} activeTab="photos" videosTabDemoTarget="1" />
       ),
     },
     {
-      scene: "details-videos",
+      scene: "media-docs-tab",
       trigger: "2",
-      userAction: 'Click the "Docs" tab in Channel Details',
-      expectedResponse: "Docs library view is shown in the panel",
-      reason: "Tab controls switch the shared-media category inside Channel Details",
+      userAction: 'Click the "Docs" tab',
+      expectedResponse: "Shared documents list appears in the library",
+      reason: "File attachments from chat are indexed under Docs",
       render: (scale) => (
-        <ChannelDetailsEmptyFrame scale={scale} activeTab="videos" docsTabDemoTarget="2" />
+        <MediaDetailsFocusFrame scale={scale} activeTab="videos" docsTabDemoTarget="2" showSharedDoc />
       ),
     },
     {
-      scene: "details-docs",
+      scene: "media-docs-library",
       trigger: "3",
-      userAction: "Click the channel info icon to close Channel Details",
-      expectedResponse: "Details panel closes; empty channel view returns",
-      reason: "Info is a toggle — clicking again dismisses the details panel",
+      userAction: 'Click "Photos" to browse sorted images',
+      expectedResponse: "Photo grid returns, completing the media tour",
+      reason: "All three media types stay accessible from Channel Details",
       render: (scale) => (
-        <ChannelDetailsEmptyFrame scale={scale} activeTab="docs" infoDemoTarget="3" />
+        <MediaDetailsFocusFrame scale={scale} activeTab="docs" showSharedDoc photosTabDemoTarget="3" />
       ),
     },
   ],
 
   requests: [
     {
-      scene: "student-requests",
+      scene: "requests-student-feed",
       trigger: "0",
       userAction: 'Click "+ Create New Request"',
-      expectedResponse: "Create Request modal opens",
-      reason: "The create button launches the structured request form",
+      expectedResponse: "Create Request modal opens with category form",
+      reason: "Students start structured requests from the Requests channel",
       render: (scale) => (
-        <RequestsStudentFrame scale={scale} createDemoTarget="0" showCreateOnly />
+        <RequestsStudentFrame scale={scale} createDemoTarget="0" />
       ),
     },
     {
-      scene: "create-extension-modal",
+      scene: "requests-create-modal",
       trigger: "1",
-      userAction: 'Click "+ Create Request" to submit the extension form',
-      expectedResponse: "Modal closes; new pending extension appears in the student Requests feed",
-      reason: "Submitting the form posts the request into the Requests channel timeline",
+      userAction: 'Click "+ Create Request" to submit',
+      expectedResponse: "Modal closes; pending extension card appears in the feed",
+      reason: "Submitting posts the request card into the Requests timeline",
       render: (scale) => (
-        <CreateRequestFrame scale={scale} category="extension" submitDemoTarget="1" />
+        <CreateRequestFrame scale={scale} category="extension" requestsBackground submitDemoTarget="1" />
       ),
     },
     {
-      scene: "student-pending-request",
+      scene: "requests-student-pending",
       trigger: "2",
-      userAction: "Click the user menu to switch to the instructor account",
-      expectedResponse: "Workspace reloads as the instructor in the course channel",
-      reason: "Account switching changes role context so the instructor can review the queue",
+      userAction: "Click the pending extension request card",
+      expectedResponse: "Instructor Requests queue opens with the same request",
+      reason: "Instructors review the shared request card in their queue",
       render: (scale) => (
-        <RequestsStudentFrame
-          scale={scale}
-          showNewPendingOnly
-          topBarUserLabel={W.people.jordan}
-          topBarUserDemoTarget="2"
-        />
+        <RequestsStudentFrame scale={scale} showNewPendingOnly pendingCardDemoTarget="2" />
       ),
     },
     {
-      scene: "instructor-course-nav",
+      scene: "requests-instructor-approve",
       trigger: "3",
-      userAction: 'Click "Requests" in the sidebar (notification badge)',
-      expectedResponse: "Instructor Requests queue opens with the pending extension",
-      reason: "Requests nav opens the course request inbox for instructors",
-      render: (scale) => <InstructorCourseScene scale={scale} requestsTarget="3" />,
-    },
-    {
-      scene: "instructor-approve",
-      trigger: "4",
-      userAction: 'Click "Approve" on the pending extension request',
-      expectedResponse: "Request card updates to an approved state",
-      reason: "Approve is the instructor action that resolves a pending request",
+      userAction: 'Click "Approve" on the extension request',
+      expectedResponse: "Request card updates to approved state",
+      reason: "Approve resolves the pending request for the student",
       render: (scale) => (
-        <RequestsInstructorFrame scale={scale} approveDemoTarget="4" />
-      ),
-    },
-    {
-      scene: "instructor-approved",
-      trigger: "5",
-      userAction: "Click the user menu to switch back to the student account",
-      expectedResponse: "Student Requests view returns to start the workflow again",
-      reason: "Account switching restores the student perspective for the demo loop",
-      render: (scale) => (
-        <RequestsInstructorFrame scale={scale} approved topBarUserDemoTarget="5" />
+        <RequestsInstructorFrame scale={scale} approveDemoTarget="3" />
       ),
     },
   ],
 
   community: [
     {
-      scene: "community-discussion",
+      scene: "community-parent",
       trigger: "0",
-      userAction: 'Click "1 reply" on a community message',
-      expectedResponse: "Message expands with reply controls visible",
-      reason: "Reply links surface thread actions on the selected message",
-      render: (scale) => <StandaloneChannelFrame scale={scale} replyDemoTarget="0" />,
-    },
-    {
-      scene: "community-reply-controls",
-      trigger: "1",
-      userAction: "Click the reply control on the message",
-      expectedResponse: "Thread panel opens beside the channel",
-      reason: "The reply button opens the side thread composer for that message",
-      render: (scale) => <MessageReplyFrame scale={scale} replyDemoTarget="1" />,
-    },
-    {
-      scene: "community-thread-compose",
-      trigger: "2",
-      userAction: "Click send in the thread composer",
-      expectedResponse: "Reply posts in the thread; thread panel shows the new reply",
-      reason: "Send publishes the thread reply into the conversation",
-      render: (scale) => <ChannelThreadFrame scale={scale} sendDemoTarget="2" />,
-    },
-    {
-      scene: "community-after-reply",
-      trigger: "3",
-      userAction: 'Click "Requests" in the sidebar',
-      expectedResponse: "Requests channel opens for structured follow-up",
-      reason: "Students escalate informal threads into formal requests via the Requests nav item",
+      userAction: "Click # project-team-alpha under the community parent",
+      expectedResponse: "Project team sub-channel opens with peer discussion",
+      reason: "Community parent channels contain linked project sub-channels",
       render: (scale) => (
-        <StandaloneChannelFrame scale={scale} requestsDemoTarget="3" showReplyPosted />
+        <CommunityBrowseFrame
+          scale={scale}
+          activeChannel="parent"
+          channelClickTargetId="guided"
+          channelClickDemoTarget="0"
+          title={W.channels.discussionParent}
+          members="4 Members"
+          body={channelBody(scale, [
+            { name: W.people.primaryStudent, photo: "maya", text: <>Anyone joining the study session for <FigmaTag type="page" scale={scale} />?</> },
+          ])}
+        />
       ),
     },
     {
-      scene: "community-create-request",
-      trigger: "4",
-      userAction: 'Click "+ Create New Request"',
-      expectedResponse: "Create Request modal opens for a structured request",
-      reason: "Create Request converts a community need into a trackable instructor workflow",
+      scene: "community-project",
+      trigger: "1",
+      userAction: "Click # study-group in the sidebar",
+      expectedResponse: "Study group community channel opens",
+      reason: "Students browse peer channels from the community workspace",
       render: (scale) => (
-        <RequestsStudentFrame scale={scale} createDemoTarget="4" activeItem="requests" />
+        <CommunityBrowseFrame
+          scale={scale}
+          activeChannel="guided"
+          channelClickTargetId="random"
+          channelClickDemoTarget="1"
+          title={W.channels.project}
+          members="5 Members"
+          body={channelBody(scale, [
+            { name: W.people.jordan, photo: "jordan", text: "We finished the wireframes — feedback welcome!" },
+            { name: W.people.sofia, photo: "sofia", text: "I can review tonight after lab." },
+          ])}
+        />
+      ),
+    },
+    {
+      scene: "community-study",
+      trigger: "2",
+      userAction: "Click # course-discussion (parent) to return to the community hub",
+      expectedResponse: "Parent community channel reopens",
+      reason: "Community navigation mirrors course channel switching",
+      render: (scale) => (
+        <CommunityBrowseFrame
+          scale={scale}
+          activeChannel="random"
+          channelClickTargetId="parent"
+          channelClickDemoTarget="2"
+          title={W.channels.study}
+          members="8 Members"
+          body={channelBody(scale, [
+            { name: W.people.primaryStudent, photo: "maya", text: "Exam prep thread — share resources here." },
+          ])}
+        />
       ),
     },
   ],

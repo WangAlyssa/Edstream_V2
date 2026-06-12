@@ -54,6 +54,8 @@ export const scaleMap = {
     mainPanel: "min-w-0 flex-[4.5]",
     threadPanel: "min-w-0 w-[30%] max-w-[34%] flex-shrink-0",
     detailsPanel: "min-w-0 w-[26%] max-w-[30%] flex-shrink-0",
+    detailsPanelWide: "min-w-0 w-[48%] max-w-[52%] flex-shrink-0",
+    mediaChatStrip: "min-w-0 w-[20%] max-w-[24%] flex-shrink-0",
     topH: "h-[38px]",
     searchH: "h-[26px]",
     searchText: "text-[11px]",
@@ -83,6 +85,8 @@ export const scaleMap = {
     mainPanel: "min-w-0 flex-[4.5]",
     threadPanel: "min-w-0 w-[30%] max-w-[34%] flex-shrink-0",
     detailsPanel: "min-w-0 w-[26%] max-w-[30%] flex-shrink-0",
+    detailsPanelWide: "min-w-0 w-[48%] max-w-[52%] flex-shrink-0",
+    mediaChatStrip: "min-w-0 w-[20%] max-w-[24%] flex-shrink-0",
     topH: "h-[34px]",
     searchH: "h-[22px]",
     searchText: "text-[9.5px]",
@@ -134,7 +138,7 @@ export type ActiveChannel =
 
 const W = FIGMA_WORLD;
 
-const CHANNELS = [
+export const CHANNELS = [
   { id: "guided" as const, label: W.channels.project, trailing: "home" as const },
   { id: "renamed-general" as const, label: W.channels.discussion, trailing: "home" as const },
   { id: "random" as const, label: W.channels.study, trailing: "lock" as const },
@@ -146,8 +150,8 @@ const CHANNELS = [
 export type FigmaChannelItem = (typeof CHANNELS)[number];
 
 export const FRAME2_CHANNELS: FigmaChannelItem[] = [
+  { id: "parent", label: W.channels.discussionParent, trailing: "home" },
   { id: "guided", label: W.channels.project, trailing: "home" },
-  { id: "renamed-general", label: W.channels.discussion, trailing: "home" },
   { id: "random", label: W.channels.study, trailing: "home" },
 ];
 
@@ -232,6 +236,9 @@ export const FigmaAppSidebar = ({
   channels = CHANNELS,
   requestsDemoTarget,
   requestsNotify,
+  channelClickTargetId,
+  channelClickDemoTarget,
+  hideMessages = false,
 }: {
   scale: FigmaScale;
   activeItem?: SidebarActive;
@@ -240,6 +247,9 @@ export const FigmaAppSidebar = ({
   channels?: FigmaChannelItem[];
   requestsDemoTarget?: string;
   requestsNotify?: boolean;
+  channelClickTargetId?: string;
+  channelClickDemoTarget?: string;
+  hideMessages?: boolean;
 }) => {
   const s = scaleMap[scale];
 
@@ -277,14 +287,14 @@ export const FigmaAppSidebar = ({
         </div>
         {channels.map((ch) => {
           const isActive =
-            activeChannel !== "parent" &&
-            (activeChannel === ch.id ||
-              (activeChannel === "demo-123" && ch.id === "random"));
+            activeChannel === ch.id ||
+            (activeChannel === "demo-123" && ch.id === "random");
           return (
             <div
               key={ch.label + ch.id}
               className={`mb-0.5 flex items-center justify-between rounded px-1.5 py-[3px] ${s.channelText} ${isActive ? "font-semibold text-white" : "text-blue-100/90"}`}
               style={isActive ? { backgroundColor: FIGMA.sidebarActive } : undefined}
+              data-demo-target={ch.id === channelClickTargetId ? channelClickDemoTarget : undefined}
             >
               <span className="truncate pr-1">{ch.label}</span>
               {ch.trailing === "lock" ? (
@@ -299,6 +309,7 @@ export const FigmaAppSidebar = ({
         })}
       </div>
 
+      {!hideMessages && (
       <div className="mt-0.5 min-h-0 flex-1 overflow-hidden">
         <div className={`mb-1 flex items-center gap-0.5 font-semibold text-blue-100 ${s.sidebarText}`}>
           <ChevronDown className={s.composerTool} strokeWidth={2.5} />
@@ -311,6 +322,7 @@ export const FigmaAppSidebar = ({
           </div>
         ))}
       </div>
+      )}
     </aside>
   );
 };
@@ -534,6 +546,9 @@ export const FigmaStandaloneShell = ({
   requestsNotify,
   topBarUserLabel,
   topBarUserDemoTarget,
+  channelClickTargetId,
+  channelClickDemoTarget,
+  hideMessages,
   children,
   showWorkspace = true,
 }: {
@@ -546,6 +561,9 @@ export const FigmaStandaloneShell = ({
   requestsNotify?: boolean;
   topBarUserLabel?: string;
   topBarUserDemoTarget?: string;
+  channelClickTargetId?: string;
+  channelClickDemoTarget?: string;
+  hideMessages?: boolean;
   children: ReactNode;
   showWorkspace?: boolean;
 }) => (
@@ -561,6 +579,9 @@ export const FigmaStandaloneShell = ({
         channels={channels}
         requestsDemoTarget={requestsDemoTarget}
         requestsNotify={requestsNotify}
+        channelClickTargetId={channelClickTargetId}
+        channelClickDemoTarget={channelClickDemoTarget}
+        hideMessages={hideMessages}
       />
       <main className={`flex flex-col overflow-hidden bg-white px-3 py-2 ${scaleMap[scale].mainPanel}`}>{children}</main>
     </div>
@@ -896,13 +917,17 @@ export const FigmaChannelDetailsPanel = ({
   activeTab = "photos",
   videosTabDemoTarget,
   docsTabDemoTarget,
+  photosTabDemoTarget,
   showSharedDoc,
+  mediaFocus = false,
 }: {
   scale: FigmaScale;
   activeTab?: "photos" | "videos" | "docs";
   videosTabDemoTarget?: string;
   docsTabDemoTarget?: string;
+  photosTabDemoTarget?: string;
   showSharedDoc?: boolean;
+  mediaFocus?: boolean;
 }) => {
   const s = scaleMap[scale];
   const tabs = [
@@ -910,35 +935,83 @@ export const FigmaChannelDetailsPanel = ({
     { id: "videos" as const, label: "Videos" },
     { id: "docs" as const, label: "Docs" },
   ];
+
+  const photoIds: FigmaPhotoId[] = ["maya", "jordan", "sofia", "ethan"];
+  const docFiles = [W.files.project, W.files.lab, W.files.notes];
+
+  const mediaGrid = () => {
+    if (activeTab === "photos") {
+      return (
+        <div className={`grid grid-cols-2 gap-1.5 ${mediaFocus ? "grid-cols-3" : ""}`}>
+          {photoIds.map((photo) => (
+            <img
+              key={photo}
+              src={FIGMA_PHOTOS[photo]}
+              alt=""
+              className={`aspect-square w-full rounded-md object-cover ${mediaFocus ? "h-[52px]" : "h-[38px]"}`}
+            />
+          ))}
+        </div>
+      );
+    }
+    if (activeTab === "videos") {
+      return (
+        <div className="space-y-1.5">
+          {["Lab demo clip", "Office hours recap"].map((label) => (
+            <div key={label} className={`relative overflow-hidden rounded-md bg-gray-800 ${mediaFocus ? "h-[56px]" : "h-[42px]"}`}>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className={`rounded-full bg-white/90 px-1.5 py-0.5 font-bold text-gray-900 ${s.channelText}`}>▶</span>
+              </div>
+              <span className={`absolute bottom-1 left-1.5 font-medium text-white ${s.channelText}`}>{label}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return (
+      <div className="space-y-1.5">
+        {(showSharedDoc ? docFiles : docFiles.slice(0, 2)).map((file) => (
+          <div key={file} className={`flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm ${s.channelText}`}>
+            <span className="text-orange-500">📄</span>
+            <span className="font-bold text-gray-800">{file}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <aside className="flex h-full flex-col border-l border-gray-200 bg-white px-3 py-2.5">
-      <div className={`mb-3 flex items-center justify-between font-bold text-gray-900 ${s.mainHeader}`}>
+      <div className={`mb-2 flex items-center justify-between font-bold text-gray-900 ${s.mainHeader}`}>
         Channel Details
         <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-gray-200 text-gray-500">
           <X className={s.composerTool} strokeWidth={2} />
         </span>
       </div>
-      <div className={`mb-1.5 font-bold text-gray-700 ${s.channelText}`}>Members</div>
-      <div className={`mb-4 flex gap-1.5 ${s.channelText}`}>
-        <button type="button" className="rounded-full border-2 border-gray-800 px-2 py-0.5 font-medium">View Members</button>
-        <button type="button" className="rounded-full border-2 border-gray-800 px-2 py-0.5 font-medium">Add Members</button>
-      </div>
-      <div className={`mb-1.5 font-bold text-gray-700 ${s.channelText}`}>Options</div>
-      <div className={`mb-4 flex flex-col gap-1.5 ${s.channelText}`}>
-        <button type="button" className="w-fit rounded-full border-2 border-gray-800 px-2 py-0.5 font-medium">Rename Channel</button>
-        <button type="button" className="w-fit rounded-full border-2 border-red-500 px-2 py-0.5 font-medium text-red-600">
-          Delete and Exit
-        </button>
-      </div>
-      <div className={`mb-2 font-bold text-gray-700 ${s.channelText}`}>Shared Media</div>
+      {!mediaFocus && (
+        <>
+          <div className={`mb-1 font-bold text-gray-700 ${s.channelText}`}>Members</div>
+          <div className={`mb-2 flex gap-1.5 ${s.channelText}`}>
+            <button type="button" className="rounded-full border-2 border-gray-800 px-2 py-0.5 font-medium">View Members</button>
+            <button type="button" className="rounded-full border-2 border-gray-800 px-2 py-0.5 font-medium">Add Members</button>
+          </div>
+        </>
+      )}
+      <div className={`mb-1.5 font-bold text-gray-700 ${s.channelText}`}>Shared Media</div>
       <div className="flex min-h-0 flex-1">
-        <div className="mr-3 space-y-1.5">
+        <div className="mr-2 space-y-1">
           {tabs.map((tab) => (
             <div
               key={tab.id}
-              className={`relative pl-2.5 ${s.channelText} ${activeTab === tab.id ? "font-bold text-gray-900" : "text-gray-500"}`}
+              className={`relative whitespace-nowrap pl-2.5 ${s.channelText} ${activeTab === tab.id ? "font-bold text-gray-900" : "text-gray-500"}`}
               data-demo-target={
-                tab.id === "videos" ? videosTabDemoTarget : tab.id === "docs" ? docsTabDemoTarget : undefined
+                tab.id === "photos"
+                  ? photosTabDemoTarget
+                  : tab.id === "videos"
+                    ? videosTabDemoTarget
+                    : tab.id === "docs"
+                      ? docsTabDemoTarget
+                      : undefined
               }
             >
               {activeTab === tab.id && (
@@ -948,18 +1021,7 @@ export const FigmaChannelDetailsPanel = ({
             </div>
           ))}
         </div>
-        <div className="flex flex-1 flex-col border-l border-gray-100 py-2 pl-3">
-          {activeTab === "docs" && showSharedDoc ? (
-            <div className={`inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm ${s.channelText}`}>
-              <span className="text-orange-500">📄</span>
-              <span className="font-bold text-gray-800">{W.files.project}</span>
-            </div>
-          ) : (
-            <div className="flex flex-1 items-center justify-center text-gray-400">
-              <span className={s.channelText}>No records found</span>
-            </div>
-          )}
-        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto border-l border-gray-100 py-1 pl-2">{mediaGrid()}</div>
       </div>
     </aside>
   );

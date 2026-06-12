@@ -266,6 +266,16 @@
   }
 }
 
+@layer components {
+  /* Feature + guide GIF mocks must match EdStream product typography (Lato only). */
+  .figma-demo-mock,
+  .figma-demo-mock button,
+  .figma-demo-mock input,
+  .figma-demo-mock textarea {
+    font-family: "Lato", sans-serif;
+  }
+}
+
 @layer utilities {
   .soft-card-motion {
     @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl;

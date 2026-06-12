@@ -18,6 +18,7 @@ import {
   FigmaReplyChip,
   FigmaRequestFilterPills,
   FRAME2_CHANNELS,
+  CHANNELS,
   scaleMap,
   FigmaCanvasGlobalNav,
   FigmaCanvasCourseNav,
@@ -25,6 +26,7 @@ import {
   FigmaTopBar,
   FigmaAvatar,
   type FigmaScale,
+  type ActiveChannel,
 } from "./FigmaMockParts";
 
 import { FigmaChannelDetailsPanel } from "./FigmaMockParts";
@@ -87,6 +89,126 @@ export const CanvasChannelChatFrame = ({
 
   return <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">{body}</FigmaStandaloneShell>;
 };
+
+export const CHANNELS_LIST = CHANNELS;
+
+/** Feature GIF: browse channels by clicking sidebar rows (no threads). */
+export const FeatureChannelBrowseFrame = ({
+  scale,
+  activeChannel,
+  channelClickTargetId,
+  channelClickDemoTarget,
+  title,
+  members,
+  body,
+  channels = CHANNELS.slice(0, 3),
+}: {
+  scale: FigmaScale;
+  activeChannel: ActiveChannel | string;
+  channelClickTargetId?: string;
+  channelClickDemoTarget?: string;
+  title: string;
+  members: string;
+  body: ReactNode;
+  channels?: typeof CHANNELS;
+}) => (
+  <FigmaStandaloneShell
+    scale={scale}
+    activeChannel={activeChannel}
+    channels={channels}
+    channelClickTargetId={channelClickTargetId}
+    channelClickDemoTarget={channelClickDemoTarget}
+    hideMessages
+  >
+    <FigmaChannelHeader scale={scale} title={title} members={members} />
+    <div className="min-h-0 flex-1 overflow-hidden">{body}</div>
+    <FigmaComposer scale={scale} />
+  </FigmaStandaloneShell>
+);
+
+/** Feature GIF: community parent channel with child channels in sidebar. */
+export const CommunityBrowseFrame = ({
+  scale,
+  activeChannel,
+  channelClickTargetId,
+  channelClickDemoTarget,
+  title,
+  members,
+  body,
+}: {
+  scale: FigmaScale;
+  activeChannel: ActiveChannel | string;
+  channelClickTargetId?: string;
+  channelClickDemoTarget?: string;
+  title: string;
+  members: string;
+  body: ReactNode;
+}) => (
+  <FigmaStandaloneShell
+    scale={scale}
+    activeChannel={activeChannel}
+    channels={FRAME2_CHANNELS}
+    channelClickTargetId={channelClickTargetId}
+    channelClickDemoTarget={channelClickDemoTarget}
+    hideMessages
+  >
+    <FigmaChannelHeader scale={scale} title={title} members={members} />
+    <div className="min-h-0 flex-1 overflow-hidden">{body}</div>
+    <FigmaComposer scale={scale} />
+  </FigmaStandaloneShell>
+);
+
+/** Feature GIF: wide channel details with sorted media visible. */
+export const MediaDetailsFocusFrame = ({
+  scale,
+  activeTab = "photos",
+  showDetails = true,
+  infoDemoTarget,
+  videosTabDemoTarget,
+  docsTabDemoTarget,
+  photosTabDemoTarget,
+  showSharedDoc,
+}: {
+  scale: FigmaScale;
+  activeTab?: "photos" | "videos" | "docs";
+  showDetails?: boolean;
+  infoDemoTarget?: string;
+  videosTabDemoTarget?: string;
+  docsTabDemoTarget?: string;
+  photosTabDemoTarget?: string;
+  showSharedDoc?: boolean;
+}) => (
+  <FigmaStandaloneShell scale={scale} activeChannel="demo-123" hideMessages>
+    <div className="flex min-h-0 flex-1 w-full">
+      <div className={`flex flex-col ${showDetails ? scaleMap[scale].mediaChatStrip : "min-w-0 flex-1"}`}>
+        <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.office} members="3 Members" infoDemoTarget={infoDemoTarget} />
+        <div className="min-h-0 flex-1 overflow-hidden px-0.5">
+          <FigmaDateDivider date="Mar 8th, 2024" scale={scale} />
+          <FigmaMessageRow scale={scale} photo="maya" name={FIGMA_WORLD.people.primaryStudent} relaxed>
+            Lab photos from today&apos;s session 📷
+          </FigmaMessageRow>
+          <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan} relaxed>
+            Uploaded the demo clip from lab — see channel details.
+          </FigmaMessageRow>
+        </div>
+        <FigmaComposer scale={scale} />
+      </div>
+      {showDetails && (
+        <div className={`flex-1 ${scaleMap[scale].detailsPanelWide}`}>
+          <FigmaChannelDetailsPanel
+            scale={scale}
+            activeTab={activeTab}
+            mediaFocus
+            videosTabDemoTarget={videosTabDemoTarget}
+            docsTabDemoTarget={docsTabDemoTarget}
+            photosTabDemoTarget={photosTabDemoTarget}
+            showSharedDoc={showSharedDoc}
+          />
+        </div>
+      )}
+    </div>
+  </FigmaStandaloneShell>
+);
 
 export const StandaloneChannelFrame = ({
   scale,
@@ -248,14 +370,38 @@ export const CreateRequestFrame = ({
   scale,
   category,
   canvas = false,
+  requestsBackground = false,
   submitDemoTarget,
 }: {
   scale: FigmaScale;
   category: "grading" | "extension";
   canvas?: boolean;
+  requestsBackground?: boolean;
   submitDemoTarget?: string;
 }) => {
-  const inner = (
+  const inner = requestsBackground ? (
+    <>
+      <FigmaChannelHeader scale={scale} title="# Requests" members="4 Members" />
+      <div className="min-h-0 flex-1 overflow-y-auto pb-2">
+        <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+        <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan}>
+          <FigmaExtensionCard scale={scale} variant="student" />
+        </FigmaMessageRow>
+        <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
+        <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan}>
+          <FigmaExtensionCard scale={scale} variant="student" />
+        </FigmaMessageRow>
+      </div>
+      <div className="flex flex-shrink-0 justify-center py-2 opacity-40">
+        <button
+          type="button"
+          className={`rounded-full border-2 border-gray-800 bg-white px-4 py-1 font-medium text-gray-900 ${scale === "guide" ? "text-[9px]" : "text-[11px]"}`}
+        >
+          + Create New Request
+        </button>
+      </div>
+    </>
+  ) : (
     <>
       <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -279,7 +425,7 @@ export const CreateRequestFrame = ({
           {inner}
         </FigmaCanvasShell>
       ) : (
-        <FigmaStandaloneShell scale={scale} activeItem="requests" activeChannel="renamed-general">
+        <FigmaStandaloneShell scale={scale} activeItem="requests" activeChannel="none">
           {inner}
         </FigmaStandaloneShell>
       )}
@@ -371,6 +517,7 @@ export const RequestsStudentFrame = ({
   createDemoTarget,
   showCreateOnly = false,
   showNewPendingOnly = false,
+  pendingCardDemoTarget,
   topBarUserLabel,
   topBarUserDemoTarget,
   activeItem = "requests",
@@ -379,6 +526,7 @@ export const RequestsStudentFrame = ({
   createDemoTarget?: string;
   showCreateOnly?: boolean;
   showNewPendingOnly?: boolean;
+  pendingCardDemoTarget?: string;
   topBarUserLabel?: string;
   topBarUserDemoTarget?: string;
   activeItem?: "requests" | "channels" | "messages" | "none";
@@ -398,7 +546,7 @@ export const RequestsStudentFrame = ({
             <>
               <FigmaDateDivider date="Today" scale={scale} />
               <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan}>
-                <FigmaExtensionCard scale={scale} variant="student" pendingNew />
+                <FigmaExtensionCard scale={scale} variant="student" pendingNew demoTarget={pendingCardDemoTarget} />
               </FigmaMessageRow>
             </>
           ) : (
