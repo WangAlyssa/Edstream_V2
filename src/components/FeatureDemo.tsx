@@ -11,6 +11,7 @@ import {
 } from "@/components/figma/FigmaFrames";
 import { FigmaMockContainer } from "@/components/figma/FigmaMockContainer";
 import { FigmaStandaloneShell, FigmaChannelHeader, FigmaComposer, FigmaDateDivider, FigmaMessageRow, type FigmaScale } from "@/components/figma/FigmaMockParts";
+import { FIGMA_WORLD } from "@/components/figma/figmaAssets";
 
 export type FeatureId = "channels" | "files" | "media" | "requests" | "community";
 
@@ -76,10 +77,10 @@ const FilePreviewOverlay = ({ scale }: { scale: FigmaScale }) => (
   <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-4" data-demo-target="2">
     <div className="w-full max-w-[240px] rounded-xl bg-white shadow-2xl">
       <div className="flex items-center justify-between border-b px-3 py-2 text-[10px] font-bold text-gray-800">
-        handout.png
+        {FIGMA_WORLD.files.project}
       </div>
       <div className="space-y-2 p-3 text-[10px] leading-relaxed text-gray-600">
-        <h5 className="text-[11px] font-bold text-gray-900">Course Handout</h5>
+        <h5 className="text-[11px] font-bold text-gray-900">Project Outline</h5>
         <p>Preview of shared file attached to the channel message.</p>
       </div>
     </div>
@@ -91,18 +92,18 @@ const FilesDemoFrame = ({ step }: { step: number }) => {
   return (
     <div className="relative h-full">
       <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
-        <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+        <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
         <div className="min-h-0 flex-1 overflow-y-auto">
           <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-          <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
-            Here is the course handout for everyone.
+          <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
+            Here is the project outline for this week.
             {step >= 1 && (
               <div
                 data-demo-target="1"
                 className={`relative mt-1.5 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm ${step >= 1 ? "ring-2 ring-orange-200" : ""}`}
               >
                 <span className="text-orange-500">📄</span>
-                <span className="text-[10px] font-bold text-gray-800">handout.png</span>
+                <span className="text-[10px] font-bold text-gray-800">{FIGMA_WORLD.files.project}</span>
               </div>
             )}
           </FigmaMessageRow>
@@ -119,7 +120,7 @@ const MediaDemoFrame = ({ step }: { step: number }) => {
   if (step === 0) {
     return (
       <FigmaStandaloneShell scale={mediaScale} activeChannel="demo-123">
-        <FigmaChannelHeader scale={mediaScale} title="# Demo 123" members="1 Member" infoDemoTarget="0" />
+        <FigmaChannelHeader scale={mediaScale} title="# office-hours" members="1 Member" infoDemoTarget="0" />
         <div className="flex min-h-0 flex-1 items-center justify-center text-sm text-gray-400">No messages found</div>
         <FigmaComposer scale={mediaScale} />
       </FigmaStandaloneShell>

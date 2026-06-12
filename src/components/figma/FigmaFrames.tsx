@@ -43,15 +43,15 @@ export type FigmaFrameId =
 
 export const CanvasChannelChatFrame = ({ scale }: { scale: FigmaScale }) => (
   <FigmaCanvasShell scale={scale} activeChannel="renamed-general">
-    <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+    <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} /></div>}>
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} /></div>}>
         Content of message. <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
-      <FigmaSystemMessage text="Dylan Tallon joined" scale={scale} />
+      <FigmaSystemMessage text="Sofia Patel joined" scale={scale} />
       <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
         <div className="mt-0.5 flex flex-col gap-0.5">
           <FigmaReactionRow scale={scale} />
           <FigmaReplyLink scale={scale} />
@@ -59,9 +59,9 @@ export const CanvasChannelChatFrame = ({ scale }: { scale: FigmaScale }) => (
       }>
         Content of message. <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
-      <FigmaSystemMessage text="GatorAide joined" scale={scale} />
+      <FigmaSystemMessage text="Ethan Brooks joined" scale={scale} />
       <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
         <div className="mt-0.5 flex flex-col gap-0.5">
           <FigmaReactionRow scale={scale} />
           <FigmaReplyLink scale={scale} />
@@ -69,13 +69,13 @@ export const CanvasChannelChatFrame = ({ scale }: { scale: FigmaScale }) => (
       }>
         Helllo <FigmaTag type="person" scale={scale} />
       </FigmaMessageRow>
-      <FigmaSystemMessage text="Aeyzechiah Vasquez joined" scale={scale} />
+      <FigmaSystemMessage text="Liam Foster joined" scale={scale} />
       <FigmaDateDivider date="Mar 12th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
         <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 25th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
         <FigmaTag type="contact" scale={scale} /> Content of message.
       </FigmaMessageRow>
     </div>
@@ -85,21 +85,21 @@ export const CanvasChannelChatFrame = ({ scale }: { scale: FigmaScale }) => (
 
 export const StandaloneChannelFrame = ({ scale }: { scale: FigmaScale }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="parent" channels={FRAME2_CHANNELS}>
-    <FigmaChannelHeader scale={scale} title="# Unison Demo (parent)" members="4 Members" />
+    <FigmaChannelHeader scale={scale} title="# course-discussion (parent)" members="4 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto" data-demo-target="0">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" showBot relaxed>
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot relaxed>
         Hi <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" showBot edited relaxed footer={<div className="mt-1"><FigmaReplyLink scale={scale} /></div>}>
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot edited relaxed footer={<div className="mt-1"><FigmaReplyLink scale={scale} /></div>}>
         <FigmaTag type="contact" scale={scale} /> Content of message.
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 12th, 2024" scale={scale} />
       <FigmaMessageRow
         scale={scale}
-        photo="decio"
-        name="Decio Emanuel"
+        photo="maya"
+        name="Maya Chen"
         showBot
         relaxed
         footer={
@@ -114,15 +114,15 @@ export const StandaloneChannelFrame = ({ scale }: { scale: FigmaScale }) => (
         Hi <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 25th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" showBot relaxed>
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot relaxed>
         <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
       <FigmaDateDivider date="Saturday" scale={scale} />
       <FigmaDateDivider date="Today" scale={scale} />
       <FigmaMessageRow
         scale={scale}
-        photo="decio"
-        name="Decio Emanuel"
+        photo="maya"
+        name="Maya Chen"
         showBot
         relaxed
         footer={
@@ -142,7 +142,7 @@ export const StandaloneChannelFrame = ({ scale }: { scale: FigmaScale }) => (
 export const ChannelThreadFrame = ({ scale }: { scale: FigmaScale }) => {
   const chatMain = (
     <>
-      <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+      <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
       <div className="min-h-0 flex-1 overflow-hidden opacity-90">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
         <FigmaMessageRow scale={scale}>
@@ -150,7 +150,7 @@ export const ChannelThreadFrame = ({ scale }: { scale: FigmaScale }) => {
           <div className={`mt-0.5 text-blue-600 ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>1 reply</div>
         </FigmaMessageRow>
         <div className={`my-1 text-center text-gray-400 ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>
-          Dylan Tallon joined
+          Sofia Patel joined
         </div>
       </div>
       <FigmaComposer scale={scale} />
@@ -179,15 +179,15 @@ export const CanvasThreadFrame = ({ scale }: { scale: FigmaScale }) => (
         <div className="flex min-h-0 flex-1">
           <FigmaAppSidebar scale={scale} activeChannel="renamed-general" />
           <main className="flex min-w-0 flex-[1.55] flex-col overflow-hidden bg-white px-3 py-2">
-            <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+            <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
             <div className="min-h-0 flex-1 overflow-y-auto">
               <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-              <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} /></div>}>
+              <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} /></div>}>
                 Hi <FigmaTag type="person" scale={scale} />
               </FigmaMessageRow>
-              <FigmaSystemMessage text="Dylan Tallon joined" scale={scale} />
+              <FigmaSystemMessage text="Sofia Patel joined" scale={scale} />
               <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-              <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={
+              <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
                 <div className="mt-0.5 flex flex-col gap-0.5">
                   <FigmaReactionRow scale={scale} />
                   <FigmaReplyLink scale={scale} />
@@ -195,9 +195,9 @@ export const CanvasThreadFrame = ({ scale }: { scale: FigmaScale }) => (
               }>
                 Content of message. <FigmaTag type="page" scale={scale} />
               </FigmaMessageRow>
-              <FigmaSystemMessage text="GatorAide joined" scale={scale} />
+              <FigmaSystemMessage text="Ethan Brooks joined" scale={scale} />
               <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
-              <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={
+              <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
                 <div className="mt-0.5 flex flex-col gap-0.5">
                   <FigmaReactionRow scale={scale} />
                   <FigmaReplyLink scale={scale} />
@@ -205,13 +205,13 @@ export const CanvasThreadFrame = ({ scale }: { scale: FigmaScale }) => (
               }>
                 Helllo <FigmaTag type="person" scale={scale} />
               </FigmaMessageRow>
-              <FigmaSystemMessage text="Aeyzechiah Vasquez joined" scale={scale} />
+              <FigmaSystemMessage text="Liam Foster joined" scale={scale} />
               <FigmaDateDivider date="Mar 12th, 2024" scale={scale} />
-              <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+              <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
                 <FigmaTag type="page" scale={scale} />
               </FigmaMessageRow>
               <FigmaDateDivider date="Mar 25th, 2024" scale={scale} />
-              <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+              <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
                 <FigmaTag type="contact" scale={scale} /> Content of message.
               </FigmaMessageRow>
             </div>
@@ -233,11 +233,11 @@ export const SettingsModalFrame = ({ scale }: { scale: FigmaScale }) => (
       <FigmaRequestFilterPills scale={scale} />
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
           Content of message. <FigmaTag type="page" scale={scale} /> <FigmaTag type="contact" scale={scale} />
         </FigmaMessageRow>
         <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
           <FigmaExtensionCard scale={scale} variant="thread" />
         </FigmaMessageRow>
       </div>
@@ -258,14 +258,14 @@ export const CreateRequestFrame = ({
 }) => {
   const inner = (
     <>
-      <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+      <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
           <FigmaTag type="contact" scale={scale} /> Content of message.
         </FigmaMessageRow>
         <FigmaDateDivider date="Mar 25th, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
           <FigmaTag type="page" scale={scale} />
         </FigmaMessageRow>
       </div>
@@ -296,9 +296,9 @@ export const RequestsInstructorFrame = ({ scale, withThread = false }: { scale: 
       <FigmaRequestFilterPills scale={scale} />
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-        <FigmaSystemMessage text="Dylan Tallon joined" scale={scale} />
+        <FigmaSystemMessage text="Sofia Patel joined" scale={scale} />
         <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" showShield footer={<FigmaReplyChip scale={scale} />}>
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showShield footer={<FigmaReplyChip scale={scale} />}>
           <FigmaExtensionCard scale={scale} variant="instructor" />
         </FigmaMessageRow>
       </div>
@@ -323,7 +323,7 @@ export const RequestsInstructorFrame = ({ scale, withThread = false }: { scale: 
               </div>
               <div className="min-h-0 flex-1 overflow-y-auto">
                 <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-                <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" showShield>
+                <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showShield>
                   <FigmaExtensionCard scale={scale} variant="thread" />
                 </FigmaMessageRow>
                 <FigmaReplyChip scale={scale} />
@@ -349,11 +349,11 @@ export const RequestsStudentFrame = ({ scale }: { scale: FigmaScale }) => (
     <FigmaChannelHeader scale={scale} title="# Requests" members="4 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto pb-2">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="ashish" name="Ashish Aggarwal">
+      <FigmaMessageRow scale={scale} photo="jordan" name="Jordan Lee">
         <FigmaExtensionCard scale={scale} variant="student" />
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="ashish" name="Ashish Aggarwal">
+      <FigmaMessageRow scale={scale} photo="jordan" name="Jordan Lee">
         <FigmaExtensionCard scale={scale} variant="student" />
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
@@ -374,7 +374,7 @@ export const ChannelDetailsEmptyFrame = ({ scale, activeTab = "photos" }: { scal
   <FigmaStandaloneShell scale={scale} activeChannel="demo-123">
     <div className="flex min-h-0 flex-1">
       <div className="flex min-w-0 flex-[1.62] flex-col pr-1">
-        <FigmaChannelHeader scale={scale} title="# Demo 123" members="1 Member" />
+        <FigmaChannelHeader scale={scale} title="# office-hours" members="1 Member" />
         <div className="flex min-h-0 flex-1 items-center justify-center text-gray-400">
           <span className={scale === "guide" ? "text-[10px]" : "text-sm"}>No messages found</span>
         </div>
@@ -389,7 +389,7 @@ export const ChannelDetailsEmptyFrame = ({ scale, activeTab = "photos" }: { scal
 
 export const SidebarComposeFrame = ({ scale }: { scale: FigmaScale }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="renamed-general" highlightCompose>
-    <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+    <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
     <div className="min-h-0 flex-1 overflow-hidden">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
       <FigmaMessageRow scale={scale}>Content of message.</FigmaMessageRow>
@@ -400,7 +400,7 @@ export const SidebarComposeFrame = ({ scale }: { scale: FigmaScale }) => (
 
 export const MessageReplyFrame = ({ scale }: { scale: FigmaScale }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
-    <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+    <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
     <div className="min-h-0 flex-1">
       <div className="relative pr-12">
         <FigmaMessageRow scale={scale}>
@@ -450,13 +450,13 @@ export const CanvasCourseHomeFrame = ({ scale }: { scale: FigmaScale }) => (
     </aside>
     <main className="flex min-w-0 flex-1 flex-col">
       <div className={`flex items-center justify-between border-b bg-white px-3 py-1.5 ${scale === "guide" ? "text-[8px]" : "text-[11px]"}`}>
-        <span className="font-bold">BIO 101C</span>
+        <span className="font-bold">CS 204</span>
         <span className="rounded border border-gray-200 px-1.5 text-gray-500">View as Student</span>
       </div>
       <div className="flex flex-1 p-2">
         <div className="flex-1 rounded-lg bg-gradient-to-br from-[#1a3a6b] to-[#1a2f5c] p-3 text-white">
-          <p className={scale === "guide" ? "text-[7px]" : "text-[10px]"}>BIO 101</p>
-          <h2 className={`font-black ${scale === "guide" ? "text-[10px]" : "text-base"}`}>Intro to Biology</h2>
+          <p className={scale === "guide" ? "text-[7px]" : "text-[10px]"}>CS 204</p>
+          <h2 className={`font-black ${scale === "guide" ? "text-[10px]" : "text-base"}`}>Data Structures</h2>
         </div>
       </div>
     </main>

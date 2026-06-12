@@ -1,25 +1,56 @@
-/** Stable portrait URLs for Figma-accurate avatars (fictional demo users). */
+/** Fictional demo world — no real people, schools, or organizations. */
+export const FIGMA_WORLD = {
+  institution: "Northwind University",
+  workspaceBadges: ["NU", "SS"] as const,
+  topBarUser: "Demo User",
+  course: { code: "CS 204", title: "Data Structures", full: "CS 204: Data Structures" },
+  channels: {
+    discussion: "# course-discussion",
+    discussionParent: "# course-discussion (parent)",
+    project: "# project-team-alpha",
+    study: "# study-group",
+    office: "# office-hours",
+    lab: "# lab-section",
+    requests: "Requests",
+  },
+  people: {
+    primaryStudent: "Maya Chen",
+    jordan: "Jordan Lee",
+    sofia: "Sofia Patel",
+    ethan: "Ethan Brooks",
+    liam: "Liam Foster",
+    ava: "Ava Martinez",
+    instructor: "Dr. Elena Park",
+  },
+  assignment: "Assignment 3",
+  files: {
+    lab: "lab-report.pdf",
+    project: "project-outline.pdf",
+    draft: "assignment-draft.docx",
+    notes: "study-notes.pdf",
+  },
+} as const;
+
 export const FIGMA_PHOTOS = {
   user: "https://i.pravatar.cc/96?img=12",
-  decio: "https://i.pravatar.cc/96?img=33",
-  dylan: "https://i.pravatar.cc/96?img=15",
-  gator: "https://i.pravatar.cc/96?img=28",
-  mikhail: "https://i.pravatar.cc/96?img=51",
-  aeyzechiah: "https://i.pravatar.cc/96?img=22",
-  ankur: "https://i.pravatar.cc/96?img=8",
-  adeeb: "https://i.pravatar.cc/96?img=45",
-  ashish: "https://i.pravatar.cc/96?img=68",
+  maya: "https://i.pravatar.cc/96?img=33",
+  jordan: "https://i.pravatar.cc/96?img=68",
+  elena: "https://i.pravatar.cc/96?img=51",
+  sofia: "https://i.pravatar.cc/96?img=15",
+  ethan: "https://i.pravatar.cc/96?img=28",
+  liam: "https://i.pravatar.cc/96?img=22",
+  ava: "https://i.pravatar.cc/96?img=8",
   account: "https://i.pravatar.cc/96?img=11",
 } as const;
 
 export type FigmaPhotoId = keyof typeof FIGMA_PHOTOS;
 
 export const FIGMA_DM_USERS = [
-  { name: "Dylan Tallon", online: true, photo: "dylan" as FigmaPhotoId },
-  { name: "GatorAide", online: true, photo: "gator" as FigmaPhotoId },
-  { name: "Mikhail Budko", online: true, photo: "mikhail" as FigmaPhotoId },
-  { name: "Dylan Tallon", online: false, photo: "dylan" as FigmaPhotoId },
-  { name: "Aeyzechiah Vasquez", online: false, photo: "aeyzechiah" as FigmaPhotoId },
-  { name: "Ankur Garg", online: false, photo: "ankur" as FigmaPhotoId },
-  { name: "Adeeb Rashid", online: false, photo: "adeeb" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.primaryStudent, online: true, photo: "maya" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.jordan, online: true, photo: "jordan" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.sofia, online: true, photo: "sofia" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.ethan, online: false, photo: "ethan" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.liam, online: false, photo: "liam" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.ava, online: false, photo: "ava" as FigmaPhotoId },
+  { name: FIGMA_WORLD.people.primaryStudent, online: true, photo: "maya" as FigmaPhotoId },
 ];

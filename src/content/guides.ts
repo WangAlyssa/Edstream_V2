@@ -96,12 +96,12 @@ export const guideSections: GuideSection[] = [
         highlightLabel: "Courses · Communities · DMs",
       },
       {
-        instruction: "Open # General to see the main course conversation.",
+        instruction: "Open # course-discussion to see the main course conversation.",
         detail:
-          "# General is the default hub for class-wide questions and announcements. Most students should start here before posting.",
+          "# course-discussion is the default hub for class-wide questions and announcements. Most students should start here before posting.",
         scene: "channel-general",
         highlight: "channel-general",
-        highlightLabel: "# General",
+        highlightLabel: "# course-discussion",
       },
       {
         instruction: "Use the composer for announcements, class Q&A, and shared files.",
@@ -170,12 +170,12 @@ export const guideSections: GuideSection[] = [
         highlightLabel: "Channel name",
       },
       {
-        instruction: "Create #general-q-and-a for student questions.",
+        instruction: "Create #study-group for student questions.",
         detail:
           "A separate Q&A channel keeps student questions out of announcements. Everyone can post here when they need help from staff or classmates.",
         scene: "channels-created",
         highlight: "qa-channel",
-        highlightLabel: "#general-q-and-a",
+        highlightLabel: "#study-group",
       },
       {
         instruction: "Post a welcome message that explains what each channel is for.",

@@ -40,7 +40,7 @@ import {
   Pencil,
   X,
 } from "lucide-react";
-import { FIGMA_DM_USERS, FIGMA_PHOTOS, type FigmaPhotoId } from "./figmaAssets";
+import { FIGMA_DM_USERS, FIGMA_PHOTOS, FIGMA_WORLD, type FigmaPhotoId } from "./figmaAssets";
 
 export type FigmaScale = "feature" | "guide";
 
@@ -126,21 +126,23 @@ export type ActiveChannel =
   | "parent"
   | "none";
 
+const W = FIGMA_WORLD;
+
 const CHANNELS = [
-  { id: "guided" as const, label: "# Your Guided Cours...", trailing: "home" as const },
-  { id: "renamed-general" as const, label: "# Renamed General", trailing: "home" as const },
-  { id: "random" as const, label: "# random", trailing: "lock" as const },
-  { id: "test123" as const, label: "# Test123", trailing: "none" as const },
-  { id: "general1" as const, label: "# General", trailing: "none" as const },
-  { id: "general2" as const, label: "# General", trailing: "none" as const },
+  { id: "guided" as const, label: W.channels.project, trailing: "home" as const },
+  { id: "renamed-general" as const, label: W.channels.discussion, trailing: "home" as const },
+  { id: "random" as const, label: W.channels.study, trailing: "lock" as const },
+  { id: "test123" as const, label: W.channels.lab, trailing: "none" as const },
+  { id: "general1" as const, label: W.channels.office, trailing: "none" as const },
+  { id: "general2" as const, label: W.channels.discussion, trailing: "none" as const },
 ];
 
 export type FigmaChannelItem = (typeof CHANNELS)[number];
 
 export const FRAME2_CHANNELS: FigmaChannelItem[] = [
-  { id: "guided", label: "# Your Guided Cours...", trailing: "home" },
-  { id: "renamed-general", label: "# Renamed General", trailing: "home" },
-  { id: "random", label: "# random", trailing: "home" },
+  { id: "guided", label: W.channels.project, trailing: "home" },
+  { id: "renamed-general", label: W.channels.discussion, trailing: "home" },
+  { id: "random", label: W.channels.study, trailing: "home" },
 ];
 
 export const FigmaAvatar = ({
@@ -176,12 +178,12 @@ export const FigmaWorkspaceStrip = ({ scale }: { scale: FigmaScale }) => {
         className={`flex items-center justify-center rounded-full font-black text-white ${scale === "guide" ? "h-[18px] w-[18px] text-[5px]" : "h-[26px] w-[26px] text-[7px]"}`}
         style={{ background: `linear-gradient(135deg, ${FIGMA.ufOrange} 50%, ${FIGMA.ufBlue} 50%)` }}
       >
-        UF
+        {W.workspaceBadges[0]}
       </div>
       <div
         className={`flex items-center justify-center rounded-full bg-[#22C55E] font-black text-white ${scale === "guide" ? "h-[18px] w-[18px] text-[7px]" : "h-[26px] w-[26px] text-[10px]"}`}
       >
-        A
+        {W.workspaceBadges[1]}
       </div>
     </div>
   );
@@ -196,7 +198,7 @@ export const FigmaTopBar = ({ scale, className = "" }: { scale: FigmaScale; clas
         <span className={`truncate text-blue-100/90 ${s.searchText}`}>Search users, channels, messages...</span>
       </div>
       <div className={`ml-auto flex flex-shrink-0 items-center gap-1.5 pl-2 ${s.sidebarText}`}>
-        <span className="whitespace-nowrap">User Name</span>
+        <span className="whitespace-nowrap">{W.topBarUser}</span>
         <FigmaAvatar scale={scale} photo="user" online />
       </div>
     </div>
@@ -221,7 +223,7 @@ export const FigmaAppSidebar = ({
   return (
     <aside className={`flex h-full flex-col overflow-hidden px-2 py-2 text-white ${s.appSidebar}`} style={{ backgroundColor: FIGMA.sidebar }}>
       <div className={`mb-2 flex items-center justify-between font-semibold ${s.sidebarHeader}`}>
-        <span>Unison Demo</span>
+        <span>{W.institution}</span>
         <Home className={s.composerTool} strokeWidth={2} />
       </div>
 
@@ -426,9 +428,9 @@ export const FigmaReactionRow = ({ scale }: { scale: FigmaScale }) => (
 
 export const FigmaMessageRow = ({
   scale,
-  name = "Decio Emanuel",
+  name = W.people.primaryStudent,
   time = "9:16 AM",
-  photo = "decio" as FigmaPhotoId,
+  photo = "maya" as FigmaPhotoId,
   showBot,
   showShield,
   edited,
@@ -553,17 +555,15 @@ export const FigmaCanvasCourseNav = ({ scale }: { scale: FigmaScale }) => {
     "People",
     "Syllabus",
     "Collaborations",
-    "NameCoach NOT Unified",
-    "LTI Test (localhost version)",
-    "LTI Test",
-    "Credentials",
-    "RedShelf Course Materials",
-    "Top Hat 1.3",
-    "Unison 1.3 Test",
-    "Harmonize",
+    "Course Analytics",
+    "Practice Labs",
+    "Course Materials",
+    "Polling Tool",
+    "Study Groups",
+    "Peer Review",
     "Ed Stream Chat",
-    "Zoom Conferences",
-    "Instructor Audit Tool (DEV)",
+    "Video Conferences",
+    "Grade Review",
   ];
   const s = scaleMap[scale];
   return (
@@ -629,17 +629,17 @@ export const FigmaExtensionCard = ({
             className="inline-block rounded px-1 font-medium"
             style={{ backgroundColor: FIGMA.tagPage.bg, color: FIGMA.tagPage.text }}
           >
-            Test 1
+            {W.assignment}
           </span>
         </div>
-        <div>New due date: 3/9/2024</div>
+        <div>New due date: 3/15/2024</div>
         <div>
-          Original due date: {variant === "instructor" ? "Invalid Date" : "3/9/2024"}
+          Original due date: {variant === "instructor" ? "3/10/2024" : "3/10/2024"}
         </div>
-        <div>Reason: {variant === "student" ? "Sick" : "reason"}</div>
+        <div>Reason: {variant === "student" ? "Medical appointment" : "Schedule conflict"}</div>
         {variant === "instructor" && (
           <div>
-            Attached file: <span style={{ color: FIGMA.orange }}>black.png</span>
+            Attached file: <span style={{ color: FIGMA.orange }}>{W.files.lab}</span>
           </div>
         )}
       </div>
@@ -772,9 +772,9 @@ export const FigmaSettingsModal = ({ scale }: { scale: FigmaScale }) => {
           </div>
           <div className="flex flex-col p-4">
             <div className="mb-4 flex items-center gap-3">
-              <FigmaAvatar scale={scale} photo="ashish" size="md" />
+              <FigmaAvatar scale={scale} photo="elena" size="md" />
               <span className={`font-bold ${s.msgName}`}>
-                Ashish Aggarwal <span className="ml-1 inline-block h-2 w-2 rounded-full bg-green-500 align-middle" />
+                {W.people.instructor} <span className="ml-1 inline-block h-2 w-2 rounded-full bg-green-500 align-middle" />
               </span>
             </div>
             <div className="grid grid-cols-2 gap-6">
@@ -895,14 +895,14 @@ export const FigmaThreadPanel = ({ scale }: { scale: FigmaScale }) => {
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
         <div className="relative mb-2">
-          <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel">
+          <FigmaMessageRow scale={scale} photo="maya">
             Hi <FigmaTag type="person" scale={scale} />
           </FigmaMessageRow>
           <FigmaThreadHoverBar scale={scale} />
         </div>
         <div className={`mb-2 font-semibold text-blue-600 ${s.msgTime}`}>1 reply</div>
         <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="decio" name="Decio Emanuel" footer={<FigmaReactionRow scale={scale} />}>
+        <FigmaMessageRow scale={scale} photo="maya" footer={<FigmaReactionRow scale={scale} />}>
           Hi Hi Hi <FigmaTag type="person" scale={scale} />
         </FigmaMessageRow>
       </div>

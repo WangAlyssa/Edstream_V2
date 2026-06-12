@@ -60,7 +60,7 @@ const HighlightWrap = ({
 const MessagesSectionScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
   <HighlightWrap active={highlight === "bottom-nav-all" || highlight === "bottom-nav-dms"} label={label} className="h-full">
     <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
-      <FigmaChannelHeader scale={scale} title="# Renamed General" members="5 Members" />
+      <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
         <p className={`text-center text-gray-400 ${scale === "guide" ? "text-[9px]" : "text-[11px]"}`}>Course channel ready for messages</p>
@@ -107,7 +107,7 @@ const CreateChannelScene = ({ highlight, label }: { highlight: GuideHighlightId;
 const ChannelsCreatedScene = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
   <div className="relative h-full">
     <FigmaStandaloneShell scale={scale} activeChannel="guided">
-      <FigmaChannelHeader scale={scale} title="# Your Guided Cours..." members="12 Members" />
+      <FigmaChannelHeader scale={scale} title="# project-team-alpha" members="12 Members" />
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
       <FigmaComposer scale={scale} />
     </FigmaStandaloneShell>
