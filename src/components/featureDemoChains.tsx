@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import {
-  CommunityBrowseFrame,
+  CommunitiesBrowseFrame,
+  CommunitiesCreateModalFrame,
+  CommunitiesSubmitModalFrame,
+} from "@/components/figma/FigmaCommunitiesMock";
+import {
   CreateRequestFrame,
   FeatureChannelBrowseFrame,
   MediaDetailsFocusFrame,
@@ -45,9 +49,9 @@ const FileCard = ({ fileTarget }: { fileTarget?: string }) => (
 );
 
 const FilePreviewOverlay = ({ closeDemoTarget }: { closeDemoTarget: string }) => (
-  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-6">
-    <div className="w-full max-w-[320px] rounded-xl bg-white shadow-2xl">
-      <div className="flex items-center justify-between border-b px-4 py-2.5 text-[11px] font-bold text-gray-800">
+  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-4">
+    <div className="flex max-h-[92%] w-full max-w-[360px] flex-col rounded-xl bg-white shadow-2xl">
+      <div className="flex flex-shrink-0 items-center justify-between border-b px-4 py-2.5 text-[11px] font-bold text-gray-800">
         {W.files.project}
         <button
           type="button"
@@ -57,9 +61,40 @@ const FilePreviewOverlay = ({ closeDemoTarget }: { closeDemoTarget: string }) =>
           ×
         </button>
       </div>
-      <div className="space-y-2 p-4 text-[11px] leading-relaxed text-gray-600">
-        <div className="rounded-lg bg-gray-50 p-4 text-center text-gray-400">Project Outline — page 1 of 4</div>
-        <p className="font-semibold text-gray-800">Week 3 deliverables and grading rubric.</p>
+      <div className="min-h-0 overflow-y-auto p-3">
+        <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-inner">
+          <div className="border-b border-gray-100 pb-2">
+            <p className="text-[12px] font-bold text-gray-900">{W.course.full}</p>
+            <p className="text-[10px] text-gray-500">Project Outline · Week 3 · Page 1 of 4</p>
+          </div>
+          <div className="space-y-2.5 pt-2.5 text-[10px] leading-relaxed text-gray-700">
+            <div>
+              <p className="font-bold text-gray-900">1. Objectives</p>
+              <ul className="ml-3 mt-0.5 list-disc space-y-0.5 text-gray-600">
+                <li>Implement a binary search tree with insert and delete</li>
+                <li>Write unit tests covering edge cases</li>
+                <li>Document time complexity for each operation</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-bold text-gray-900">2. Deliverables</p>
+              <ul className="ml-3 mt-0.5 list-disc space-y-0.5 text-gray-600">
+                <li><span className="font-medium">{W.files.project}</span> (PDF, due Mar 15)</li>
+                <li>Source code pushed to course repository</li>
+                <li>2-minute demo video in channel</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-bold text-gray-900">3. Grading Rubric</p>
+              <div className="mt-1 grid grid-cols-2 gap-1 text-[9px]">
+                <div className="rounded bg-gray-50 px-1.5 py-1">Correctness — 40%</div>
+                <div className="rounded bg-gray-50 px-1.5 py-1">Code quality — 25%</div>
+                <div className="rounded bg-gray-50 px-1.5 py-1">Testing — 20%</div>
+                <div className="rounded bg-gray-50 px-1.5 py-1">Documentation — 15%</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -294,65 +329,28 @@ export const FEATURE_DEMO_CHAINS: Record<FeatureId, DemoStepDef[]> = {
 
   community: [
     {
-      scene: "community-parent",
+      scene: "communities-browse",
       trigger: "0",
-      userAction: "Click # project-team-alpha under the community parent",
-      expectedResponse: "Project team sub-channel opens with peer discussion",
-      reason: "Community parent channels contain linked project sub-channels",
-      render: (scale) => (
-        <CommunityBrowseFrame
-          scale={scale}
-          activeChannel="parent"
-          channelClickTargetId="guided"
-          channelClickDemoTarget="0"
-          title={W.channels.discussionParent}
-          members="4 Members"
-          body={channelBody(scale, [
-            { name: W.people.primaryStudent, photo: "maya", text: <>Anyone joining the study session for <FigmaTag type="page" scale={scale} />?</> },
-          ])}
-        />
-      ),
+      userAction: 'Click the "Create a Community" card',
+      expectedResponse: "Create a community modal opens over the browse page",
+      reason: "Students start new communities from the Communities hub",
+      render: (scale) => <CommunitiesBrowseFrame scale={scale} createDemoTarget="0" />,
     },
     {
-      scene: "community-project",
+      scene: "communities-create-modal",
       trigger: "1",
-      userAction: "Click # study-group in the sidebar",
-      expectedResponse: "Study group community channel opens",
-      reason: "Students browse peer channels from the community workspace",
-      render: (scale) => (
-        <CommunityBrowseFrame
-          scale={scale}
-          activeChannel="guided"
-          channelClickTargetId="random"
-          channelClickDemoTarget="1"
-          title={W.channels.project}
-          members="5 Members"
-          body={channelBody(scale, [
-            { name: W.people.jordan, photo: "jordan", text: "We finished the wireframes — feedback welcome!" },
-            { name: W.people.sofia, photo: "sofia", text: "I can review tonight after lab." },
-          ])}
-        />
-      ),
+      userAction: "Click the Name field to enter a community title",
+      expectedResponse: "Name field is ready for input",
+      reason: "Community requests require a visible name and description",
+      render: (scale) => <CommunitiesCreateModalFrame scale={scale} nameDemoTarget="1" />,
     },
     {
-      scene: "community-study",
+      scene: "communities-submit",
       trigger: "2",
-      userAction: "Click # course-discussion (parent) to return to the community hub",
-      expectedResponse: "Parent community channel reopens",
-      reason: "Community navigation mirrors course channel switching",
-      render: (scale) => (
-        <CommunityBrowseFrame
-          scale={scale}
-          activeChannel="random"
-          channelClickTargetId="parent"
-          channelClickDemoTarget="2"
-          title={W.channels.study}
-          members="8 Members"
-          body={channelBody(scale, [
-            { name: W.people.primaryStudent, photo: "maya", text: "Exam prep thread — share resources here." },
-          ])}
-        />
-      ),
+      userAction: 'Click "Request to create" to submit',
+      expectedResponse: "Filled form is ready to send for approval",
+      reason: "Requests go to admins before the community goes live",
+      render: (scale) => <CommunitiesSubmitModalFrame scale={scale} submitDemoTarget="2" />,
     },
   ],
 };

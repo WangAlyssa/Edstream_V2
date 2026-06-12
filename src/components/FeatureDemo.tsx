@@ -45,8 +45,8 @@ export const features: Array<{
     id: "community",
     title: "Community",
     description:
-      "Give students course-aware spaces for peer questions, project groups, and broader class community without leaving Canvas.",
-    bullets: ["Course Q&A", "Project groups", "Communities tab"],
+      "Browse and request new communities from a dedicated hub — separate from course channels, with visibility, tags, and admin approval.",
+    bullets: ["Communities browse page", "Create community request", "Visibility & tags"],
   },
 ];
 

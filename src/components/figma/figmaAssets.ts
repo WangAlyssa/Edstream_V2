@@ -29,6 +29,10 @@ export const FIGMA_WORLD = {
     draft: "assignment-draft.docx",
     notes: "study-notes.pdf",
   },
+  communities: {
+    sampleName: "CS Study Hub",
+    sampleDescription: "Peer support for data structures coursework, exam prep, and project teams.",
+  },
 } as const;
 
 export const FIGMA_PHOTOS = {
