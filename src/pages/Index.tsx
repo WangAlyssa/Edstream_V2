@@ -59,12 +59,12 @@ const Index = () => {
               </div>
 
               {/* Mobile App Downloads */}
-              <div className="flex items-end">
+              <div className="flex flex-wrap items-center gap-4">
                 <a 
                   href="https://apps.apple.com/us/app/edstream/id6736952355"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block transform hover:scale-105 transition-transform duration-200"
+                  className="inline-block transition-transform duration-200 hover:scale-105"
                 >
                   <AppStoreBadge />
                 </a>
@@ -72,12 +72,12 @@ const Index = () => {
                   href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block transform hover:scale-105 transition-transform duration-200 -mb-2"
+                  className="inline-block transition-transform duration-200 hover:scale-105"
                 >
                   <img 
                     src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
                     alt="Get it on Google Play"
-                    className="w-[260px] h-[78px] object-contain"
+                    className="h-[78px] w-[260px] object-contain"
                   />
                 </a>
               </div>
@@ -300,12 +300,12 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a 
               href="https://apps.apple.com/us/app/edstream/id6736952355"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block hover:scale-105 transition-transform duration-200"
+              className="inline-block transition-transform duration-200 hover:scale-105"
             >
               <AppStoreBadge />
             </a>
@@ -313,12 +313,12 @@ const Index = () => {
               href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block hover:scale-105 transition-transform duration-200"
+              className="inline-block transition-transform duration-200 hover:scale-105"
             >
               <img 
                 src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
                 alt="Get it on Google Play"
-                className="w-[260px] h-[78px] object-contain"
+                className="h-[78px] w-[260px] object-contain"
               />
             </a>
           </div>

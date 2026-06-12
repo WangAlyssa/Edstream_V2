@@ -6,7 +6,6 @@ import {
   Plus,
   Search,
 } from "lucide-react";
-import { useEffectiveDarkMode } from "@/hooks/use-effective-dark-mode";
 
 export type FeatureId = "channels" | "files" | "media" | "requests" | "community";
 
@@ -53,9 +52,12 @@ export const features: Array<{
   },
 ];
 
-const DEMO_BG = "#1E212B";
 const DEMO_NAV = "#0A1240";
-const DEMO_MAIN_LIGHT = "#F3F4F6";
+
+const demoPanelText = "text-white dark:text-gray-900";
+const demoPanelMuted = "text-gray-300 dark:text-gray-600";
+const demoTabInactive = "bg-white/10 text-gray-300 dark:bg-gray-200 dark:text-gray-800";
+const demoMainBg = "bg-[#1E212B] dark:bg-[#F3F4F6]";
 
 const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" | "orange" | "gray" }) => {
   const colorMap = {
@@ -82,12 +84,6 @@ const DemoCursor = ({ position }: { position: CSSProperties }) => (
 );
 
 const FeatureDemo = ({ id }: { id: FeatureId }) => {
-  const isSiteDark = useEffectiveDarkMode();
-  const outerBg = isSiteDark ? DEMO_MAIN_LIGHT : DEMO_BG;
-  const mainBg = isSiteDark ? DEMO_MAIN_LIGHT : DEMO_BG;
-  const panelHeading = isSiteDark ? "text-gray-900" : "text-white";
-  const panelSubtext = isSiteDark ? "text-gray-600" : "text-gray-300";
-  const tabInactive = isSiteDark ? "bg-gray-200 text-gray-700" : "bg-white/10 text-gray-300";
   const [step, setStep] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
   const [cursorPosition, setCursorPosition] = useState<CSSProperties>({
@@ -133,8 +129,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
   return (
     <div
       ref={frameRef}
-      className="relative overflow-hidden rounded-3xl p-4 shadow-xl"
-      style={{ backgroundColor: outerBg }}
+      className={`relative overflow-hidden rounded-3xl p-4 shadow-xl ${demoMainBg}`}
     >
       <div className="relative overflow-hidden rounded-2xl">
         <div className="flex h-11 items-center px-4 text-white" style={{ backgroundColor: DEMO_NAV }}>
@@ -176,7 +171,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
               </div>
             )}
           </aside>
-          <main className="relative p-4" style={{ backgroundColor: mainBg }}>
+          <main className={`relative p-4 ${demoMainBg}`}>
             {id === "channels" && (
               <div className="mx-auto max-w-xs rounded-2xl bg-white p-5 shadow-2xl">
                 <h4 className="mb-4 text-lg font-black text-blue-700">Create Channel</h4>
@@ -212,8 +207,8 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                 <div className="flex gap-3">
                   <FakeAvatar label="PI" />
                   <div>
-                    <div className={`text-xs font-black ${panelHeading}`}>Dr. Morgan</div>
-                    <p className={`mt-1 text-xs ${panelSubtext}`}>Here is the course welcome packet for everyone.</p>
+                    <div className={`text-xs font-black ${demoPanelText}`}>Dr. Morgan</div>
+                    <p className={`mt-1 text-xs ${demoPanelMuted}`}>Here is the course welcome packet for everyone.</p>
                     <div
                       data-demo-target="1"
                       className={`relative mt-2 flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-md transition-all duration-500 ${step > 0 ? "ring-2 ring-orange-200" : ""}`}
@@ -267,10 +262,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             {id === "media" && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <h4 className={`font-black ${panelHeading}`}>Channel Details</h4>
+                  <h4 className={`font-black ${demoPanelText}`}>Channel Details</h4>
                   <span
                     data-demo-target={id === "media" ? "0" : undefined}
-                    className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : tabInactive}`}
+                    className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : demoTabInactive}`}
                   >
                     i
                   </span>
@@ -280,7 +275,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                     <span
                       key={tab}
                       data-demo-target={id === "media" && index === step ? String(step) : undefined}
-                      className={`relative rounded-full px-3 py-1 text-xs font-black transition-colors duration-500 ${index === step ? "bg-[#0033CC] text-white" : tabInactive}`}
+                      className={`relative rounded-full px-3 py-1 text-xs font-black transition-colors duration-500 ${index === step ? "bg-[#0033CC] text-white" : demoTabInactive}`}
                     >
                       {tab}
                     </span>
@@ -290,7 +285,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                   {[1, 2, 3, 4].map((item) => (
                     <div
                       key={item}
-                      className="h-20 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 p-3 text-xs font-bold text-blue-600"
+                      className="h-20 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 p-3 text-xs font-bold text-blue-600 dark:text-gray-900"
                     >
                       Course media {item}
                     </div>
@@ -317,14 +312,16 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             )}
             {id === "community" && (
               <div>
-                <h4 className={`mb-4 text-xl font-black ${panelHeading}`}>Communities</h4>
+                <h4 className={`mb-4 text-xl font-black ${demoPanelText}`}>Communities</h4>
                 <div className="grid grid-cols-2 gap-3">
                   {["Study Group", "Project Teams", "Peer Mentors", "Exam Review"].map((community, index) => (
                     <div
                       key={community}
                       data-demo-target={id === "community" && index === step ? String(step) : undefined}
                       className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${
-                        index === step ? "bg-orange-50 text-orange-700" : "bg-white text-gray-700 shadow-sm"
+                        index === step
+                          ? "bg-orange-50 text-orange-700"
+                          : "bg-white text-gray-600 shadow-sm dark:text-gray-800"
                       }`}
                     >
                       {community}
