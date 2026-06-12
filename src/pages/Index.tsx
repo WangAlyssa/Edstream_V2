@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import StoreBadges from "@/components/StoreBadges";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, CheckCircle, Star, Smartphone } from "lucide-react";
@@ -59,7 +58,33 @@ const Index = () => {
               </div>
 
               {/* Mobile App Downloads */}
-              <StoreBadges />
+              {/* Mobile App Downloads */}
+              <div className="flex items-end">
+                <a 
+                  href="https://apps.apple.com/us/app/edstream/id6736952355"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transform hover:scale-105 transition-transform duration-200"
+                >
+                  <img 
+                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                    alt="Download on the App Store"
+                    className="w-[200px] h-[60px] object-contain"
+                  />
+                </a>
+                <a 
+                  href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transform hover:scale-105 transition-transform duration-200 -mb-2"
+                >
+                  <img 
+                    src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                    alt="Get it on Google Play"
+                    className="w-[260px] h-[78px] object-contain"
+                  />
+                </a>
+              </div>
             </div>
 
             {/* Right Column - Visual */}
@@ -279,7 +304,32 @@ const Index = () => {
             </p>
           </div>
 
-          <StoreBadges className="justify-center" />
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <a 
+              href="https://apps.apple.com/us/app/edstream/id6736952355"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block hover:scale-105 transition-transform duration-200"
+            >
+              <img 
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                alt="Download on the App Store"
+                className="w-[200px] h-[60px] object-contain"
+              />
+            </a>
+            <a 
+              href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block hover:scale-105 transition-transform duration-200"
+            >
+              <img 
+                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                alt="Get it on Google Play"
+                className="w-[260px] h-[78px] object-contain"
+              />
+            </a>
+          </div>
         </div>
       </section>
 
