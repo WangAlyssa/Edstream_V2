@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AppStoreBadge from "@/components/AppStoreBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, CheckCircle, Star, Smartphone } from "lucide-react";
@@ -65,11 +66,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="block transform hover:scale-105 transition-transform duration-200"
                 >
-                  <img 
-                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                    alt="Download on the App Store"
-                    className="w-[200px] h-[60px] object-contain"
-                  />
+                  <AppStoreBadge />
                 </a>
                 <a 
                   href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
@@ -310,11 +307,7 @@ const Index = () => {
               rel="noopener noreferrer"
               className="inline-block hover:scale-105 transition-transform duration-200"
             >
-              <img 
-                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                alt="Download on the App Store"
-                className="w-[200px] h-[60px] object-contain"
-              />
+              <AppStoreBadge />
             </a>
             <a 
               href="https://play.google.com/store/apps/details?id=com.edstreamchat.app&pcampaignid=web_share"
@@ -333,7 +326,7 @@ const Index = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-gray-800 dark:to-gray-900">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-8">
             Ready to Transform Your Course Communication?

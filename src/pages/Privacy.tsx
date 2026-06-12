@@ -8,15 +8,15 @@ const Privacy = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-orange-50 dark:from-gray-800 dark:to-gray-900 py-20">
+      <section className="bg-gradient-to-br from-blue-50 to-orange-50 dark:from-blue-900 dark:to-blue-800 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold text-blue dark:text-blue-300 mb-6">
+          <h1 className="text-4xl lg:text-5xl font-bold text-blue dark:text-white mb-6">
             Privacy Policy
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-4">
+          <p className="text-xl text-gray-600 dark:text-blue-100 max-w-3xl mx-auto mb-4">
             Your privacy and data security are fundamental to everything we do at EdStream.
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500 dark:text-blue-200">
             Last Updated: August 27, 2024
           </p>
         </div>
