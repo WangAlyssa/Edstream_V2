@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 const LOGO_SRC = `${import.meta.env.BASE_URL}lovable-uploads/8f4a6de0-da43-4b0b-8550-2d2f9c1c4e5b.png`;
@@ -59,8 +60,9 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Login Button */}
-          <div className="hidden md:flex">
+          {/* Theme toggle + Login */}
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             <Button 
               asChild
               className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 transition-all duration-200 font-bold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform"
@@ -71,8 +73,9 @@ const Header = () => {
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile theme toggle + menu button */}
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <Button
               variant="ghost"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
