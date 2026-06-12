@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
 
-const LOGO_SRC = `${import.meta.env.BASE_URL}logo.svg`;
+const LOGO_SRC = `${import.meta.env.BASE_URL}lovable-uploads/8f4a6de0-da43-4b0b-8550-2d2f9c1c4e5b.png`;
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,11 +34,13 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-all duration-300 hover:scale-105">
-              <img
-                src={LOGO_SRC}
-                alt="EdStream Logo"
-                className="w-12 h-12 transition-transform duration-300"
-              />
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-200 dark:ring-gray-600">
+                <img
+                  src={LOGO_SRC}
+                  alt="EdStream Logo"
+                  className="h-full w-full object-contain transition-transform duration-300"
+                />
+              </span>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">EdStream</span>
             </Link>
           </div>
