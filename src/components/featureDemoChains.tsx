@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import {
   CanvasChannelChatFrame,
   CanvasCourseHomeFrame,
-  CanvasThreadFrame,
   ChannelDetailsEmptyFrame,
   ChannelThreadFrame,
   CreateRequestFrame,
@@ -12,7 +11,6 @@ import {
   StandaloneChannelFrame,
 } from "@/components/figma/FigmaFrames";
 import {
-  FigmaCanvasShell,
   FigmaChannelHeader,
   FigmaComposer,
   FigmaDateDivider,
@@ -62,7 +60,7 @@ const FilePreviewOverlay = ({ closeDemoTarget }: { closeDemoTarget: string }) =>
 );
 
 const FilesAttachScene = ({ scale, sendTarget }: { scale: FigmaScale; sendTarget: string }) => (
-  <FigmaCanvasShell scale={scale} activeChannel="renamed-general">
+  <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
     <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
@@ -79,7 +77,7 @@ const FilesAttachScene = ({ scale, sendTarget }: { scale: FigmaScale; sendTarget
       </div>
       <FigmaComposer scale={scale} sendDemoTarget={sendTarget} />
     </div>
-  </FigmaCanvasShell>
+  </FigmaStandaloneShell>
 );
 
 const FilesCardScene = ({
@@ -91,7 +89,7 @@ const FilesCardScene = ({
   fileTarget?: string;
   infoTarget?: string;
 }) => (
-  <FigmaCanvasShell scale={scale} activeChannel="renamed-general">
+  <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
     <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" infoDemoTarget={infoTarget} />
     <div className="min-h-0 flex-1 overflow-y-auto">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
@@ -107,7 +105,7 @@ const FilesCardScene = ({
       </FigmaMessageRow>
     </div>
     <FigmaComposer scale={scale} />
-  </FigmaCanvasShell>
+  </FigmaStandaloneShell>
 );
 
 const MediaEmptyScene = ({ scale, infoTarget }: { scale: FigmaScale; infoTarget: string }) => (
@@ -161,7 +159,7 @@ export const FEATURE_DEMO_CHAINS: Record<FeatureId, DemoStepDef[]> = {
       userAction: "Click the thread panel close control",
       expectedResponse: "Thread panel closes; channel chat remains visible",
       reason: "Closing the thread dismisses the side panel without leaving the channel",
-      render: (scale) => <CanvasThreadFrame scale={scale} closeDemoTarget="2" />,
+      render: (scale) => <ChannelThreadFrame scale={scale} closeDemoTarget="2" />,
     },
     {
       scene: "canvas-channel-chat-again",
@@ -300,7 +298,7 @@ export const FEATURE_DEMO_CHAINS: Record<FeatureId, DemoStepDef[]> = {
       expectedResponse: "Modal closes; new pending extension appears in the student Requests feed",
       reason: "Submitting the form posts the request into the Requests channel timeline",
       render: (scale) => (
-        <CreateRequestFrame scale={scale} category="extension" canvas submitDemoTarget="1" />
+        <CreateRequestFrame scale={scale} category="extension" submitDemoTarget="1" />
       ),
     },
     {

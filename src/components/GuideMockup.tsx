@@ -5,7 +5,7 @@ import {
   CanvasCourseHomeFrame,
   CanvasEnableFrame,
   CanvasSettingsFrame,
-  CanvasThreadFrame,
+  ChannelThreadFrame,
   ChannelDetailsEmptyFrame,
   MessageReplyFrame,
   RequestsInstructorFrame,
@@ -178,7 +178,7 @@ const sceneRenderers: Record<
   ),
   "message-thread": ({ highlight, label }) => (
     <HighlightWrap active={highlight === "thread-panel" || highlight === "thread-composer"} label={label} className="h-full">
-      <CanvasThreadFrame scale={scale} />
+      <ChannelThreadFrame scale={scale} />
     </HighlightWrap>
   ),
   "request-queue": (props) => <RequestQueueScene {...props} />,

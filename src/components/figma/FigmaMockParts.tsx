@@ -46,11 +46,14 @@ export type FigmaScale = "feature" | "guide";
 
 export const scaleMap = {
   feature: {
-    canvasNav: "w-[54px]",
-    courseNav: "w-[132px]",
-    ws: "w-[36px]",
-    appSidebar: "w-[170px]",
-    sidebar: "w-[170px]",
+    canvasNav: "w-[4.5%] min-w-[34px] max-w-[46px] flex-shrink-0",
+    courseNav: "w-[9.5%] min-w-[76px] max-w-[104px] flex-shrink-0",
+    ws: "w-[3.5%] min-w-[24px] max-w-[32px] flex-shrink-0",
+    appSidebar: "w-[17.5%] min-w-[92px] max-w-[148px] flex-shrink-0",
+    sidebar: "w-[17.5%] min-w-[92px] max-w-[148px] flex-shrink-0",
+    mainPanel: "min-w-0 flex-[4.5]",
+    threadPanel: "min-w-0 w-[30%] max-w-[34%] flex-shrink-0",
+    detailsPanel: "min-w-0 w-[26%] max-w-[30%] flex-shrink-0",
     topH: "h-[38px]",
     searchH: "h-[26px]",
     searchText: "text-[11px]",
@@ -72,11 +75,14 @@ export const scaleMap = {
     navLabel: "text-[7px]",
   },
   guide: {
-    canvasNav: "w-[10%] min-w-[34px] max-w-[42px]",
-    courseNav: "w-[13.5%] min-w-[82px]",
-    ws: "w-[5%] min-w-[22px] max-w-[28px]",
-    appSidebar: "w-[16.5%] min-w-[92px]",
-    sidebar: "w-[16.5%] min-w-[92px]",
+    canvasNav: "w-[4.5%] min-w-[32px] max-w-[44px] flex-shrink-0",
+    courseNav: "w-[9.5%] min-w-[72px] max-w-[100px] flex-shrink-0",
+    ws: "w-[3.5%] min-w-[20px] max-w-[28px] flex-shrink-0",
+    appSidebar: "w-[17.5%] min-w-[84px] max-w-[140px] flex-shrink-0",
+    sidebar: "w-[17.5%] min-w-[84px] max-w-[140px] flex-shrink-0",
+    mainPanel: "min-w-0 flex-[4.5]",
+    threadPanel: "min-w-0 w-[30%] max-w-[34%] flex-shrink-0",
+    detailsPanel: "min-w-0 w-[26%] max-w-[30%] flex-shrink-0",
     topH: "h-[34px]",
     searchH: "h-[22px]",
     searchText: "text-[9.5px]",
@@ -298,7 +304,7 @@ export const FigmaAppSidebar = ({
           <ChevronDown className={s.composerTool} strokeWidth={2.5} />
           Messages
         </div>
-        {FIGMA_DM_USERS.map((dm, i) => (
+        {FIGMA_DM_USERS.slice(0, scale === "feature" ? 4 : 6).map((dm, i) => (
           <div key={`${dm.name}-${i}`} className={`mb-[3px] flex items-center gap-1.5 ${s.channelText} text-blue-100/90`}>
             <FigmaAvatar scale={scale} photo={dm.photo} online={dm.online} size="sm" />
             <span className="truncate">{dm.name}</span>
@@ -556,7 +562,7 @@ export const FigmaStandaloneShell = ({
         requestsDemoTarget={requestsDemoTarget}
         requestsNotify={requestsNotify}
       />
-      <main className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white px-3 py-2">{children}</main>
+      <main className={`flex flex-col overflow-hidden bg-white px-3 py-2 ${scaleMap[scale].mainPanel}`}>{children}</main>
     </div>
   </div>
 );
@@ -606,25 +612,27 @@ export const FigmaCanvasGlobalNav = ({ scale }: { scale: FigmaScale }) => {
   );
 };
 
-export const FigmaCanvasCourseNav = ({ scale }: { scale: FigmaScale }) => {
-  const links = [
-    "Home",
-    "Assignments",
-    "Discussions",
-    "Grades",
-    "People",
-    "Syllabus",
-    "Collaborations",
-    "Course Analytics",
-    "Practice Labs",
-    "Course Materials",
-    "Polling Tool",
-    "Study Groups",
-    "Peer Review",
-    "Ed Stream Chat",
-    "Video Conferences",
-    "Grade Review",
-  ];
+export const FigmaCanvasCourseNav = ({ scale, compact = false }: { scale: FigmaScale; compact?: boolean }) => {
+  const links = compact
+    ? ["Home", "Assignments", "Discussions", "Grades", "Ed Stream Chat", "Modules"]
+    : [
+        "Home",
+        "Assignments",
+        "Discussions",
+        "Grades",
+        "People",
+        "Syllabus",
+        "Collaborations",
+        "Course Analytics",
+        "Practice Labs",
+        "Course Materials",
+        "Polling Tool",
+        "Study Groups",
+        "Peer Review",
+        "Ed Stream Chat",
+        "Video Conferences",
+        "Grade Review",
+      ];
   const s = scaleMap[scale];
   return (
     <aside className={`flex-shrink-0 overflow-hidden border-r border-gray-200 bg-white py-1.5 ${s.courseNav}`}>
@@ -666,7 +674,7 @@ export const FigmaCanvasShell = ({
         <FigmaTopBar scale={scale} />
         <div className="flex min-h-0 flex-1">
           <FigmaAppSidebar scale={scale} activeItem={activeItem} activeChannel={activeChannel} requestsDemoTarget={requestsDemoTarget} />
-          <main className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white px-3 py-2">{children}</main>
+          <main className={`flex flex-col overflow-hidden bg-white px-3 py-2 ${scaleMap[scale].mainPanel}`}>{children}</main>
         </div>
       </div>
     </div>

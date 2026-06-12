@@ -47,52 +47,46 @@ export const CanvasChannelChatFrame = ({
   replyDemoTarget,
   attachDemoTarget,
   sendDemoTarget,
+  shell = "standalone",
 }: {
   scale: FigmaScale;
   replyDemoTarget?: string;
   attachDemoTarget?: string;
   sendDemoTarget?: string;
-}) => (
-  <FigmaCanvasShell scale={scale} activeChannel="renamed-general">
-    <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.discussion} members="5 Members" />
-    <div className="min-h-0 flex-1 overflow-y-auto">
-      <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} demoTarget={replyDemoTarget} /></div>}>
-        Content of message. <FigmaTag type="page" scale={scale} />
-      </FigmaMessageRow>
-      <FigmaSystemMessage text="Sofia Patel joined" scale={scale} />
-      <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
-        <div className="mt-0.5 flex flex-col gap-0.5">
-          <FigmaReactionRow scale={scale} />
-          <FigmaReplyLink scale={scale} />
-        </div>
-      }>
-        Content of message. <FigmaTag type="page" scale={scale} />
-      </FigmaMessageRow>
-      <FigmaSystemMessage text="Ethan Brooks joined" scale={scale} />
-      <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
-        <div className="mt-0.5 flex flex-col gap-0.5">
-          <FigmaReactionRow scale={scale} />
-          <FigmaReplyLink scale={scale} />
-        </div>
-      }>
-        Helllo <FigmaTag type="person" scale={scale} />
-      </FigmaMessageRow>
-      <FigmaSystemMessage text="Liam Foster joined" scale={scale} />
-      <FigmaDateDivider date="Mar 12th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
-        <FigmaTag type="page" scale={scale} />
-      </FigmaMessageRow>
-      <FigmaDateDivider date="Mar 25th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
-        <FigmaTag type="contact" scale={scale} /> Content of message.
-      </FigmaMessageRow>
-    </div>
-    <FigmaComposer scale={scale} attachDemoTarget={attachDemoTarget} sendDemoTarget={sendDemoTarget} />
-  </FigmaCanvasShell>
-);
+  shell?: "standalone" | "canvas";
+}) => {
+  const body = (
+    <>
+      <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.discussion} members="5 Members" />
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} demoTarget={replyDemoTarget} /></div>}>
+          Content of message. <FigmaTag type="page" scale={scale} />
+        </FigmaMessageRow>
+        <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={
+          <div className="mt-0.5 flex flex-col gap-0.5">
+            <FigmaReactionRow scale={scale} />
+            <FigmaReplyLink scale={scale} />
+          </div>
+        }>
+          Content of message. <FigmaTag type="page" scale={scale} />
+        </FigmaMessageRow>
+        <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen">
+          Helllo <FigmaTag type="person" scale={scale} />
+        </FigmaMessageRow>
+      </div>
+      <FigmaComposer scale={scale} attachDemoTarget={attachDemoTarget} sendDemoTarget={sendDemoTarget} />
+    </>
+  );
+
+  if (shell === "canvas") {
+    return <FigmaCanvasShell scale={scale} activeChannel="renamed-general">{body}</FigmaCanvasShell>;
+  }
+
+  return <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">{body}</FigmaStandaloneShell>;
+};
 
 export const StandaloneChannelFrame = ({
   scale,
@@ -112,7 +106,7 @@ export const StandaloneChannelFrame = ({
     requestsDemoTarget={requestsDemoTarget}
     requestsNotify={Boolean(requestsDemoTarget)}
   >
-    <FigmaChannelHeader scale={scale} title="# course-discussion (parent)" members="4 Members" />
+    <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.discussionParent} members="4 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
       <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot relaxed>
@@ -130,45 +124,6 @@ export const StandaloneChannelFrame = ({
           </FigmaMessageRow>
         </>
       )}
-      <FigmaDateDivider date="Mar 12th, 2024" scale={scale} />
-      <FigmaMessageRow
-        scale={scale}
-        photo="maya"
-        name="Maya Chen"
-        showBot
-        relaxed
-        footer={
-          <div className="mt-1 space-y-1">
-            <div>
-              <FigmaTag type="contact" scale={scale} /> 1 when is it?
-            </div>
-            <FigmaReplyLink scale={scale} />
-          </div>
-        }
-      >
-        Hi <FigmaTag type="page" scale={scale} />
-      </FigmaMessageRow>
-      <FigmaDateDivider date="Mar 25th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot relaxed>
-        <FigmaTag type="page" scale={scale} />
-      </FigmaMessageRow>
-      <FigmaDateDivider date="Saturday" scale={scale} />
-      <FigmaDateDivider date="Today" scale={scale} />
-      <FigmaMessageRow
-        scale={scale}
-        photo="maya"
-        name="Maya Chen"
-        showBot
-        relaxed
-        footer={
-          <div className="mt-1">
-            <FigmaTag type="contact" scale={scale} /> How are you doing?{" "}
-            <span className={`text-gray-400 ${scaleMap[scale].msgTime}`}>10:56 AM</span>
-          </div>
-        }
-      >
-        Hi, I have a question on <FigmaTag type="page" scale={scale} />
-      </FigmaMessageRow>
     </div>
     <FigmaComposer scale={scale} />
   </FigmaStandaloneShell>
@@ -176,25 +131,24 @@ export const StandaloneChannelFrame = ({
 
 export const ChannelThreadFrame = ({
   scale,
+  closeDemoTarget,
   sendDemoTarget,
   showPostedReply,
 }: {
   scale: FigmaScale;
+  closeDemoTarget?: string;
   sendDemoTarget?: string;
   showPostedReply?: boolean;
 }) => {
+  const s = scaleMap[scale];
   const chatMain = (
     <>
-      <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
+      <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.discussion} members="5 Members" />
       <div className="min-h-0 flex-1 overflow-hidden opacity-90">
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale}>
+        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} /></div>}>
           Hi <FigmaTag type="person" scale={scale} />
-          <div className={`mt-0.5 text-blue-600 ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>1 reply</div>
         </FigmaMessageRow>
-        <div className={`my-1 text-center text-gray-400 ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>
-          Sofia Patel joined
-        </div>
       </div>
       <FigmaComposer scale={scale} />
     </>
@@ -204,8 +158,8 @@ export const ChannelThreadFrame = ({
     <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
       <div className="flex min-h-0 flex-1 gap-0">
         <div className="flex min-w-0 flex-1 flex-col pr-1">{chatMain}</div>
-        <div className="w-[42%] min-w-0 border-l border-gray-200">
-          <FigmaThreadPanel scale={scale} sendDemoTarget={sendDemoTarget} showPostedReply={showPostedReply} />
+        <div className={s.threadPanel}>
+          <FigmaThreadPanel scale={scale} closeDemoTarget={closeDemoTarget} sendDemoTarget={sendDemoTarget} showPostedReply={showPostedReply} />
         </div>
       </div>
     </FigmaStandaloneShell>
@@ -491,15 +445,15 @@ export const ChannelDetailsEmptyFrame = ({
   showSharedDoc?: boolean;
 }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="demo-123">
-    <div className="flex min-h-0 flex-1">
-      <div className="flex min-w-0 flex-[1.62] flex-col pr-1">
-        <FigmaChannelHeader scale={scale} title="# office-hours" members="1 Member" infoDemoTarget={infoDemoTarget} />
+    <div className="flex min-h-0 flex-1 w-full">
+      <div className="flex min-w-0 flex-1 flex-col pr-1">
+        <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.office} members="1 Member" infoDemoTarget={infoDemoTarget} />
         <div className="flex min-h-0 flex-1 items-center justify-center text-gray-400">
           <span className={scale === "guide" ? "text-[10px]" : "text-sm"}>No messages found</span>
         </div>
         <FigmaComposer scale={scale} />
       </div>
-      <div className="min-w-0 flex-[0.78] max-w-[34%]">
+      <div className={scaleMap[scale].detailsPanel}>
         <FigmaChannelDetailsPanel
           scale={scale}
           activeTab={activeTab}
