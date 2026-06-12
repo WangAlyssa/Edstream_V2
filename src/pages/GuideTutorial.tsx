@@ -6,7 +6,6 @@ import GuideMockup from "@/components/GuideMockup";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { findGuideById, guideSections } from "@/content/guides";
-import { MOCK_ORGANIZATIONS } from "@/components/mockup/mockup-data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const GuideTutorial = () => {
@@ -36,9 +35,6 @@ const GuideTutorial = () => {
             </Link>
           </Button>
           <div className="max-w-3xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-300">
-              Sample data · {MOCK_ORGANIZATIONS.institution}
-            </p>
             <h1 className="text-4xl font-black lg:text-5xl">{guide.title}</h1>
             <p className="mt-4 text-base leading-7 text-blue-100">{guide.overview}</p>
           </div>
