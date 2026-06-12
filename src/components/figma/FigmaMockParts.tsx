@@ -189,7 +189,17 @@ export const FigmaWorkspaceStrip = ({ scale }: { scale: FigmaScale }) => {
   );
 };
 
-export const FigmaTopBar = ({ scale, className = "" }: { scale: FigmaScale; className?: string }) => {
+export const FigmaTopBar = ({
+  scale,
+  className = "",
+  userLabel,
+  userDemoTarget,
+}: {
+  scale: FigmaScale;
+  className?: string;
+  userLabel?: string;
+  userDemoTarget?: string;
+}) => {
   const s = scaleMap[scale];
   return (
     <div className={`flex flex-shrink-0 items-center px-3 text-white ${s.topH} ${className}`} style={{ backgroundColor: FIGMA.topBar }}>
@@ -197,8 +207,11 @@ export const FigmaTopBar = ({ scale, className = "" }: { scale: FigmaScale; clas
         <Search className={`mr-1.5 flex-shrink-0 text-blue-200 ${s.composerTool}`} strokeWidth={2} />
         <span className={`truncate text-blue-100/90 ${s.searchText}`}>Search users, channels, messages...</span>
       </div>
-      <div className={`ml-auto flex flex-shrink-0 items-center gap-1.5 pl-2 ${s.sidebarText}`}>
-        <span className="whitespace-nowrap">{W.topBarUser}</span>
+      <div
+        className={`ml-auto flex flex-shrink-0 cursor-default items-center gap-1.5 rounded-full pl-2 pr-0.5 ${s.sidebarText}`}
+        data-demo-target={userDemoTarget}
+      >
+        <span className="whitespace-nowrap">{userLabel ?? W.topBarUser}</span>
         <FigmaAvatar scale={scale} photo="user" online />
       </div>
     </div>
@@ -211,12 +224,16 @@ export const FigmaAppSidebar = ({
   activeChannel = "renamed-general",
   highlightCompose,
   channels = CHANNELS,
+  requestsDemoTarget,
+  requestsNotify,
 }: {
   scale: FigmaScale;
   activeItem?: SidebarActive;
   activeChannel?: ActiveChannel | string;
   highlightCompose?: boolean;
   channels?: FigmaChannelItem[];
+  requestsDemoTarget?: string;
+  requestsNotify?: boolean;
 }) => {
   const s = scaleMap[scale];
 
@@ -228,9 +245,17 @@ export const FigmaAppSidebar = ({
       </div>
 
       <div className="mb-1.5 rounded-md px-1.5 py-1" style={activeItem === "requests" ? { backgroundColor: FIGMA.sidebarActive } : undefined}>
-        <div className={`flex items-center gap-1.5 ${s.sidebarText} ${activeItem === "requests" ? "font-semibold text-white" : "text-blue-100"}`}>
+        <div
+          className={`flex items-center gap-1.5 ${s.sidebarText} ${activeItem === "requests" ? "font-semibold text-white" : "text-blue-100"}`}
+          data-demo-target={requestsDemoTarget}
+        >
           <Inbox className={s.composerTool} strokeWidth={2} />
           Requests
+          {requestsNotify && (
+            <span className="ml-auto flex h-4 min-w-[16px] items-center justify-center rounded-full bg-orange-500 px-1 text-[8px] font-bold text-white">
+              1
+            </span>
+          )}
         </div>
       </div>
 
@@ -254,7 +279,6 @@ export const FigmaAppSidebar = ({
               key={ch.label + ch.id}
               className={`mb-0.5 flex items-center justify-between rounded px-1.5 py-[3px] ${s.channelText} ${isActive ? "font-semibold text-white" : "text-blue-100/90"}`}
               style={isActive ? { backgroundColor: FIGMA.sidebarActive } : undefined}
-              data-demo-target={isActive ? "1" : undefined}
             >
               <span className="truncate pr-1">{ch.label}</span>
               {ch.trailing === "lock" ? (
@@ -320,16 +344,38 @@ export const FigmaRequestFilterPills = ({ scale }: { scale: FigmaScale }) => {
   );
 };
 
-export const FigmaComposer = ({ scale, demoTarget }: { scale: FigmaScale; demoTarget?: string }) => {
+export const FigmaComposer = ({
+  scale,
+  demoTarget,
+  attachDemoTarget,
+  sendDemoTarget,
+}: {
+  scale: FigmaScale;
+  demoTarget?: string;
+  attachDemoTarget?: string;
+  sendDemoTarget?: string;
+}) => {
   const s = scaleMap[scale];
-  const topTools = [Bold, Italic, Strikethrough, Link2, List, ListOrdered, Quote, Code, Paperclip];
+  const topTools = [
+    { Icon: Bold, target: undefined },
+    { Icon: Italic, target: undefined },
+    { Icon: Strikethrough, target: undefined },
+    { Icon: Link2, target: undefined },
+    { Icon: List, target: undefined },
+    { Icon: ListOrdered, target: undefined },
+    { Icon: Quote, target: undefined },
+    { Icon: Code, target: undefined },
+    { Icon: Paperclip, target: attachDemoTarget },
+  ];
   const bottomTools = [Plus, Type, Smile, AtSign, Video, Mic, ImageIcon];
 
   return (
     <div className="mt-auto flex-shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm" data-demo-target={demoTarget}>
       <div className="flex items-center gap-2 border-b border-gray-100 px-2.5 py-1.5">
-        {topTools.map((Icon, i) => (
-          <Icon key={i} className={`text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
+        {topTools.map(({ Icon, target }, i) => (
+          <span key={i} data-demo-target={target}>
+            <Icon className={`text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
+          </span>
         ))}
       </div>
       <div className={`min-h-[36px] px-2.5 py-2 text-gray-400 ${s.composerText}`}>Enter your message here</div>
@@ -340,7 +386,7 @@ export const FigmaComposer = ({ scale, demoTarget }: { scale: FigmaScale; demoTa
           ))}
           <Square className={`text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
         </div>
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-0.5" data-demo-target={sendDemoTarget}>
           <Send className={`text-gray-500 ${s.composerTool}`} strokeWidth={2} />
           <ChevronDown className={`text-gray-400 ${s.composerTool}`} strokeWidth={2} />
         </div>
@@ -413,9 +459,13 @@ export const FigmaSystemMessage = ({ text, scale }: { text: string; scale: Figma
   return <div className={`py-0.5 text-center text-gray-400 ${s.msgTime}`}>{text}</div>;
 };
 
-export const FigmaReplyLink = ({ scale }: { scale: FigmaScale }) => {
+export const FigmaReplyLink = ({ scale, demoTarget }: { scale: FigmaScale; demoTarget?: string }) => {
   const s = scaleMap[scale];
-  return <span className={`font-semibold text-blue-600 ${s.msgTime}`}>1 reply</span>;
+  return (
+    <span className={`font-semibold text-blue-600 ${s.msgTime}`} data-demo-target={demoTarget}>
+      1 reply
+    </span>
+  );
 };
 
 export const FigmaReactionRow = ({ scale }: { scale: FigmaScale }) => (
@@ -474,6 +524,10 @@ export const FigmaStandaloneShell = ({
   activeChannel,
   highlightCompose,
   channels,
+  requestsDemoTarget,
+  requestsNotify,
+  topBarUserLabel,
+  topBarUserDemoTarget,
   children,
   showWorkspace = true,
 }: {
@@ -482,11 +536,15 @@ export const FigmaStandaloneShell = ({
   activeChannel?: ActiveChannel | string;
   highlightCompose?: boolean;
   channels?: FigmaChannelItem[];
+  requestsDemoTarget?: string;
+  requestsNotify?: boolean;
+  topBarUserLabel?: string;
+  topBarUserDemoTarget?: string;
   children: ReactNode;
   showWorkspace?: boolean;
 }) => (
   <div className="flex h-full flex-col">
-    <FigmaTopBar scale={scale} />
+    <FigmaTopBar scale={scale} userLabel={topBarUserLabel} userDemoTarget={topBarUserDemoTarget} />
     <div className="flex min-h-0 flex-1">
       {showWorkspace && <FigmaWorkspaceStrip scale={scale} />}
       <FigmaAppSidebar
@@ -495,6 +553,8 @@ export const FigmaStandaloneShell = ({
         activeChannel={activeChannel}
         highlightCompose={highlightCompose}
         channels={channels}
+        requestsDemoTarget={requestsDemoTarget}
+        requestsNotify={requestsNotify}
       />
       <main className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white px-3 py-2">{children}</main>
     </div>
@@ -589,11 +649,13 @@ export const FigmaCanvasShell = ({
   scale,
   activeItem,
   activeChannel,
+  requestsDemoTarget,
   children,
 }: {
   scale: FigmaScale;
   activeItem?: SidebarActive;
   activeChannel?: ActiveChannel | string;
+  requestsDemoTarget?: string;
   children: ReactNode;
 }) => (
   <div className="flex h-full min-h-0 flex-col">
@@ -603,7 +665,7 @@ export const FigmaCanvasShell = ({
       <div className="flex min-w-0 flex-1 flex-col">
         <FigmaTopBar scale={scale} />
         <div className="flex min-h-0 flex-1">
-          <FigmaAppSidebar scale={scale} activeItem={activeItem} activeChannel={activeChannel} />
+          <FigmaAppSidebar scale={scale} activeItem={activeItem} activeChannel={activeChannel} requestsDemoTarget={requestsDemoTarget} />
           <main className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white px-3 py-2">{children}</main>
         </div>
       </div>
@@ -614,13 +676,21 @@ export const FigmaCanvasShell = ({
 export const FigmaExtensionCard = ({
   scale,
   variant = "instructor",
+  demoTarget,
+  approveDemoTarget,
+  approved = false,
+  pendingNew = false,
 }: {
   scale: FigmaScale;
   variant?: "instructor" | "student" | "thread";
+  demoTarget?: string;
+  approveDemoTarget?: string;
+  approved?: boolean;
+  pendingNew?: boolean;
 }) => {
   const s = scaleMap[scale];
   return (
-    <div className="rounded-xl p-3" style={{ backgroundColor: FIGMA.cardBg }} data-demo-target={variant === "student" ? "1" : undefined}>
+    <div className="rounded-xl p-3" style={{ backgroundColor: FIGMA.cardBg }} data-demo-target={demoTarget}>
       <div className={`mb-2 font-bold text-gray-900 ${s.msgName}`}>Extension Request</div>
       <div className={`space-y-1 leading-snug text-gray-700 ${s.msgBody}`}>
         <div>
@@ -646,23 +716,27 @@ export const FigmaExtensionCard = ({
       <div className={`mt-2 flex gap-2 ${s.channelText}`}>
         {variant === "student" ? (
           <button type="button" className="rounded-full border-2 border-gray-800 bg-white px-2.5 py-0.5 font-medium text-gray-800">
-            Pending approval
+            {pendingNew ? "Pending approval" : "Pending approval"}
           </button>
         ) : variant === "thread" ? (
           <>
             <button type="button" className="rounded-full border-2 border-gray-800 bg-white px-2.5 py-0.5 font-medium text-gray-900">
               Default
             </button>
-            <button type="button" className="rounded-full border-2 border-[#16A34A] bg-white px-2.5 py-0.5 font-medium text-[#16A34A]" data-demo-target="2">
+            <button type="button" className="rounded-full border-2 border-[#16A34A] bg-white px-2.5 py-0.5 font-medium text-[#16A34A]" data-demo-target={approveDemoTarget}>
               Approve
             </button>
           </>
+        ) : approved ? (
+          <button type="button" className="rounded-full border-2 border-[#16A34A] bg-[#16A34A] px-2.5 py-0.5 font-medium text-white">
+            Approved
+          </button>
         ) : (
           <>
             <button type="button" className="rounded-full border-2 border-gray-800 bg-white px-2.5 py-0.5 font-medium text-gray-900">
               Decline
             </button>
-            <button type="button" className="rounded-full border-2 border-[#16A34A] bg-white px-2.5 py-0.5 font-medium text-[#16A34A]" data-demo-target="2">
+            <button type="button" className="rounded-full border-2 border-[#16A34A] bg-white px-2.5 py-0.5 font-medium text-[#16A34A]" data-demo-target={approveDemoTarget}>
               Approve
             </button>
           </>
@@ -675,9 +749,11 @@ export const FigmaExtensionCard = ({
 export const FigmaCreateRequestModal = ({
   scale,
   category,
+  submitDemoTarget,
 }: {
   scale: FigmaScale;
   category: "grading" | "extension";
+  submitDemoTarget?: string;
 }) => {
   const s = scaleMap[scale];
   const categories = ["Grading", "Attendance", "Extension", "Accomodation", "Other"];
@@ -700,7 +776,7 @@ export const FigmaCreateRequestModal = ({
                 <div
                   key={cat}
                   className={`relative px-4 py-2 ${s.sidebarText} ${active ? "font-bold text-gray-900" : "text-gray-500"} ${gradingActive ? "bg-blue-50" : ""}`}
-                  data-demo-target={active ? (category === "grading" ? "0" : "1") : undefined}
+                  data-demo-target={active && category === "grading" ? "0" : undefined}
                 >
                   {gradingActive && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded bg-blue-600" />}
                   {extensionActive && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded" style={{ backgroundColor: FIGMA.orange }} />}
@@ -736,7 +812,7 @@ export const FigmaCreateRequestModal = ({
                 Choose
               </button>
             </div>
-            <button type="button" className="mt-1 rounded-full border-2 border-gray-800 px-4 py-1 font-medium text-gray-900">
+            <button type="button" className="mt-1 rounded-full border-2 border-gray-800 px-4 py-1 font-medium text-gray-900" data-demo-target={submitDemoTarget}>
               + Create Request
             </button>
           </div>
@@ -810,9 +886,15 @@ export const FigmaSettingsModal = ({ scale }: { scale: FigmaScale }) => {
 export const FigmaChannelDetailsPanel = ({
   scale,
   activeTab = "photos",
+  videosTabDemoTarget,
+  docsTabDemoTarget,
+  showSharedDoc,
 }: {
   scale: FigmaScale;
   activeTab?: "photos" | "videos" | "docs";
+  videosTabDemoTarget?: string;
+  docsTabDemoTarget?: string;
+  showSharedDoc?: boolean;
 }) => {
   const s = scaleMap[scale];
   const tabs = [
@@ -847,6 +929,9 @@ export const FigmaChannelDetailsPanel = ({
             <div
               key={tab.id}
               className={`relative pl-2.5 ${s.channelText} ${activeTab === tab.id ? "font-bold text-gray-900" : "text-gray-500"}`}
+              data-demo-target={
+                tab.id === "videos" ? videosTabDemoTarget : tab.id === "docs" ? docsTabDemoTarget : undefined
+              }
             >
               {activeTab === tab.id && (
                 <span className="absolute left-0 top-0 bottom-0 w-1 rounded" style={{ backgroundColor: FIGMA.orange }} />
@@ -855,8 +940,17 @@ export const FigmaChannelDetailsPanel = ({
             </div>
           ))}
         </div>
-        <div className="flex flex-1 items-center justify-center border-l border-gray-100 py-8 text-gray-400">
-          <span className={s.channelText}>No records found</span>
+        <div className="flex flex-1 flex-col border-l border-gray-100 py-2 pl-3">
+          {activeTab === "docs" && showSharedDoc ? (
+            <div className={`inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm ${s.channelText}`}>
+              <span className="text-orange-500">📄</span>
+              <span className="font-bold text-gray-800">{W.files.project}</span>
+            </div>
+          ) : (
+            <div className="flex flex-1 items-center justify-center text-gray-400">
+              <span className={s.channelText}>No records found</span>
+            </div>
+          )}
         </div>
       </div>
     </aside>
@@ -882,13 +976,26 @@ export const FigmaThreadHoverBar = ({ scale }: { scale: FigmaScale }) => {
   );
 };
 
-export const FigmaThreadPanel = ({ scale }: { scale: FigmaScale }) => {
+export const FigmaThreadPanel = ({
+  scale,
+  closeDemoTarget,
+  sendDemoTarget,
+  showPostedReply,
+}: {
+  scale: FigmaScale;
+  closeDemoTarget?: string;
+  sendDemoTarget?: string;
+  showPostedReply?: boolean;
+}) => {
   const s = scaleMap[scale];
   return (
     <aside className="flex h-full min-w-0 flex-col overflow-hidden border-l border-gray-200 bg-white px-2.5 py-2">
       <div className={`mb-2 flex flex-shrink-0 items-center justify-between font-bold ${s.mainHeader}`}>
         Thread
-        <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-gray-200 text-gray-500">
+        <span
+          className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-gray-200 text-gray-500"
+          data-demo-target={closeDemoTarget}
+        >
           <X className={s.composerTool} strokeWidth={2} />
         </span>
       </div>
@@ -898,15 +1005,17 @@ export const FigmaThreadPanel = ({ scale }: { scale: FigmaScale }) => {
           <FigmaMessageRow scale={scale} photo="maya">
             Hi <FigmaTag type="person" scale={scale} />
           </FigmaMessageRow>
-          <FigmaThreadHoverBar scale={scale} />
         </div>
-        <div className={`mb-2 font-semibold text-blue-600 ${s.msgTime}`}>1 reply</div>
-        <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="maya" footer={<FigmaReactionRow scale={scale} />}>
-          Hi Hi Hi <FigmaTag type="person" scale={scale} />
-        </FigmaMessageRow>
+        {showPostedReply && (
+          <>
+            <FigmaDateDivider date="Today" scale={scale} />
+            <FigmaMessageRow scale={scale} photo="maya" name={W.people.primaryStudent}>
+              Thanks — that clears it up for our study group.
+            </FigmaMessageRow>
+          </>
+        )}
       </div>
-      <FigmaComposer scale={scale} />
+      <FigmaComposer scale={scale} sendDemoTarget={sendDemoTarget} />
     </aside>
   );
 };

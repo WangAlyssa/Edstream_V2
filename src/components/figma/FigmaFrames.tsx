@@ -28,6 +28,7 @@ import {
 } from "./FigmaMockParts";
 
 import { FigmaChannelDetailsPanel } from "./FigmaMockParts";
+import { FIGMA_WORLD } from "./figmaAssets";
 
 export type FigmaFrameId =
   | "canvas-channel-chat"
@@ -41,12 +42,22 @@ export type FigmaFrameId =
   | "channel-details-empty"
   | "canvas-create-request";
 
-export const CanvasChannelChatFrame = ({ scale }: { scale: FigmaScale }) => (
+export const CanvasChannelChatFrame = ({
+  scale,
+  replyDemoTarget,
+  attachDemoTarget,
+  sendDemoTarget,
+}: {
+  scale: FigmaScale;
+  replyDemoTarget?: string;
+  attachDemoTarget?: string;
+  sendDemoTarget?: string;
+}) => (
   <FigmaCanvasShell scale={scale} activeChannel="renamed-general">
-    <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
+    <FigmaChannelHeader scale={scale} title={FIGMA_WORLD.channels.discussion} members="5 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} /></div>}>
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" footer={<div className="mt-0.5"><FigmaReplyLink scale={scale} demoTarget={replyDemoTarget} /></div>}>
         Content of message. <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
       <FigmaSystemMessage text="Sofia Patel joined" scale={scale} />
@@ -79,22 +90,46 @@ export const CanvasChannelChatFrame = ({ scale }: { scale: FigmaScale }) => (
         <FigmaTag type="contact" scale={scale} /> Content of message.
       </FigmaMessageRow>
     </div>
-    <FigmaComposer scale={scale} demoTarget="2" />
+    <FigmaComposer scale={scale} attachDemoTarget={attachDemoTarget} sendDemoTarget={sendDemoTarget} />
   </FigmaCanvasShell>
 );
 
-export const StandaloneChannelFrame = ({ scale }: { scale: FigmaScale }) => (
-  <FigmaStandaloneShell scale={scale} activeChannel="parent" channels={FRAME2_CHANNELS}>
+export const StandaloneChannelFrame = ({
+  scale,
+  replyDemoTarget,
+  requestsDemoTarget,
+  showReplyPosted,
+}: {
+  scale: FigmaScale;
+  replyDemoTarget?: string;
+  requestsDemoTarget?: string;
+  showReplyPosted?: boolean;
+}) => (
+  <FigmaStandaloneShell
+    scale={scale}
+    activeChannel="parent"
+    channels={FRAME2_CHANNELS}
+    requestsDemoTarget={requestsDemoTarget}
+    requestsNotify={Boolean(requestsDemoTarget)}
+  >
     <FigmaChannelHeader scale={scale} title="# course-discussion (parent)" members="4 Members" />
-    <div className="min-h-0 flex-1 overflow-y-auto" data-demo-target="0">
+    <div className="min-h-0 flex-1 overflow-y-auto">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
       <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot relaxed>
         Hi <FigmaTag type="page" scale={scale} />
       </FigmaMessageRow>
       <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot edited relaxed footer={<div className="mt-1"><FigmaReplyLink scale={scale} /></div>}>
+      <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot edited relaxed footer={<div className="mt-1"><FigmaReplyLink scale={scale} demoTarget={replyDemoTarget} /></div>}>
         <FigmaTag type="contact" scale={scale} /> Content of message.
       </FigmaMessageRow>
+      {showReplyPosted && (
+        <>
+          <FigmaDateDivider date="Today" scale={scale} />
+          <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showBot relaxed>
+            Thanks — that clears it up for our study group.
+          </FigmaMessageRow>
+        </>
+      )}
       <FigmaDateDivider date="Mar 12th, 2024" scale={scale} />
       <FigmaMessageRow
         scale={scale}
@@ -139,7 +174,15 @@ export const StandaloneChannelFrame = ({ scale }: { scale: FigmaScale }) => (
   </FigmaStandaloneShell>
 );
 
-export const ChannelThreadFrame = ({ scale }: { scale: FigmaScale }) => {
+export const ChannelThreadFrame = ({
+  scale,
+  sendDemoTarget,
+  showPostedReply,
+}: {
+  scale: FigmaScale;
+  sendDemoTarget?: string;
+  showPostedReply?: boolean;
+}) => {
   const chatMain = (
     <>
       <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
@@ -162,14 +205,14 @@ export const ChannelThreadFrame = ({ scale }: { scale: FigmaScale }) => {
       <div className="flex min-h-0 flex-1 gap-0">
         <div className="flex min-w-0 flex-1 flex-col pr-1">{chatMain}</div>
         <div className="w-[42%] min-w-0 border-l border-gray-200">
-          <FigmaThreadPanel scale={scale} />
+          <FigmaThreadPanel scale={scale} sendDemoTarget={sendDemoTarget} showPostedReply={showPostedReply} />
         </div>
       </div>
     </FigmaStandaloneShell>
   );
 };
 
-export const CanvasThreadFrame = ({ scale }: { scale: FigmaScale }) => (
+export const CanvasThreadFrame = ({ scale, closeDemoTarget }: { scale: FigmaScale; closeDemoTarget?: string }) => (
   <div className="flex h-full min-h-0 flex-col">
     <div className="flex min-h-0 flex-1">
       <FigmaCanvasGlobalNav scale={scale} />
@@ -218,7 +261,7 @@ export const CanvasThreadFrame = ({ scale }: { scale: FigmaScale }) => (
             <FigmaComposer scale={scale} />
           </main>
           <div className="min-w-0 flex-[0.82] max-w-[38%]">
-            <FigmaThreadPanel scale={scale} />
+            <FigmaThreadPanel scale={scale} closeDemoTarget={closeDemoTarget} />
           </div>
         </div>
       </div>
@@ -251,10 +294,12 @@ export const CreateRequestFrame = ({
   scale,
   category,
   canvas = false,
+  submitDemoTarget,
 }: {
   scale: FigmaScale;
   category: "grading" | "extension";
   canvas?: boolean;
+  submitDemoTarget?: string;
 }) => {
   const inner = (
     <>
@@ -284,12 +329,24 @@ export const CreateRequestFrame = ({
           {inner}
         </FigmaStandaloneShell>
       )}
-      <FigmaCreateRequestModal scale={scale} category={category} />
+      <FigmaCreateRequestModal scale={scale} category={category} submitDemoTarget={submitDemoTarget} />
     </div>
   );
 };
 
-export const RequestsInstructorFrame = ({ scale, withThread = false }: { scale: FigmaScale; withThread?: boolean }) => {
+export const RequestsInstructorFrame = ({
+  scale,
+  withThread = false,
+  approveDemoTarget,
+  approved = false,
+  topBarUserDemoTarget,
+}: {
+  scale: FigmaScale;
+  withThread?: boolean;
+  approveDemoTarget?: string;
+  approved?: boolean;
+  topBarUserDemoTarget?: string;
+}) => {
   const main = (
     <>
       <FigmaChannelHeader scale={scale} title="Requests" members="2 Members" />
@@ -298,71 +355,119 @@ export const RequestsInstructorFrame = ({ scale, withThread = false }: { scale: 
         <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
         <FigmaSystemMessage text="Sofia Patel joined" scale={scale} />
         <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-        <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showShield footer={<FigmaReplyChip scale={scale} />}>
-          <FigmaExtensionCard scale={scale} variant="instructor" />
+        <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan} showShield footer={<FigmaReplyChip scale={scale} />}>
+          <FigmaExtensionCard
+            scale={scale}
+            variant="instructor"
+            approveDemoTarget={approved ? undefined : approveDemoTarget}
+            approved={approved}
+          />
         </FigmaMessageRow>
       </div>
       <FigmaComposer scale={scale} />
     </>
   );
 
+  const shell = (content: ReactNode) => (
+    <FigmaStandaloneShell
+      scale={scale}
+      activeItem="requests"
+      activeChannel="none"
+      topBarUserLabel={FIGMA_WORLD.people.instructor}
+      topBarUserDemoTarget={topBarUserDemoTarget}
+    >
+      {content}
+    </FigmaStandaloneShell>
+  );
+
   if (withThread) {
-    return (
-      <FigmaStandaloneShell scale={scale} activeItem="requests" activeChannel="none">
-        <div className="flex min-h-0 flex-1">
-          <div className="flex min-w-0 flex-[1.55] flex-col pr-1">{main}</div>
-          <div className="min-w-0 flex-[0.82] max-w-[38%] border-l border-gray-200">
-            <aside className="flex h-full flex-col overflow-hidden px-2.5 py-2">
-              <div className={`mb-2 flex flex-shrink-0 items-center justify-between font-bold ${scaleMap[scale].mainHeader}`}>
-                <span>
-                  Thread <span className="ml-1 font-normal text-gray-400">Requests</span>
-                </span>
-                <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-gray-200 text-gray-500">
-                  <X className={scaleMap[scale].composerTool} strokeWidth={2} />
-                </span>
-              </div>
-              <div className="min-h-0 flex-1 overflow-y-auto">
-                <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-                <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showShield>
-                  <FigmaExtensionCard scale={scale} variant="thread" />
-                </FigmaMessageRow>
-                <FigmaReplyChip scale={scale} />
-                <div className={`my-2 text-gray-400 ${scaleMap[scale].msgTime}`}>Loading...</div>
-              </div>
-              <FigmaComposer scale={scale} />
-            </aside>
-          </div>
+    return shell(
+      <div className="flex min-h-0 flex-1">
+        <div className="flex min-w-0 flex-[1.55] flex-col pr-1">{main}</div>
+        <div className="min-w-0 flex-[0.82] max-w-[38%] border-l border-gray-200">
+          <aside className="flex h-full flex-col overflow-hidden px-2.5 py-2">
+            <div className={`mb-2 flex flex-shrink-0 items-center justify-between font-bold ${scaleMap[scale].mainHeader}`}>
+              <span>
+                Thread <span className="ml-1 font-normal text-gray-400">Requests</span>
+              </span>
+              <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-gray-200 text-gray-500">
+                <X className={scaleMap[scale].composerTool} strokeWidth={2} />
+              </span>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+              <FigmaMessageRow scale={scale} photo="maya" name="Maya Chen" showShield>
+                <FigmaExtensionCard scale={scale} variant="thread" />
+              </FigmaMessageRow>
+              <FigmaReplyChip scale={scale} />
+              <div className={`my-2 text-gray-400 ${scaleMap[scale].msgTime}`}>Loading...</div>
+            </div>
+            <FigmaComposer scale={scale} />
+          </aside>
         </div>
-      </FigmaStandaloneShell>
+      </div>,
     );
   }
 
-  return (
-    <FigmaStandaloneShell scale={scale} activeItem="requests" activeChannel="none">
-      {main}
-    </FigmaStandaloneShell>
-  );
+  return shell(main);
 };
 
-export const RequestsStudentFrame = ({ scale }: { scale: FigmaScale }) => (
-  <FigmaStandaloneShell scale={scale} activeItem="requests" activeChannel="none">
+export const RequestsStudentFrame = ({
+  scale,
+  createDemoTarget,
+  showCreateOnly = false,
+  showNewPendingOnly = false,
+  topBarUserLabel,
+  topBarUserDemoTarget,
+  activeItem = "requests",
+}: {
+  scale: FigmaScale;
+  createDemoTarget?: string;
+  showCreateOnly?: boolean;
+  showNewPendingOnly?: boolean;
+  topBarUserLabel?: string;
+  topBarUserDemoTarget?: string;
+  activeItem?: "requests" | "channels" | "messages" | "none";
+}) => (
+  <FigmaStandaloneShell
+    scale={scale}
+    activeItem={activeItem}
+    activeChannel="none"
+    topBarUserLabel={topBarUserLabel}
+    topBarUserDemoTarget={topBarUserDemoTarget}
+  >
     <FigmaChannelHeader scale={scale} title="# Requests" members="4 Members" />
     <div className="min-h-0 flex-1 overflow-y-auto pb-2">
-      <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="jordan" name="Jordan Lee">
-        <FigmaExtensionCard scale={scale} variant="student" />
-      </FigmaMessageRow>
-      <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
-      <FigmaMessageRow scale={scale} photo="jordan" name="Jordan Lee">
-        <FigmaExtensionCard scale={scale} variant="student" />
-      </FigmaMessageRow>
-      <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
+      {!showCreateOnly && (
+        <>
+          {showNewPendingOnly ? (
+            <>
+              <FigmaDateDivider date="Today" scale={scale} />
+              <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan}>
+                <FigmaExtensionCard scale={scale} variant="student" pendingNew />
+              </FigmaMessageRow>
+            </>
+          ) : (
+            <>
+              <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
+              <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan}>
+                <FigmaExtensionCard scale={scale} variant="student" />
+              </FigmaMessageRow>
+              <FigmaDateDivider date="Mar 3rd, 2024" scale={scale} />
+              <FigmaMessageRow scale={scale} photo="jordan" name={FIGMA_WORLD.people.jordan}>
+                <FigmaExtensionCard scale={scale} variant="student" />
+              </FigmaMessageRow>
+              <FigmaDateDivider date="Mar 5th, 2024" scale={scale} />
+            </>
+          )}
+        </>
+      )}
     </div>
     <div className="flex flex-shrink-0 justify-center py-2">
       <button
         type="button"
         className={`rounded-full border-2 border-gray-800 bg-white px-4 py-1 font-medium text-gray-900 ${scale === "guide" ? "text-[9px]" : "text-[11px]"}`}
-        data-demo-target="2"
+        data-demo-target={createDemoTarget}
       >
         + Create New Request
       </button>
@@ -370,18 +475,38 @@ export const RequestsStudentFrame = ({ scale }: { scale: FigmaScale }) => (
   </FigmaStandaloneShell>
 );
 
-export const ChannelDetailsEmptyFrame = ({ scale, activeTab = "photos" }: { scale: FigmaScale; activeTab?: "photos" | "videos" | "docs" }) => (
+export const ChannelDetailsEmptyFrame = ({
+  scale,
+  activeTab = "photos",
+  infoDemoTarget,
+  videosTabDemoTarget,
+  docsTabDemoTarget,
+  showSharedDoc,
+}: {
+  scale: FigmaScale;
+  activeTab?: "photos" | "videos" | "docs";
+  infoDemoTarget?: string;
+  videosTabDemoTarget?: string;
+  docsTabDemoTarget?: string;
+  showSharedDoc?: boolean;
+}) => (
   <FigmaStandaloneShell scale={scale} activeChannel="demo-123">
     <div className="flex min-h-0 flex-1">
       <div className="flex min-w-0 flex-[1.62] flex-col pr-1">
-        <FigmaChannelHeader scale={scale} title="# office-hours" members="1 Member" />
+        <FigmaChannelHeader scale={scale} title="# office-hours" members="1 Member" infoDemoTarget={infoDemoTarget} />
         <div className="flex min-h-0 flex-1 items-center justify-center text-gray-400">
           <span className={scale === "guide" ? "text-[10px]" : "text-sm"}>No messages found</span>
         </div>
         <FigmaComposer scale={scale} />
       </div>
       <div className="min-w-0 flex-[0.78] max-w-[34%]">
-        <FigmaChannelDetailsPanel scale={scale} activeTab={activeTab} />
+        <FigmaChannelDetailsPanel
+          scale={scale}
+          activeTab={activeTab}
+          videosTabDemoTarget={videosTabDemoTarget}
+          docsTabDemoTarget={docsTabDemoTarget}
+          showSharedDoc={showSharedDoc}
+        />
       </div>
     </div>
   </FigmaStandaloneShell>
@@ -398,7 +523,7 @@ export const SidebarComposeFrame = ({ scale }: { scale: FigmaScale }) => (
   </FigmaStandaloneShell>
 );
 
-export const MessageReplyFrame = ({ scale }: { scale: FigmaScale }) => (
+export const MessageReplyFrame = ({ scale, replyDemoTarget }: { scale: FigmaScale; replyDemoTarget?: string }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="renamed-general">
     <FigmaChannelHeader scale={scale} title="# course-discussion" members="5 Members" />
     <div className="min-h-0 flex-1">
@@ -408,7 +533,7 @@ export const MessageReplyFrame = ({ scale }: { scale: FigmaScale }) => (
         </FigmaMessageRow>
         <div className={`absolute right-0 top-0 flex items-center gap-0.5 rounded-full border bg-white px-1 py-0.5 shadow-sm ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>
           <span>👍</span><span>😊</span>
-          <span className="rounded bg-blue-50 px-0.5 text-blue-600">↩</span>
+          <span className="rounded bg-blue-50 px-0.5 text-blue-600" data-demo-target={replyDemoTarget}>↩</span>
         </div>
         <button type="button" className={`mt-0.5 font-bold text-blue-600 ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>
           1 reply
@@ -419,7 +544,7 @@ export const MessageReplyFrame = ({ scale }: { scale: FigmaScale }) => (
   </FigmaStandaloneShell>
 );
 
-export const CanvasCourseHomeFrame = ({ scale }: { scale: FigmaScale }) => (
+export const CanvasCourseHomeFrame = ({ scale, edStreamDemoTarget }: { scale: FigmaScale; edStreamDemoTarget?: string }) => (
   <div className="flex h-full bg-[#f5f5f5]">
     <aside
       className={`flex flex-col items-center gap-2 py-2 text-white ${scale === "guide" ? "w-[5%] min-w-[22px] text-[5px]" : "w-[52px] text-[7px]"}`}
@@ -442,6 +567,7 @@ export const CanvasCourseHomeFrame = ({ scale }: { scale: FigmaScale }) => (
                   ? "border-l-2 border-[#0374b5] font-bold text-[#0374b5]"
                   : "text-[#0374B5]"
             }`}
+            data-demo-target={link === "Ed Stream Chat" ? edStreamDemoTarget : undefined}
           >
             {link}
           </div>

@@ -292,6 +292,25 @@
     }
   }
 
+  .demo-cursor-click-once {
+    animation: demo-cursor-click-once 220ms ease-out forwards;
+  }
+
+  @keyframes demo-cursor-click-once {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+    45% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.85);
+    }
+  }
+
   @keyframes demo-cursor-click {
     0%, 58%, 100% {
       opacity: 0;
