@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FeatureDemo, { features } from "@/components/FeatureDemo";
+import { MOCK_ORGANIZATIONS } from "@/components/mockup/mockup-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageSquare, Settings, Users, Zap, BarChart3, Shield, CheckCircle } from "lucide-react";
@@ -69,7 +70,7 @@ const Features = () => {
               </span>
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Discover how EdStream's comprehensive toolkit transforms course communication and community building within Canvas LMS.
+              Interactive demos and step-by-step guides that mirror the Ed Stream Chat design — built with fictional course data from {MOCK_ORGANIZATIONS.institution}.
             </p>
           </div>
         </div>
@@ -83,7 +84,7 @@ const Features = () => {
               Core Workflows
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Five EdStream workflows with interactive demos — each using sample course data while matching the real app layout.
+              Five core workflows with animated demos. Each example uses fictional names — Maya Chen, Ethan Brooks, Sofia Patel — in a {MOCK_ORGANIZATIONS.workspace} course ({MOCK_ORGANIZATIONS.institution}).
             </p>
           </div>
 
@@ -93,6 +94,7 @@ const Features = () => {
                 <div className={index % 2 === 1 ? "lg:order-2" : ""}>
                   <h3 className="mb-5 text-2xl font-bold text-blue-600 dark:text-blue-300">{feature.title}</h3>
                   <p className="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-300">{feature.description}</p>
+                  <p className="mb-4 text-sm italic leading-relaxed text-gray-500 dark:text-gray-400">{feature.scenario}</p>
                   <ul className="space-y-3">
                     {feature.bullets.map((bullet) => (
                       <li key={bullet} className="flex gap-3 text-gray-700 dark:text-gray-300">

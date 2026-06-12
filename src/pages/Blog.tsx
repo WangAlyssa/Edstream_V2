@@ -5,6 +5,7 @@ import GuideMockup from "@/components/GuideMockup";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { guideSections, type GuideRole } from "@/content/guides";
+import { MOCK_COURSE, MOCK_ORGANIZATIONS, MOCK_WORKSPACE } from "@/components/mockup/mockup-data";
 import { ArrowRight, BookOpen, Calendar, GraduationCap, User, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -48,7 +49,7 @@ const Blog = () => {
               </span>
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Step-by-step visual guides for instructors and students using EdStream inside Canvas.
+              Step-by-step visual guides for instructors and students. Walkthroughs use fictional examples from {MOCK_COURSE.code} ({MOCK_COURSE.title}) at {MOCK_ORGANIZATIONS.institution} — workspace: {MOCK_WORKSPACE}.
             </p>
           </div>
         </div>
