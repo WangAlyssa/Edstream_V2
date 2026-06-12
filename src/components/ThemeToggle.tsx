@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
 
 const ThemeToggle = () => {
@@ -26,25 +26,17 @@ const ThemeToggle = () => {
   }, [theme]);
 
   return (
-    <div
-      className="flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 px-2 py-1"
-      role="group"
-      aria-label="Theme"
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className="relative h-9 w-9 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
     >
-      <Sun
-        className={`h-4 w-4 transition-colors ${isDark ? "text-gray-400" : "text-orange-500"}`}
-        aria-hidden
-      />
-      <Switch
-        checked={isDark}
-        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-        aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      />
-      <Moon
-        className={`h-4 w-4 transition-colors ${isDark ? "text-blue-400" : "text-gray-400"}`}
-        aria-hidden
-      />
-    </div>
+      <Sun className="h-[18px] w-[18px] rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-[18px] w-[18px] rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
+    </Button>
   );
 };
 
