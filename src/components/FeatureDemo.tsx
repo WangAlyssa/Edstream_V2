@@ -1,17 +1,23 @@
 import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { CheckCircle, FileText, MousePointer2, Plus } from "lucide-react";
+import { CheckCircle, MousePointer2 } from "lucide-react";
 import {
-  ChannelDetailsPanel,
-  ChannelHeader,
-  CommunitiesGrid,
-  CreateRequestModal,
-  DateDivider,
-  ExtensionRequestCard,
-  MockAvatar,
-  MockupFourPane,
-  RichComposer,
-} from "@/components/mockup/MockupShell";
-import { MOCK_CHANNELS, MOCK_COLORS, MOCK_USERS, DEMO_STEP_LABELS } from "@/components/mockup/mockup-data";
+  FigmaAppShell,
+  FigmaChannelDetails,
+  FigmaChatHeader,
+  FigmaCommunitiesView,
+  FigmaComposer,
+  FigmaCreateChannelModal,
+  FigmaCreateRequestModal,
+  FigmaDatePill,
+  FigmaExtensionCard,
+  FigmaFileCard,
+  FigmaFilePreviewModal,
+  FigmaMessage,
+  FigmaSystemMessage,
+  FigmaTag,
+  demoTargetStyle,
+} from "@/components/mockup/FigmaProductUI";
+import { DEMO_STEP_LABELS, MOCK_USERS } from "@/components/mockup/mockup-data";
 
 export type FeatureId = "channels" | "files" | "media" | "requests" | "community";
 
@@ -52,7 +58,7 @@ export const features: Array<{
     description:
       "Photos, videos, and documents shared in a channel are collected in Channel Details. After a busy lab week, students can browse everything in one place.",
     bullets: [
-      "Photos, Videos, and Files tabs per channel",
+      "Photos, Videos, and Docs tabs per channel",
       "Auto-organized shared media library",
       "Ideal for labs, projects, and study groups",
     ],
@@ -85,232 +91,186 @@ export const features: Array<{
 ];
 
 const DemoCursor = ({ position }: { position: CSSProperties }) => (
-  <div className="pointer-events-none absolute z-30 transition-all duration-1000 ease-in-out" style={position}>
-    <span className="absolute left-1 top-1 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 demo-cursor-click" />
-    <MousePointer2 className="demo-cursor-float h-4 w-4 fill-white text-blue-950" />
+  <div className="pointer-events-none absolute z-40 transition-all duration-1000 ease-in-out" style={position}>
+    <span className="absolute left-1 top-1 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/25 demo-cursor-click" />
+    <MousePointer2 className="demo-cursor-float h-4 w-4 fill-white text-[#1D2631]" />
   </div>
 );
 
 const FeatureDemo = ({ id }: { id: FeatureId }) => {
   const [step, setStep] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
-  const [cursorPosition, setCursorPosition] = useState<CSSProperties>({
-    left: "50%",
-    top: "50%",
-    opacity: 0,
-  });
+  const [cursorPosition, setCursorPosition] = useState<CSSProperties>({ left: "50%", top: "50%", opacity: 0 });
 
   useEffect(() => {
-    const timer = window.setInterval(() => setStep((current) => (current + 1) % 3), 2300);
+    const timer = window.setInterval(() => setStep((s) => (s + 1) % 3), 2800);
     return () => window.clearInterval(timer);
   }, []);
 
   useLayoutEffect(() => {
-    const updateCursor = () => {
+    const update = () => {
       const frame = frameRef.current;
       const target = frame?.querySelector(`[data-demo-target="${step}"]`) as HTMLElement | null;
-
       if (!frame || !target) {
-        setCursorPosition((current) => ({ ...current, opacity: 0 }));
+        setCursorPosition((c) => ({ ...c, opacity: 0 }));
         return;
       }
-
-      const frameRect = frame.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-
+      const fr = frame.getBoundingClientRect();
+      const tr = target.getBoundingClientRect();
       setCursorPosition({
-        left: targetRect.left - frameRect.left + targetRect.width * 0.72,
-        top: targetRect.top - frameRect.top + targetRect.height * 0.72,
+        left: tr.left - fr.left + tr.width * 0.75,
+        top: tr.top - fr.top + tr.height * 0.75,
         opacity: 1,
       });
     };
-
-    const animationFrame = window.requestAnimationFrame(updateCursor);
-    window.addEventListener("resize", updateCursor);
-
+    const raf = requestAnimationFrame(update);
+    window.addEventListener("resize", update);
     return () => {
-      window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", updateCursor);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", update);
     };
   }, [id, step]);
 
   return (
-    <div ref={frameRef} className="relative overflow-hidden rounded-3xl p-3 shadow-xl" style={{ backgroundColor: MOCK_COLORS.topBar }}>
-      <div className="relative overflow-hidden rounded-2xl">
-        {id === "channels" && (
-          <MockupFourPane
-            activeChannel="# project-lab"
-            overlay={
-              step >= 1 ? (
-                <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 p-3">
-                  <div className="w-full max-w-[220px] rounded-xl bg-white p-3 shadow-2xl">
-                    <div className="mb-2 flex items-center justify-between text-[9px] font-black text-gray-800">
-                      Create Channel
-                      <span className="text-gray-400">✕</span>
-                    </div>
-                    <div className="mb-2 grid grid-cols-2 gap-1.5 text-[7px]">
-                      <div className="rounded-lg bg-blue-50 p-2">
-                        <span className="block text-gray-500">Visibility</span>
-                        <b className="text-gray-800">Private</b>
-                      </div>
-                      <div className="rounded-lg bg-blue-50 p-2">
-                        <span className="block text-gray-500">Who can send</span>
-                        <b className="text-gray-800">Everyone</b>
-                      </div>
-                    </div>
-                    <div
-                      data-demo-target="1"
-                      className={`mb-2 rounded-lg bg-orange-50 p-2 text-[8px] font-black text-blue-700 transition-all ${
-                        step === 1 ? "ring-2 ring-orange-200" : ""
-                      }`}
-                    >
-                      # project-lab
-                    </div>
-                    <button
-                      data-demo-target="2"
-                      type="button"
-                      className={`w-full rounded-full py-1.5 text-[8px] font-black text-white transition-colors ${
-                        step === 2 ? "bg-orange-500" : "bg-blue-600"
-                      }`}
-                    >
-                      Create Channel
-                    </button>
-                  </div>
-                </div>
-              ) : undefined
-            }
-          >
-            <ChannelHeader channel="# general-q-and-a" />
-            <DateDivider label="Today" />
-            <div className="mb-2 text-[8px] text-gray-600">
-              <span className="font-bold text-gray-800">{MOCK_USERS.instructor.name}</span>
-              <span className="ml-1 text-[6px] text-gray-400">9:02 AM</span>
-              <p className="mt-0.5">Use # project-lab for group work updates this week.</p>
-            </div>
-            <div
-              data-demo-target="0"
-              className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[7px] font-bold transition-all ${
-                step === 0 ? "border-orange-300 bg-orange-50 text-orange-700 ring-2 ring-orange-200" : "border-gray-200 bg-white text-gray-600"
-              }`}
-            >
-              <Plus className="h-2.5 w-2.5" />
-              New channel
-            </div>
-            <RichComposer compact />
-          </MockupFourPane>
-        )}
+    <div ref={frameRef} className="relative">
+      {/* ── Channels: full Canvas + chat + Create Channel modal ── */}
+      {id === "channels" && (
+        <FigmaAppShell
+          sidebar={{
+            activeChannel: "# general-q-and-a",
+            highlightChannelPlus: step === 0,
+            demoTargetPlus: step === 0 ? "0" : undefined,
+          }}
+          overlay={
+            step >= 1 ? (
+              <div data-demo-target={step === 1 ? "1" : step === 2 ? "2" : undefined}>
+                <FigmaCreateChannelModal
+                  channelName="# project-lab"
+                  highlightName={step === 1}
+                  highlightCreate={step === 2}
+                />
+              </div>
+            ) : undefined
+          }
+        >
+          <FigmaChatHeader channel="# general-q-and-a" members={28} />
+          <FigmaDatePill label="Mar 1st, 2026" />
+          <FigmaMessage user={MOCK_USERS.instructor.name} initials="MC" color="#FF5630" time="9:02 AM">
+            Use <FigmaTag># project-lab</FigmaTag> for group work updates this week.
+          </FigmaMessage>
+          <FigmaSystemMessage text={`${MOCK_USERS.peer.name} joined`} />
+          <FigmaComposer />
+        </FigmaAppShell>
+      )}
 
-        {id === "files" && (
-          <MockupFourPane activeChannel={MOCK_CHANNELS[1]}>
-            <ChannelHeader channel={MOCK_CHANNELS[1]} />
-            <DateDivider label="Mar 1, 2026" />
-            <div className="mb-2 flex gap-1.5">
-              <MockAvatar initials={MOCK_USERS.instructor.initials} />
-              <div className="min-w-0 flex-1">
-                <div className="text-[8px] font-bold text-gray-800">{MOCK_USERS.instructor.name}</div>
-                <p className="text-[7px] text-gray-500">Lab 3 guide is attached below for everyone in section B.</p>
-                <div
-                  data-demo-target="1"
-                  className={`mt-1.5 flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white p-1.5 shadow-sm transition-all ${
-                    step > 0 ? "ring-2 ring-orange-200" : ""
-                  }`}
-                >
-                  <FileText className="h-4 w-4 flex-shrink-0 text-orange-500" />
-                  <div>
-                    <h4 className="text-[8px] font-black text-blue-700">Lab-3-Guide.pdf</h4>
-                    <p className="text-[6px] text-gray-500">312 KB · PDF</p>
-                  </div>
-                </div>
+      {/* ── Files: message + inline PDF + preview overlay ── */}
+      {id === "files" && (
+        <FigmaAppShell sidebar={{ activeChannel: "# general-q-and-a" }}>
+          <FigmaChatHeader channel="# general-q-and-a" members={28} />
+          <FigmaDatePill label="Mar 1st, 2026" />
+          <div className="mb-1 flex gap-2">
+            <div className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full bg-[#6554C0] text-[9px] font-bold text-white">
+              SP
+            </div>
+            <div className="min-w-0 flex-1">
+              <FigmaMessage user={MOCK_USERS.ta.name} initials="SP" color="#00B8D9" time="9:16 AM">
+                Lab 3 guide is attached below for everyone in Section B.
+              </FigmaMessage>
+              <div data-demo-target={step >= 1 ? "1" : undefined} style={demoTargetStyle(step >= 1)}>
+                <FigmaFileCard name="Lab-3-Guide.pdf" size="312 KB" highlight={step >= 1} />
               </div>
             </div>
-            {step >= 2 && (
-              <div className="absolute inset-3 z-20 flex items-center justify-center rounded-lg bg-black/25">
-                <div
-                  data-demo-target="2"
-                  className="w-full max-w-[200px] rounded-xl bg-white shadow-2xl ring-1 ring-blue-100"
-                >
-                  <div className="flex items-center justify-between border-b px-2 py-1.5">
-                    <div className="flex items-center gap-1">
-                      <FileText className="h-3 w-3 text-orange-500" />
-                      <span className="text-[7px] font-black text-blue-700">Lab-3-Guide.pdf</span>
-                    </div>
-                    <span className="text-[7px] text-gray-400">✕</span>
-                  </div>
-                  <div className="space-y-1.5 p-2 text-[7px] leading-relaxed text-gray-600">
-                    <h5 className="text-[8px] font-black text-blue-700">Lab 3: Binary Search Trees</h5>
-                    <p>Complete the traversal exercises and submit through Canvas by Friday.</p>
-                    <div className="rounded bg-blue-50 px-2 py-1 font-bold text-blue-700">
-                      Preview files without leaving the channel.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div data-demo-target="0">
-              <RichComposer compact />
-            </div>
-          </MockupFourPane>
-        )}
-
-        {id === "media" && (
-          <div className="flex h-[300px] flex-col overflow-hidden rounded-xl bg-white">
-            <MockupFourPane activeChannel="# project-lab" showRequests={false}>
-              <div className="flex min-h-0 flex-1">
-                <div className="min-w-0 flex-1">
-                  <ChannelHeader channel="# project-lab" members={12} />
-                  <DateDivider label="This week" />
-                  <div className="text-[7px] text-gray-500">Shared whiteboard snapshots and lab photos appear here.</div>
-                  <RichComposer compact />
-                </div>
-                <div data-demo-target={step === 0 ? "0" : undefined}>
-                  <ChannelDetailsPanel activeTab={step === 1 ? "Videos" : step === 2 ? "Files" : "Photos"} />
-                </div>
-              </div>
-            </MockupFourPane>
           </div>
-        )}
+          {step >= 2 && (
+            <div data-demo-target="2">
+              <FigmaFilePreviewModal
+                name="Lab-3-Guide.pdf"
+                title="Lab 3: Binary Search Trees"
+                body="Complete the traversal exercises and submit through Canvas by Friday at 11:59 PM."
+              />
+            </div>
+          )}
+          <div data-demo-target={step === 0 ? "0" : undefined}>
+            <FigmaComposer />
+          </div>
+        </FigmaAppShell>
+      )}
 
-        {id === "requests" && (
-          <MockupFourPane
-            activeSection="requests"
-            showRequests
-            overlay={step === 0 ? <CreateRequestModal activeCategory="Extension" /> : undefined}
+      {/* ── Media: chat + Channel Details panel ── */}
+      {id === "media" && (
+        <FigmaAppShell
+          sidebar={{ activeChannel: "# project-lab" }}
+          rightPanel={
+            <div data-demo-target={String(step)} style={demoTargetStyle(true)}>
+              <FigmaChannelDetails activeTab={step === 0 ? "Photos" : step === 1 ? "Videos" : "Docs"} />
+            </div>
+          }
+        >
+          <FigmaChatHeader channel="# project-lab" members={12} />
+          <FigmaDatePill label="This week" />
+          <FigmaMessage user={MOCK_USERS.student.name} initials="EB" color="#6554C0" time="2:41 PM">
+            Uploaded our whiteboard notes from today&apos;s lab session.
+          </FigmaMessage>
+          <FigmaComposer placeholder="Enter your message here" />
+        </FigmaAppShell>
+      )}
+
+      {/* ── Requests: queue + modal + extension card ── */}
+      {id === "requests" && (
+        <FigmaAppShell sidebar={{ activeSection: "requests", activeChannel: "# general-q-and-a" }}>
+          <div className="mb-1 flex items-center justify-between">
+            <div>
+              <h3 className="text-[11px] font-bold text-[#172B4D]">Requests</h3>
+              <p className="text-[8px] text-[#97A0AF]">2 Members</p>
+            </div>
+            <div className="flex gap-1.5">
+              <span className="rounded border px-1.5 py-0.5 text-[7px] text-[#6B778C]">Request type: All ▾</span>
+            </div>
+          </div>
+          <FigmaDatePill label="Mar 3rd, 2026" />
+          <FigmaMessage user={MOCK_USERS.student.name} initials="EB" color="#6554C0" time="9:16 AM">
+            <div data-demo-target={step === 1 ? "1" : undefined} style={demoTargetStyle(step === 1)}>
+              <FigmaExtensionCard
+                assignment="Project Checkpoint 2"
+                newDate="3/18/2026"
+                originalDate="3/14/2026"
+                reason="Need time to incorporate TA feedback on the draft."
+                attachment="checkpoint-draft.pdf"
+                mode={step === 2 ? "approved" : "actions"}
+                highlight={step === 1}
+              />
+            </div>
+          </FigmaMessage>
+          {step === 0 && (
+            <div data-demo-target="0">
+              <FigmaCreateRequestModal activeCategory="Extension" />
+            </div>
+          )}
+          <div
+            data-demo-target={step === 2 ? "2" : undefined}
+            className="mx-auto mt-2 w-fit rounded-full border border-[#E4E7EB] bg-white px-4 py-1.5 text-[9px] font-semibold text-[#172B4D]"
+            style={demoTargetStyle(step === 2)}
           >
-            <ChannelHeader channel="Requests" members={2} />
-            <DateDivider label="Today" />
-            <ExtensionRequestCard
-              assignment="Project Checkpoint 2"
-              reason="Needs additional time to incorporate TA feedback on the draft."
-              highlight={step === 1}
-              status={step === 2 ? "approved" : "pending"}
-            />
-            <div
-              data-demo-target={step > 0 ? String(step) : "0"}
-              className={`mx-auto mt-2 w-fit rounded-full border px-3 py-1 text-[7px] font-bold transition-colors ${
-                step === 2 ? "border-green-500 bg-green-50 text-green-600" : "border-gray-300 text-gray-600"
-              }`}
-            >
-              {step === 2 ? `Approved by ${MOCK_USERS.instructor.name}` : "+ Create New Request"}
-            </div>
-          </MockupFourPane>
-        )}
+            + Create New Request
+          </div>
+        </FigmaAppShell>
+      )}
 
-        {id === "community" && (
-          <MockupFourPane activeChannel={MOCK_CHANNELS[1]}>
-            <div className="mb-2 text-[9px] font-black text-gray-800">Communities</div>
-            <p className="mb-2 text-[7px] text-gray-500">
-              Peer spaces beyond your roster — study groups, mentors, and exam prep.
-            </p>
-            <CommunitiesGrid activeIndex={step} />
-            <div data-demo-target={String(step)} className="mt-2">
-              <RichComposer placeholder="Share an update with your community..." compact />
-            </div>
-          </MockupFourPane>
-        )}
-      </div>
-      <div className="mt-2 rounded-lg bg-black/40 px-3 py-1.5 text-center text-[10px] text-blue-100">
-        {DEMO_STEP_LABELS[id][step]}
-      </div>
+      {/* ── Community: bottom nav + communities grid ── */}
+      {id === "community" && (
+        <FigmaAppShell showBottomNav bottomNavActive="communities" sidebar={{ activeChannel: "# general-q-and-a" }}>
+          <p className="mb-0.5 text-[11px] font-bold text-[#172B4D]">Communities</p>
+          <p className="mb-2 text-[8px] text-[#6B778C]">Peer spaces beyond your course roster</p>
+          <div data-demo-target={String(step)} style={demoTargetStyle(true)}>
+            <FigmaCommunitiesView activeIndex={step} />
+          </div>
+          <div className="mt-2">
+            <FigmaComposer placeholder="Share an update with your community..." />
+          </div>
+        </FigmaAppShell>
+      )}
+
+      <p className="mt-2 rounded-md bg-[#1D2631] px-3 py-2 text-center text-[11px] text-white/85">{DEMO_STEP_LABELS[id][step]}</p>
       <DemoCursor position={cursorPosition} />
     </div>
   );
@@ -318,14 +278,14 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
 
 export const FeaturesSection = () => (
   <section className="bg-gray-50 py-20 dark:bg-gray-800/50">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center max-w-3xl mx-auto mb-16">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto mb-16 max-w-3xl text-center">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">Features</p>
-        <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">
-          Five workflows shown with realistic demos
+        <h2 className="mb-4 text-3xl font-bold text-blue-600 dark:text-blue-300 lg:text-4xl">
+          Production-faithful product demos
         </h2>
-        <p className="text-gray-500 text-base dark:text-gray-400">
-          Each demo uses fictional names and course data while matching the Ed Stream Chat layout from our design system.
+        <p className="text-base text-gray-500 dark:text-gray-400">
+          Each animation recreates the Ed Stream Chat Figma layout — four-pane Canvas integration, real composer, request cards, and channel details. All data is fictional.
         </p>
       </div>
       <div className="space-y-16">

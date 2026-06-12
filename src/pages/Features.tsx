@@ -70,7 +70,7 @@ const Features = () => {
               </span>
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Interactive demos and step-by-step guides that mirror the Ed Stream Chat design — built with fictional course data from {MOCK_ORGANIZATIONS.institution}.
+              Interactive demos rebuilt from the Ed Stream Chat Figma designs — four-pane Canvas layout, real composer, and request workflows.
             </p>
           </div>
         </div>
