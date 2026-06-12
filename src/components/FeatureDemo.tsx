@@ -55,19 +55,7 @@ export const features: Array<{
 
 const DEMO_BG = "#1E212B";
 const DEMO_NAV = "#0A1240";
-const DEMO_PANEL_LIGHT = "#F4F6FA";
-
-const DemoCursor = ({ position, onLightPanel }: { position: CSSProperties; onLightPanel: boolean }) => (
-  <div
-    className="pointer-events-none absolute z-30 transition-all duration-1000 ease-in-out"
-    style={position}
-  >
-    <span className="absolute left-1 top-1 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 demo-cursor-click" />
-    <MousePointer2
-      className={`demo-cursor-float h-4 w-4 ${onLightPanel ? "fill-blue-900 text-white" : "fill-white text-blue-950"}`}
-    />
-  </div>
-);
+const DEMO_MAIN_LIGHT = "#F3F4F6";
 
 const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" | "orange" | "gray" }) => {
   const colorMap = {
@@ -83,23 +71,23 @@ const FakeAvatar = ({ label, color = "blue" }: { label: string; color?: "blue" |
   );
 };
 
+const DemoCursor = ({ position }: { position: CSSProperties }) => (
+  <div
+    className="pointer-events-none absolute z-30 transition-all duration-1000 ease-in-out"
+    style={position}
+  >
+    <span className="absolute left-1 top-1 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 demo-cursor-click" />
+    <MousePointer2 className="demo-cursor-float h-4 w-4 fill-white text-blue-950" />
+  </div>
+);
+
 const FeatureDemo = ({ id }: { id: FeatureId }) => {
   const isSiteDark = useEffectiveDarkMode();
-  const panelBg = isSiteDark ? DEMO_PANEL_LIGHT : DEMO_BG;
-  const panelText = isSiteDark ? "text-gray-900" : "text-white";
-  const panelMuted = isSiteDark ? "text-gray-600" : "text-gray-300";
-  const tabInactive = isSiteDark ? "bg-gray-200 text-gray-700" : "bg-white/10 text-gray-400";
-  const overlayBg = isSiteDark ? "bg-slate-900/20" : "bg-black/30";
-  const chatInput = isSiteDark
-    ? "border-gray-300 bg-white text-gray-500"
-    : "border-gray-600/30 bg-white text-gray-400";
-  const promptBanner = isSiteDark
-    ? "border-gray-200 bg-white text-gray-600"
-    : "border-gray-600/30 bg-white text-gray-500";
-  const communityCard = isSiteDark
-    ? "border border-gray-200 bg-white text-gray-700 shadow-sm"
-    : "bg-white/90 text-gray-600";
-  const communityCardActive = "bg-orange-50 text-orange-700 border border-orange-200";
+  const outerBg = isSiteDark ? DEMO_MAIN_LIGHT : DEMO_BG;
+  const mainBg = isSiteDark ? DEMO_MAIN_LIGHT : DEMO_BG;
+  const panelHeading = isSiteDark ? "text-gray-900" : "text-white";
+  const panelSubtext = isSiteDark ? "text-gray-600" : "text-gray-300";
+  const tabInactive = isSiteDark ? "bg-gray-200 text-gray-700" : "bg-white/10 text-gray-300";
   const [step, setStep] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
   const [cursorPosition, setCursorPosition] = useState<CSSProperties>({
@@ -145,8 +133,8 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
   return (
     <div
       ref={frameRef}
-      className={`relative overflow-hidden rounded-3xl p-4 shadow-xl ${isSiteDark ? "ring-1 ring-gray-200" : ""}`}
-      style={{ backgroundColor: panelBg }}
+      className="relative overflow-hidden rounded-3xl p-4 shadow-xl"
+      style={{ backgroundColor: outerBg }}
     >
       <div className="relative overflow-hidden rounded-2xl">
         <div className="flex h-11 items-center px-4 text-white" style={{ backgroundColor: DEMO_NAV }}>
@@ -162,7 +150,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
               <span># Channels</span>
               <span
                 data-demo-target={id === "channels" ? "0" : undefined}
-                className={`relative rounded transition-colors duration-500 ${id === "channels" && step === 0 ? "bg-orange-500 text-white" : ""}`}
+                className={`relative rounded transition-colors duration-500 ${id === "channels" && step === 0 ? "bg-orange-500" : ""}`}
               >
                 <Plus className="h-4 w-4" />
               </span>
@@ -170,7 +158,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             {["# General", "# Peer Mentors", "# Project"].map((item, index) => (
               <div
                 key={item}
-                className={`mb-2 rounded px-2 py-1.5 text-xs ${index === 0 ? "bg-white/15 text-white" : "text-blue-100"}`}
+                className={`mb-2 rounded px-2 py-1.5 text-xs ${index === 0 ? "bg-white/15" : "text-blue-100"}`}
               >
                 {item}
               </div>
@@ -178,20 +166,29 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             <div className="mt-8 text-xs font-bold">Direct messages</div>
             <div className="mt-2 rounded bg-white/15 px-2 py-2 text-xs">Dr. Morgan</div>
             {id === "community" && (
-              <div className="absolute bottom-0 left-0 grid w-[135px] grid-cols-3 p-1 text-[9px] text-blue-100" style={{ backgroundColor: DEMO_NAV }}>
+              <div
+                className="absolute bottom-0 left-0 grid w-[135px] grid-cols-3 p-1 text-[9px] text-blue-100"
+                style={{ backgroundColor: DEMO_NAV }}
+              >
                 <span className="rounded px-1 py-2 text-center">Courses</span>
-                <span className={`rounded px-1 py-2 text-center ${step > 0 ? "bg-white/15 text-white" : ""}`}>Communities</span>
+                <span className={`rounded px-1 py-2 text-center ${step > 0 ? "bg-white/15" : ""}`}>Communities</span>
                 <span className="rounded px-1 py-2 text-center">DMs</span>
               </div>
             )}
           </aside>
-          <main className="relative p-4" style={{ backgroundColor: panelBg }}>
+          <main className="relative p-4" style={{ backgroundColor: mainBg }}>
             {id === "channels" && (
               <div className="mx-auto max-w-xs rounded-2xl bg-white p-5 shadow-2xl">
                 <h4 className="mb-4 text-lg font-black text-blue-700">Create Channel</h4>
-                <div className="mb-3 grid grid-cols-2 gap-3 text-xs">
-                  <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Visibility</span><b>Private</b></div>
-                  <div className="rounded-lg bg-blue-50 p-3"><span className="block text-gray-400">Who can send</span><b>Everyone</b></div>
+                <div className="mb-3 grid grid-cols-2 gap-3 text-xs text-gray-900">
+                  <div className="rounded-lg bg-blue-50 p-3">
+                    <span className="block text-gray-500">Visibility</span>
+                    <b>Private</b>
+                  </div>
+                  <div className="rounded-lg bg-blue-50 p-3">
+                    <span className="block text-gray-500">Who can send</span>
+                    <b>Everyone</b>
+                  </div>
                 </div>
                 <div
                   data-demo-target="1"
@@ -209,26 +206,28 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             )}
             {id === "files" && (
               <div className="relative space-y-4">
-                <div className={`rounded-xl border p-4 text-sm ${promptBanner}`}>Share a course handout in # General</div>
+                <div className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-600">
+                  Share a course handout in # General
+                </div>
                 <div className="flex gap-3">
                   <FakeAvatar label="PI" />
                   <div>
-                    <div className={`text-xs font-black ${panelText}`}>Dr. Morgan</div>
-                    <p className={`mt-1 text-xs ${panelMuted}`}>Here is the course welcome packet for everyone.</p>
+                    <div className={`text-xs font-black ${panelHeading}`}>Dr. Morgan</div>
+                    <p className={`mt-1 text-xs ${panelSubtext}`}>Here is the course welcome packet for everyone.</p>
                     <div
                       data-demo-target="1"
-                      className={`relative mt-2 flex items-center gap-3 rounded-xl border bg-white p-3 shadow-md transition-all duration-500 ${step > 0 ? "ring-2 ring-orange-200" : ""}`}
+                      className={`relative mt-2 flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-md transition-all duration-500 ${step > 0 ? "ring-2 ring-orange-200" : ""}`}
                     >
                       <FileText className="h-7 w-7 flex-shrink-0 text-orange-500" />
                       <div>
                         <h4 className="text-sm font-black text-blue-700">Welcome-to-EdStream.pdf</h4>
-                        <p className="text-[10px] text-gray-400">248 KB · PDF</p>
+                        <p className="text-[10px] text-gray-500">248 KB · PDF</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 {step >= 2 && (
-                  <div className={`absolute inset-0 z-20 flex items-center justify-center rounded-2xl backdrop-blur-[1px] ${overlayBg}`}>
+                  <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-black/30 backdrop-blur-[1px]">
                     <div
                       data-demo-target="2"
                       className="mx-3 w-full max-w-[240px] rounded-2xl bg-white shadow-2xl ring-1 ring-blue-100"
@@ -257,7 +256,10 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
                     </div>
                   </div>
                 )}
-                <div data-demo-target="0" className={`relative flex items-center rounded-xl border px-3 py-2 text-xs ${chatInput}`}>
+                <div
+                  data-demo-target="0"
+                  className="relative flex items-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs text-gray-500"
+                >
                   Type message <Plus className="ml-auto h-4 w-4 text-blue-600" />
                 </div>
               </div>
@@ -265,7 +267,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             {id === "media" && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <h4 className={`font-black ${panelText}`}>Channel Details</h4>
+                  <h4 className={`font-black ${panelHeading}`}>Channel Details</h4>
                   <span
                     data-demo-target={id === "media" ? "0" : undefined}
                     className={`relative rounded-full px-2 py-1 text-xs transition-colors duration-500 ${step === 0 ? "bg-orange-500 text-white" : tabInactive}`}
@@ -298,10 +300,12 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             )}
             {id === "requests" && (
               <div className="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-xl">
-                <div data-demo-target="0" className="mb-3 rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-orange-600">Extension request</div>
-                <p className="text-sm text-gray-500">Student requests more time for Project Checkpoint 2.</p>
+                <div data-demo-target="0" className="mb-3 rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-orange-600">
+                  Extension request
+                </div>
+                <p className="text-sm text-gray-600">Student requests more time for Project Checkpoint 2.</p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
-                  <button className="rounded-lg border py-2 text-sm font-bold text-gray-500">Deny</button>
+                  <button className="rounded-lg border py-2 text-sm font-bold text-gray-600">Deny</button>
                   <button
                     data-demo-target={step > 0 ? String(step) : undefined}
                     className={`relative rounded-lg py-2 text-sm font-bold text-white transition-colors duration-500 ${step === 2 ? "bg-green-600" : "bg-blue-600"}`}
@@ -313,13 +317,15 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
             )}
             {id === "community" && (
               <div>
-                <h4 className={`mb-4 text-xl font-black ${panelText}`}>Communities</h4>
+                <h4 className={`mb-4 text-xl font-black ${panelHeading}`}>Communities</h4>
                 <div className="grid grid-cols-2 gap-3">
                   {["Study Group", "Project Teams", "Peer Mentors", "Exam Review"].map((community, index) => (
                     <div
                       key={community}
                       data-demo-target={id === "community" && index === step ? String(step) : undefined}
-                      className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${index === step ? communityCardActive : communityCard}`}
+                      className={`relative h-24 rounded-xl p-4 text-sm font-bold transition-colors duration-500 ${
+                        index === step ? "bg-orange-50 text-orange-700" : "bg-white text-gray-700 shadow-sm"
+                      }`}
                     >
                       {community}
                     </div>
@@ -330,7 +336,7 @@ const FeatureDemo = ({ id }: { id: FeatureId }) => {
           </main>
         </div>
       </div>
-      <DemoCursor position={cursorPosition} onLightPanel={isSiteDark} />
+      <DemoCursor position={cursorPosition} />
     </div>
   );
 };
@@ -341,7 +347,7 @@ export const FeaturesSection = () => (
       <div className="text-center max-w-3xl mx-auto mb-16">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">Features</p>
         <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4">Five workflows shown with realistic demos</h2>
-        <p className="text-gray-500 text-base">Each demo uses fake names and course data while matching the real app layout.</p>
+        <p className="text-gray-500 text-base dark:text-gray-400">Each demo uses fake names and course data while matching the real app layout.</p>
       </div>
       <div className="space-y-16">
         {features.map((feature, index) => (
