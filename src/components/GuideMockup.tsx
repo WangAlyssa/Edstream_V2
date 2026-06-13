@@ -19,10 +19,8 @@ const GuideMockup = ({ scene, highlight, highlightLabel }: GuideMockupProps) => 
 
   return (
     <FigmaMockContainer variant="guide">
-      <div className="relative h-full min-h-0">
-        <div ref={frameRef} className="h-full min-h-0 overflow-hidden">
-          {render ? render(scale) : null}
-        </div>
+      <div ref={frameRef} className="relative h-full min-h-0 overflow-hidden">
+        {render ? render(scale) : null}
         <GuideHighlightRing
           containerRef={frameRef}
           highlightId={highlight}

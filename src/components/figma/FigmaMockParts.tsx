@@ -445,9 +445,22 @@ export const FigmaDateDivider = ({ date, scale }: { date: string; scale: FigmaSc
   );
 };
 
-export const FigmaTag = ({ type, scale }: { type: "page" | "contact" | "person"; scale: FigmaScale }) => {
+export const FigmaTag = ({
+  type,
+  scale,
+  plain,
+}: {
+  type: "page" | "contact" | "person";
+  scale: FigmaScale;
+  /** Guide mocks: show assignment/name as plain text without orange pill. */
+  plain?: boolean;
+}) => {
   const s = scaleMap[scale];
   const label = type === "page" ? "Page" : type === "contact" ? "Contact" : "Person";
+  const display = type === "page" && (plain || scale === "guide") ? W.assignment : label;
+  if (plain || scale === "guide") {
+    return <span className={`font-semibold text-blue-700 ${s.channelText}`}>{display}</span>;
+  }
   const colors = type === "page" ? FIGMA.tagPage : FIGMA.tagContact;
   return (
     <span

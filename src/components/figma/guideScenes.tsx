@@ -78,7 +78,7 @@ export const GuideChannelNameFrame = ({ scale }: { scale: FigmaScale }) => (
         <label className="mb-1 block text-gray-600">Channel name</label>
         <div
           data-guide-highlight="channel-name-input"
-          className="rounded-lg border-2 border-orange-300 bg-orange-50/40 px-3 py-1.5 text-gray-400"
+          className="rounded-lg border border-gray-200 px-3 py-1.5 text-gray-700"
         >
           # announcements
         </div>

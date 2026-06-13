@@ -285,6 +285,10 @@
     animation: demo-highlight-pulse 1.8s ease-in-out infinite;
   }
 
+  .demo-highlight-ring {
+    animation: demo-highlight-ring 1.6s ease-in-out infinite;
+  }
+
   .demo-cursor-float {
     filter: drop-shadow(0 8px 12px rgba(15, 23, 42, 0.22));
   }
@@ -301,6 +305,17 @@
     50% {
       border-color: rgb(251 146 60);
       box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.38), 0 0 22px 6px rgba(249, 115, 22, 0.65);
+    }
+  }
+
+  @keyframes demo-highlight-ring {
+    0%, 100% {
+      border-color: rgb(249 115 22);
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.35), 0 0 14px rgba(249, 115, 22, 0.45);
+    }
+    50% {
+      border-color: rgb(253 186 116);
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.25), 0 0 22px rgba(249, 115, 22, 0.6);
     }
   }
 
