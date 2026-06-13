@@ -570,6 +570,7 @@ export const RequestsStudentFrame = ({
         type="button"
         className={`rounded-full border-2 border-gray-800 bg-white px-4 py-1 font-medium text-gray-900 ${scale === "guide" ? "text-[9px]" : "text-[11px]"}`}
         data-demo-target={createDemoTarget}
+        data-guide-highlight="request-create"
       >
         + Create New Request
       </button>
@@ -635,7 +636,7 @@ export const MessageReplyFrame = ({ scale, replyDemoTarget }: { scale: FigmaScal
         </FigmaMessageRow>
         <div className={`absolute right-0 top-0 flex items-center gap-0.5 rounded-full border bg-white px-1 py-0.5 shadow-sm ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>
           <span>👍</span><span>😊</span>
-          <span className="rounded bg-blue-50 px-0.5 text-blue-600" data-demo-target={replyDemoTarget}>↩</span>
+          <span className="rounded bg-blue-50 px-0.5 text-blue-600" data-demo-target={replyDemoTarget} data-guide-highlight="reply-btn">↩</span>
         </div>
         <button type="button" className={`mt-0.5 font-bold text-blue-600 ${scale === "guide" ? "text-[7px]" : "text-[10px]"}`}>
           1 reply
@@ -670,6 +671,7 @@ export const CanvasCourseHomeFrame = ({ scale, edStreamDemoTarget }: { scale: Fi
                   : "text-[#0374B5]"
             }`}
             data-demo-target={link === "Ed Stream Chat" ? edStreamDemoTarget : undefined}
+            data-guide-highlight={link === "Ed Stream Chat" ? "canvas-edstream-link" : undefined}
           >
             {link}
           </div>

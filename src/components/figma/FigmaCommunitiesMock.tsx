@@ -65,16 +65,17 @@ const FigmaCommunitiesShell = ({
             </>
           )}
         </div>
-        <div className={`grid grid-cols-3 border-t border-white/15 ${scale === "guide" ? "py-1" : "py-1.5"}`}>
+        <div className={`grid grid-cols-3 border-t border-white/15 ${scale === "guide" ? "py-1" : "py-1.5"}`} data-guide-highlight="bottom-nav-all">
           {[
-            { id: "courses", label: "Courses", icon: BookOpen, active: false },
-            { id: "communities", label: "Communities", icon: Users, active: true },
-            { id: "dms", label: "DMs", icon: MessageSquare, active: false },
+            { id: "courses", label: "Courses", icon: BookOpen, active: false, highlight: "bottom-nav-courses" },
+            { id: "communities", label: "Communities", icon: Users, active: true, highlight: "bottom-nav-communities" },
+            { id: "dms", label: "DMs", icon: MessageSquare, active: false, highlight: "bottom-nav-dms" },
           ].map((tab) => (
             <div
               key={tab.id}
               className={`flex flex-col items-center gap-0.5 px-0.5 ${navLabel} ${tab.active ? "text-white" : "text-white/60"}`}
               style={tab.active ? { backgroundColor: COMMUNITY.sidebarActive } : undefined}
+              data-guide-highlight={tab.highlight}
             >
               <tab.icon className={navIcon} strokeWidth={2} />
               <span className="truncate">{tab.label}</span>

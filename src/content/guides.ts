@@ -2,11 +2,12 @@ export type GuideRole = "instructor" | "student";
 
 export type GuideScene =
   | "canvas-course-home"
-  | "bottom-nav"
+  | "communities-nav"
   | "channel-general"
   | "sidebar-overview"
   | "channel-composer"
   | "create-channel"
+  | "create-channel-name"
   | "channels-created"
   | "channel-details"
   | "channel-details-files"
@@ -15,8 +16,6 @@ export type GuideScene =
   | "message-thread"
   | "request-queue"
   | "request-queue-student"
-  | "canvas-settings"
-  | "canvas-enable"
   | "settings-modal";
 
 export type GuideHighlightId =
@@ -32,17 +31,16 @@ export type GuideHighlightId =
   | "files-tab"
   | "file-card"
   | "reply-btn"
-  | "thread-indicator"
   | "thread-panel"
   | "thread-composer"
-  | "request-btn"
+  | "request-sidebar"
+  | "request-create"
+  | "request-card"
   | "bottom-nav-all"
   | "bottom-nav-courses"
   | "bottom-nav-communities"
   | "bottom-nav-dms"
-  | "canvas-navigation-menu"
   | "canvas-edstream-link"
-  | "save-btn"
   | "settings-save";
 
 export type GuideStep = {
@@ -69,20 +67,20 @@ export const guideSections: GuideSection[] = [
     title: "Basic Primer",
     description: "Understand the core instructor workspace before inviting students.",
     overview:
-      "This primer introduces the minimum EdStream layout instructors should understand before using it with a live class.",
+      "This primer walks through the EdStream layout instructors should know before using it with a live class — all examples use fictional course data.",
     steps: [
       {
         instruction: "Open EdStream from the Canvas course navigation.",
         detail:
-          "EdStream lives in your Canvas course menu, usually right below Home. Click it to launch the course workspace without leaving Canvas.",
+          "EdStream lives in your Canvas course menu, usually below Home. Click Ed Stream Chat to launch the course workspace without leaving Canvas.",
         scene: "canvas-course-home",
         highlight: "canvas-edstream-link",
-        highlightLabel: "EdStream link",
+        highlightLabel: "Ed Stream Chat",
       },
       {
-        instruction: "Review the left sidebar: channels, direct messages, and course tools.",
+        instruction: "Review the left sidebar: Requests, channels, and direct messages.",
         detail:
-          "The sidebar is your control center — channels organize class conversations, direct messages reach individuals, and everything stays tied to the course.",
+          "The sidebar is your control center — Requests handles structured student asks, channels organize conversations, and direct messages reach individuals.",
         scene: "sidebar-overview",
         highlight: "sidebar",
         highlightLabel: "Left sidebar",
@@ -90,15 +88,15 @@ export const guideSections: GuideSection[] = [
       {
         instruction: "Use the bottom navigation to switch between Courses, Communities, and DMs.",
         detail:
-          "Courses brings you back to class channels, Communities opens study groups beyond your roster, and DMs handles one-on-one messages.",
-        scene: "bottom-nav",
+          "Courses brings you back to class channels, Communities opens the browse hub for study groups, and DMs handles one-on-one messages.",
+        scene: "communities-nav",
         highlight: "bottom-nav-all",
         highlightLabel: "Courses · Communities · DMs",
       },
       {
         instruction: "Open # course-discussion to see the main course conversation.",
         detail:
-          "# course-discussion is the default hub for class-wide questions and announcements. Most students should start here before posting.",
+          "# course-discussion is the default hub for class-wide questions and announcements. Highlight the channel row in the sidebar, then open it.",
         scene: "channel-general",
         highlight: "channel-general",
         highlightLabel: "# course-discussion",
@@ -122,7 +120,7 @@ export const guideSections: GuideSection[] = [
       {
         instruction: "Reply to a message to answer without cluttering the main channel.",
         detail:
-          "Hover a message and click the reply icon — like Slack, this starts a side thread so follow-up answers stay tied to one question.",
+          "Hover a message and click the reply icon — this starts a side thread so follow-up answers stay tied to one question.",
         scene: "message-reply",
         highlight: "reply-btn",
         highlightLabel: "Reply",
@@ -138,7 +136,7 @@ export const guideSections: GuideSection[] = [
       {
         instruction: "Tell students which channel to use for general questions versus project work.",
         detail:
-          "A clear channel list helps students pick the right space — general Q&A in one channel, project or lab work in another — so messages don't get lost.",
+          "Point to the channel list in the sidebar — general Q&A in one channel, project or lab work in another — so messages do not get lost.",
         scene: "channel-general",
         highlight: "channels-section",
         highlightLabel: "Course channels",
@@ -156,32 +154,32 @@ export const guideSections: GuideSection[] = [
       {
         instruction: "Click the plus button beside Channels.",
         detail:
-          "The + next to Channels opens the create flow. Use it whenever you need a new space for announcements, labs, or project groups.",
-        scene: "channel-general",
+          "The pencil icon next to Channels opens the create flow. Use it whenever you need a new space for announcements, labs, or project groups.",
+        scene: "create-channel",
         highlight: "channel-plus",
         highlightLabel: "Create channel",
       },
       {
-        instruction: "Create #announcements for instructor-only updates.",
+        instruction: "Name the channel and set who can post.",
         detail:
-          "Name the channel and set visibility so only instructors and TAs can post — students can read but not clutter the feed with replies.",
-        scene: "create-channel",
+          "Enter a channel name like # announcements and set visibility so only instructors and TAs can post — students can read without cluttering the feed.",
+        scene: "create-channel-name",
         highlight: "channel-name-input",
         highlightLabel: "Channel name",
       },
       {
-        instruction: "Create #study-group for student questions.",
+        instruction: "Create # study-group for student questions.",
         detail:
           "A separate Q&A channel keeps student questions out of announcements. Everyone can post here when they need help from staff or classmates.",
         scene: "channels-created",
         highlight: "qa-channel",
-        highlightLabel: "#study-group",
+        highlightLabel: "# study-group",
       },
       {
         instruction: "Post a welcome message that explains what each channel is for.",
         detail:
-          "A short welcome in the composer sets expectations — which channel is for what — so students don't ask in the wrong place on day one.",
-        scene: "channel-composer",
+          "A short welcome in the composer sets expectations — which channel is for what — so students do not ask in the wrong place on day one.",
+        scene: "channels-created",
         highlight: "composer",
         highlightLabel: "Welcome message",
       },
@@ -230,34 +228,34 @@ export const guideSections: GuideSection[] = [
       {
         instruction: "Follow thread replies in the message panel on the right.",
         detail:
-          "The thread panel shows every reply in order. Click “1 reply” under a message or use reply to jump into the same view.",
+          "The thread panel shows every reply in order. Use the composer at the bottom of the panel to post follow-ups.",
         scene: "message-thread",
         highlight: "thread-composer",
         highlightLabel: "Thread replies",
       },
       {
-        instruction: "Use request workflows for extension, attendance, or regrade questions.",
+        instruction: "Review extension and regrade requests in the Requests queue.",
         detail:
-          "Structured requests replace scattered emails. Review pending items, approve or deny, and keep a clear record for both sides.",
+          "Structured request cards replace scattered emails. Review pending items, approve or deny, and keep a clear record for both sides.",
         scene: "request-queue",
-        highlight: "request-btn",
-        highlightLabel: "Request queue",
+        highlight: "request-card",
+        highlightLabel: "Request card",
       },
       {
         instruction: "Open Channel Details to review shared photos, videos, and files.",
         detail:
-          "The info button opens the channel panel where shared media is collected automatically — useful after a busy lab or project week.",
+          "The info button on the channel header opens the details panel where shared media is collected automatically — useful after a busy lab week.",
         scene: "channel-details",
         highlight: "channel-details-info",
-        highlightLabel: "Channel details",
+        highlightLabel: "Channel info",
       },
       {
-        instruction: "Confirm students can find the result without leaving the course workspace.",
+        instruction: "Browse the Docs tab to find every file shared in the channel.",
         detail:
-          "The Files tab in Channel Details lists everything shared in that channel, so students can revisit materials without asking for a resend.",
+          "The Docs tab in Channel Details lists documents from chat, so students can revisit materials without asking for a resend.",
         scene: "channel-details-files",
         highlight: "files-tab",
-        highlightLabel: "Files tab",
+        highlightLabel: "Docs tab",
       },
     ],
   },
@@ -267,15 +265,15 @@ export const guideSections: GuideSection[] = [
     title: "Student Quick Start",
     description: "Help students ask questions, find files, and use enabled requests.",
     overview:
-      "This student guide explains the first actions a student should take after opening EdStream from Canvas.",
+      "This student guide explains the first actions to take after opening EdStream from Canvas — using fictional names and sample course data.",
     steps: [
       {
         instruction: "Open EdStream from the Canvas course navigation.",
         detail:
-          "Find EdStream in your Canvas course menu and click it. You'll land in your class workspace with channels, messages, and shared files.",
+          "Find Ed Stream Chat in your Canvas course menu and click it. You will land in your class workspace with channels, messages, and shared files.",
         scene: "canvas-course-home",
         highlight: "canvas-edstream-link",
-        highlightLabel: "Open EdStream",
+        highlightLabel: "Ed Stream Chat",
       },
       {
         instruction: "Select the channel that best matches your question.",
@@ -288,7 +286,7 @@ export const guideSections: GuideSection[] = [
       {
         instruction: "Read pinned or recent instructor messages before posting.",
         detail:
-          "Check recent posts first — your answer may already be there, or you'll see how others are asking questions in this channel.",
+          "Check recent posts first — your answer may already be there, or you will see how others are asking questions in this channel.",
         scene: "channel-general",
         highlight: "welcome-message-area",
         highlightLabel: "Recent messages",
@@ -318,20 +316,20 @@ export const guideSections: GuideSection[] = [
         highlightLabel: "Thread panel",
       },
       {
-        instruction: "Check shared files or media before asking classmates to resend materials.",
+        instruction: "Check shared files in Channel Details before asking classmates to resend materials.",
         detail:
-          "Open Channel Details and browse the Files tab — handouts and slides shared in the channel are collected there for easy download.",
+          "Open Channel Details and browse the Docs tab — handouts and slides shared in the channel are collected there for easy download.",
         scene: "channel-details-files",
-        highlight: "file-card",
-        highlightLabel: "Shared files",
+        highlight: "files-tab",
+        highlightLabel: "Docs tab",
       },
       {
         instruction: "Use requests only for workflows your course team has enabled.",
         detail:
-          "If your course uses extension or regrade requests, submit through the request flow instead of emailing — staff can track and respond in one place.",
+          "If your course uses extension or regrade requests, submit through Create New Request instead of emailing — staff can track and respond in one place.",
         scene: "request-queue-student",
-        highlight: "request-btn",
-        highlightLabel: "Submit request",
+        highlight: "request-create",
+        highlightLabel: "Create request",
       },
     ],
   },

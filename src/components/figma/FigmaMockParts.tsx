@@ -254,7 +254,11 @@ export const FigmaAppSidebar = ({
   const s = scaleMap[scale];
 
   return (
-    <aside className={`flex h-full flex-col overflow-hidden px-2 py-2 text-white ${s.appSidebar}`} style={{ backgroundColor: FIGMA.sidebar }}>
+    <aside
+      className={`flex h-full flex-col overflow-hidden px-2 py-2 text-white ${s.appSidebar}`}
+      style={{ backgroundColor: FIGMA.sidebar }}
+      data-guide-highlight="sidebar"
+    >
       <div className={`mb-2 flex items-center justify-between font-semibold ${s.sidebarHeader}`}>
         <span>{W.institution}</span>
         <Home className={s.composerTool} strokeWidth={2} />
@@ -264,6 +268,7 @@ export const FigmaAppSidebar = ({
         <div
           className={`flex items-center gap-1.5 ${s.sidebarText} ${activeItem === "requests" ? "font-semibold text-white" : "text-blue-100"}`}
           data-demo-target={requestsDemoTarget}
+          data-guide-highlight="request-sidebar"
         >
           <Inbox className={s.composerTool} strokeWidth={2} />
           Requests
@@ -275,13 +280,17 @@ export const FigmaAppSidebar = ({
         </div>
       </div>
 
-      <div className="mb-1">
+      <div className="mb-1" data-guide-highlight="channels-section">
         <div className={`mb-1 flex items-center justify-between font-semibold text-blue-100 ${s.sidebarText}`}>
           <span className="flex items-center gap-0.5">
             <ChevronDown className={s.composerTool} strokeWidth={2.5} />
             Channels
           </span>
-          <span className={`rounded p-0.5 ${highlightCompose ? "bg-orange-500" : ""}`} data-demo-target={highlightCompose ? "0" : undefined}>
+          <span
+            className={`rounded p-0.5 ${highlightCompose ? "bg-orange-500" : ""}`}
+            data-demo-target={highlightCompose ? "0" : undefined}
+            data-guide-highlight="channel-plus"
+          >
             <Pencil className={s.composerTool} strokeWidth={2} />
           </span>
         </div>
@@ -289,12 +298,15 @@ export const FigmaAppSidebar = ({
           const isActive =
             activeChannel === ch.id ||
             (activeChannel === "demo-123" && ch.id === "random");
+          const channelGuideHighlight =
+            ch.id === "renamed-general" ? "channel-general" : ch.id === "random" ? "qa-channel" : undefined;
           return (
             <div
               key={ch.label + ch.id}
               className={`mb-0.5 flex items-center justify-between rounded px-1.5 py-[3px] ${s.channelText} ${isActive ? "font-semibold text-white" : "text-blue-100/90"}`}
               style={isActive ? { backgroundColor: FIGMA.sidebarActive } : undefined}
               data-demo-target={ch.id === channelClickTargetId ? channelClickDemoTarget : undefined}
+              data-guide-highlight={channelGuideHighlight}
             >
               <span className="truncate pr-1">{ch.label}</span>
               {ch.trailing === "lock" ? (
@@ -367,11 +379,13 @@ export const FigmaComposer = ({
   demoTarget,
   attachDemoTarget,
   sendDemoTarget,
+  guideHighlightId,
 }: {
   scale: FigmaScale;
   demoTarget?: string;
   attachDemoTarget?: string;
   sendDemoTarget?: string;
+  guideHighlightId?: string;
 }) => {
   const s = scaleMap[scale];
   const topTools = [
@@ -388,7 +402,11 @@ export const FigmaComposer = ({
   const bottomTools = [Plus, Type, Smile, AtSign, Video, Mic, ImageIcon];
 
   return (
-    <div className="mt-auto flex-shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm" data-demo-target={demoTarget}>
+    <div
+      className="mt-auto flex-shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"
+      data-demo-target={demoTarget}
+      data-guide-highlight={guideHighlightId ?? "composer"}
+    >
       <div className="flex items-center gap-2 border-b border-gray-100 px-2.5 py-1.5">
         {topTools.map(({ Icon, target }, i) => (
           <span key={i} data-demo-target={target}>
@@ -464,6 +482,7 @@ export const FigmaChannelHeader = ({
         <span
           className="flex h-[18px] w-[18px] items-center justify-center rounded-full border border-gray-300"
           data-demo-target={infoDemoTarget}
+          data-guide-highlight="channel-details-info"
         >
           <Info className="h-[10px] w-[10px]" strokeWidth={2} />
         </span>
@@ -480,7 +499,11 @@ export const FigmaSystemMessage = ({ text, scale }: { text: string; scale: Figma
 export const FigmaReplyLink = ({ scale, demoTarget }: { scale: FigmaScale; demoTarget?: string }) => {
   const s = scaleMap[scale];
   return (
-    <span className={`font-semibold text-blue-600 ${s.msgTime}`} data-demo-target={demoTarget}>
+    <span
+      className={`font-semibold text-blue-600 ${s.msgTime}`}
+      data-demo-target={demoTarget}
+      data-guide-highlight="reply-btn"
+    >
       1 reply
     </span>
   );
@@ -719,7 +742,7 @@ export const FigmaExtensionCard = ({
 }) => {
   const s = scaleMap[scale];
   return (
-    <div className="rounded-xl p-3" style={{ backgroundColor: FIGMA.cardBg }} data-demo-target={demoTarget}>
+    <div className="rounded-xl p-3" style={{ backgroundColor: FIGMA.cardBg }} data-demo-target={demoTarget} data-guide-highlight="request-card">
       <div className={`mb-2 font-bold text-gray-900 ${s.msgName}`}>Extension Request</div>
       <div className={`space-y-1 leading-snug text-gray-700 ${s.msgBody}`}>
         <div>
@@ -902,7 +925,7 @@ export const FigmaSettingsModal = ({ scale }: { scale: FigmaScale }) => {
                 </div>
               </div>
             </div>
-            <button type="button" className={`mt-auto self-start rounded-full border-2 border-gray-800 px-4 py-1 font-medium ${s.sidebarText}`} data-demo-target="settings-save">
+            <button type="button" className={`mt-auto self-start rounded-full border-2 border-gray-800 px-4 py-1 font-medium ${s.sidebarText}`} data-demo-target="settings-save" data-guide-highlight="settings-save">
               Save Changes
             </button>
           </div>
@@ -1013,6 +1036,7 @@ export const FigmaChannelDetailsPanel = ({
                       ? docsTabDemoTarget
                       : undefined
               }
+              data-guide-highlight={tab.id === "docs" ? "files-tab" : undefined}
             >
               {activeTab === tab.id && (
                 <span className="absolute left-0 top-0 bottom-0 w-1 rounded" style={{ backgroundColor: FIGMA.orange }} />
@@ -1059,7 +1083,7 @@ export const FigmaThreadPanel = ({
 }) => {
   const s = scaleMap[scale];
   return (
-    <aside className="flex h-full min-w-0 flex-col overflow-hidden border-l border-gray-200 bg-white px-2.5 py-2">
+    <aside className="flex h-full min-w-0 flex-col overflow-hidden border-l border-gray-200 bg-white px-2.5 py-2" data-guide-highlight="thread-panel">
       <div className={`mb-2 flex flex-shrink-0 items-center justify-between font-bold ${s.mainHeader}`}>
         Thread
         <span
@@ -1085,7 +1109,7 @@ export const FigmaThreadPanel = ({
           </>
         )}
       </div>
-      <FigmaComposer scale={scale} sendDemoTarget={sendDemoTarget} />
+      <FigmaComposer scale={scale} sendDemoTarget={sendDemoTarget} guideHighlightId="thread-composer" />
     </aside>
   );
 };
