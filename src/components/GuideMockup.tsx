@@ -1,8 +1,8 @@
-import { useRef } from "react";
 import type { GuideHighlightId, GuideScene } from "@/content/guides";
-import { GuideHighlightRing } from "@/components/GuideHighlightRing";
+import { GuideHighlightRegion } from "@/components/GuideHighlightWrap";
+import { guideHighlightRegion } from "@/components/guideHighlightRegions";
 import { FigmaMockContainer } from "@/components/figma/FigmaMockContainer";
-import { guideSceneMap } from "@/components/figma/guideScenes";
+import { guideSceneMap, type GuideSceneProps } from "@/components/figma/guideScenes";
 import type { FigmaScale } from "@/components/figma/FigmaMockParts";
 
 type GuideMockupProps = {
@@ -14,22 +14,25 @@ type GuideMockupProps = {
 const scale: FigmaScale = "guide";
 
 const GuideMockup = ({ scene, highlight, highlightLabel }: GuideMockupProps) => {
-  const frameRef = useRef<HTMLDivElement>(null);
   const render = guideSceneMap[scene];
+  const region = guideHighlightRegion(scene, highlight);
 
   return (
     <FigmaMockContainer variant="guide">
-      <div ref={frameRef} className="relative h-full min-h-0 overflow-hidden">
-        {render ? render(scale) : null}
-        <GuideHighlightRing
-          containerRef={frameRef}
-          highlightId={highlight}
-          label={highlightLabel}
-          sceneKey={`${scene}-${highlight}`}
-        />
+      <div className="relative h-full min-h-0 overflow-hidden">
+        {render ? render({ scale, highlight, label: highlightLabel }) : null}
+        {region ? (
+          <GuideHighlightRegion
+            active
+            label={highlightLabel}
+            className={region.className}
+            labelPosition={region.labelPosition}
+          />
+        ) : null}
       </div>
     </FigmaMockContainer>
   );
 };
 
 export default GuideMockup;
+export type { GuideSceneProps };

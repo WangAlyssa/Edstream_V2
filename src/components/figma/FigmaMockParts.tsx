@@ -405,7 +405,7 @@ export const FigmaComposer = ({
     <div
       className="mt-auto flex-shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"
       data-demo-target={demoTarget}
-      data-guide-highlight={guideHighlightId ?? "composer"}
+      {...(guideHighlightId ? { "data-guide-highlight": guideHighlightId } : {})}
     >
       <div className="flex items-center gap-2 border-b border-gray-100 px-2.5 py-1.5">
         {topTools.map(({ Icon, target }, i) => (

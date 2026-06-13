@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { GuideHighlightId } from "@/content/guides";
 import { CommunitiesBrowseFrame } from "./FigmaCommunitiesMock";
 import {
   CanvasCourseHomeFrame,
@@ -23,11 +24,14 @@ import {
 
 const W = FIGMA_WORLD;
 
+export type GuideSceneProps = {
+  scale: FigmaScale;
+  highlight: GuideHighlightId;
+  label: string;
+};
+
 const GuideFileCard = () => (
-  <div
-    data-guide-highlight="file-card"
-    className="relative mt-1 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm"
-  >
+  <div className="relative mt-1 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 shadow-sm">
     <span className="text-base text-orange-500">📄</span>
     <div>
       <div className="text-[9px] font-bold text-gray-900">{W.files.project}</div>
@@ -40,7 +44,7 @@ const GuideFileCard = () => (
 export const GuideDiscussionFrame = ({ scale }: { scale: FigmaScale }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="renamed-general" hideMessages>
     <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
-    <div className="min-h-0 flex-1 overflow-hidden" data-guide-highlight="welcome-message-area">
+    <div className="min-h-0 flex-1 overflow-hidden">
       <FigmaDateDivider date="Mar 1st, 2024" scale={scale} />
       <FigmaMessageRow scale={scale} photo="maya" name={W.people.instructor} showShield relaxed>
         Welcome to the workspace. Post class questions in {W.channels.discussion} and use {W.channels.study} for peer help.
@@ -50,11 +54,11 @@ export const GuideDiscussionFrame = ({ scale }: { scale: FigmaScale }) => (
         Where should we upload the lab write-up for <FigmaTag type="page" scale={scale} />?
       </FigmaMessageRow>
     </div>
-    <FigmaComposer scale={scale} guideHighlightId="composer" />
+    <FigmaComposer scale={scale} guideHighlightId={undefined} />
   </FigmaStandaloneShell>
 );
 
-/** Sidebar compose — highlight the + beside Channels. */
+/** Sidebar compose — pencil beside Channels. */
 export const GuideCreateChannelFrame = ({ scale }: { scale: FigmaScale }) => (
   <FigmaStandaloneShell scale={scale} activeChannel="renamed-general" highlightCompose hideMessages>
     <FigmaChannelHeader scale={scale} title={W.channels.discussion} members="5 Members" />
@@ -64,7 +68,7 @@ export const GuideCreateChannelFrame = ({ scale }: { scale: FigmaScale }) => (
         Channel list is ready — add spaces for announcements and project groups.
       </FigmaMessageRow>
     </div>
-    <FigmaComposer scale={scale} />
+    <FigmaComposer scale={scale} guideHighlightId={undefined} />
   </FigmaStandaloneShell>
 );
 
@@ -76,12 +80,7 @@ export const GuideChannelNameFrame = ({ scale }: { scale: FigmaScale }) => (
       <div className={`w-full max-w-[55%] rounded-xl bg-white p-4 shadow-2xl ${scaleMap[scale].sidebarText}`}>
         <p className={`mb-2 font-bold text-gray-900 ${scaleMap[scale].mainHeader}`}>Create channel</p>
         <label className="mb-1 block text-gray-600">Channel name</label>
-        <div
-          data-guide-highlight="channel-name-input"
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-gray-700"
-        >
-          # announcements
-        </div>
+        <div className="rounded-lg border border-gray-200 px-3 py-1.5 text-gray-700"># announcements</div>
         <p className="mt-2 text-gray-500">Only instructors can post in this channel.</p>
       </div>
     </div>
@@ -98,7 +97,7 @@ export const GuideChannelsReadyFrame = ({ scale }: { scale: FigmaScale }) => (
         Peer Q&amp;A goes here — ask before the deadline on <FigmaTag type="page" scale={scale} />.
       </FigmaMessageRow>
     </div>
-    <FigmaComposer scale={scale} guideHighlightId="composer" />
+    <FigmaComposer scale={scale} guideHighlightId={undefined} />
   </FigmaStandaloneShell>
 );
 
@@ -113,25 +112,27 @@ export const GuideFileShareFrame = ({ scale }: { scale: FigmaScale }) => (
         <GuideFileCard />
       </FigmaMessageRow>
     </div>
-    <FigmaComposer scale={scale} />
+    <FigmaComposer scale={scale} guideHighlightId={undefined} />
   </FigmaStandaloneShell>
 );
 
-export const guideSceneMap: Record<string, (scale: FigmaScale) => ReactNode> = {
-  "canvas-course-home": (s) => <CanvasCourseHomeFrame scale={s} />,
-  "communities-nav": (s) => <CommunitiesBrowseFrame scale={s} />,
-  "sidebar-overview": (s) => <GuideDiscussionFrame scale={s} />,
-  "channel-general": (s) => <GuideDiscussionFrame scale={s} />,
-  "channel-composer": (s) => <GuideDiscussionFrame scale={s} />,
-  "create-channel": (s) => <GuideCreateChannelFrame scale={s} />,
-  "create-channel-name": (s) => <GuideChannelNameFrame scale={s} />,
-  "channels-created": (s) => <GuideChannelsReadyFrame scale={s} />,
-  "file-in-chat": (s) => <GuideFileShareFrame scale={s} />,
-  "message-reply": (s) => <MessageReplyFrame scale={s} />,
-  "message-thread": (s) => <ChannelThreadFrame scale={s} />,
-  "channel-details": (s) => <MediaDetailsFocusFrame scale={s} showDetails={false} />,
-  "channel-details-files": (s) => <MediaDetailsFocusFrame scale={s} activeTab="docs" showSharedDoc showDetails />,
-  "request-queue": (s) => <RequestsInstructorFrame scale={s} />,
-  "request-queue-student": (s) => <RequestsStudentFrame scale={s} />,
-  "settings-modal": (s) => <SettingsModalFrame scale={s} />,
+export const guideSceneMap: Record<string, (props: GuideSceneProps) => ReactNode> = {
+  "canvas-course-home": ({ scale }) => <CanvasCourseHomeFrame scale={scale} />,
+  "communities-nav": ({ scale }) => <CommunitiesBrowseFrame scale={scale} />,
+  "sidebar-overview": ({ scale }) => <GuideDiscussionFrame scale={scale} />,
+  "channel-general": ({ scale }) => <GuideDiscussionFrame scale={scale} />,
+  "channel-composer": ({ scale }) => <GuideDiscussionFrame scale={scale} />,
+  "create-channel": ({ scale }) => <GuideCreateChannelFrame scale={scale} />,
+  "create-channel-name": ({ scale }) => <GuideChannelNameFrame scale={scale} />,
+  "channels-created": ({ scale }) => <GuideChannelsReadyFrame scale={scale} />,
+  "file-in-chat": ({ scale }) => <GuideFileShareFrame scale={scale} />,
+  "message-reply": ({ scale }) => <MessageReplyFrame scale={scale} />,
+  "message-thread": ({ scale }) => <ChannelThreadFrame scale={scale} />,
+  "channel-details": ({ scale }) => <MediaDetailsFocusFrame scale={scale} showDetails={false} />,
+  "channel-details-files": ({ scale }) => (
+    <MediaDetailsFocusFrame scale={scale} activeTab="docs" showSharedDoc showDetails />
+  ),
+  "request-queue": ({ scale }) => <RequestsInstructorFrame scale={scale} />,
+  "request-queue-student": ({ scale }) => <RequestsStudentFrame scale={scale} />,
+  "settings-modal": ({ scale }) => <SettingsModalFrame scale={scale} />,
 };
