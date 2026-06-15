@@ -388,45 +388,26 @@ export const FigmaComposer = ({
   guideHighlightId?: string;
 }) => {
   const s = scaleMap[scale];
-  const topTools = [
-    { Icon: Bold, target: undefined },
-    { Icon: Italic, target: undefined },
-    { Icon: Strikethrough, target: undefined },
-    { Icon: Link2, target: undefined },
-    { Icon: List, target: undefined },
-    { Icon: ListOrdered, target: undefined },
-    { Icon: Quote, target: undefined },
-    { Icon: Code, target: undefined },
-    { Icon: Paperclip, target: attachDemoTarget },
-  ];
-  const bottomTools = [Plus, Type, Smile, AtSign, Video, Mic, ImageIcon];
+  const barH = scale === "guide" ? "min-h-[26px] py-1" : "min-h-[34px] py-1.5";
+  const plusBtn = scale === "guide" ? "h-[18px] w-[18px]" : "h-[22px] w-[22px]";
 
   return (
     <div
-      className="mt-auto flex-shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"
+      className={`mt-auto flex flex-shrink-0 items-center gap-2 rounded-full border border-gray-300 bg-white px-2.5 ${barH}`}
       data-demo-target={demoTarget}
       {...(guideHighlightId ? { "data-guide-highlight": guideHighlightId } : {})}
     >
-      <div className="flex items-center gap-2 border-b border-gray-100 px-2.5 py-1.5">
-        {topTools.map(({ Icon, target }, i) => (
-          <span key={i} data-demo-target={target}>
-            <Icon className={`text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
-          </span>
-        ))}
-      </div>
-      <div className={`min-h-[36px] px-2.5 py-2 text-gray-400 ${s.composerText}`}>Enter your message here</div>
-      <div className="flex items-center justify-between px-2.5 py-1.5">
-        <div className="flex items-center gap-2">
-          {bottomTools.map((Icon, i) => (
-            <Icon key={i} className={`text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
-          ))}
-          <Square className={`text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
-        </div>
-        <div className="flex items-center gap-0.5" data-demo-target={sendDemoTarget}>
-          <Send className={`text-gray-500 ${s.composerTool}`} strokeWidth={2} />
-          <ChevronDown className={`text-gray-400 ${s.composerTool}`} strokeWidth={2} />
-        </div>
-      </div>
+      <span
+        className={`flex flex-shrink-0 items-center justify-center rounded-full border border-gray-300 text-gray-500 ${plusBtn}`}
+        data-demo-target={attachDemoTarget}
+      >
+        <Plus className={s.composerTool} strokeWidth={2} />
+      </span>
+      <span className={`min-w-0 flex-1 truncate text-gray-400 ${s.composerText}`}>Enter your message here</span>
+      <Smile className={`flex-shrink-0 text-gray-400 ${s.composerTool}`} strokeWidth={1.75} />
+      <span className="flex flex-shrink-0 items-center" data-demo-target={sendDemoTarget}>
+        <Send className={`text-gray-500 ${s.composerTool}`} strokeWidth={2} />
+      </span>
     </div>
   );
 };

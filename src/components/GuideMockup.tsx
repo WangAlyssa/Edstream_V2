@@ -10,6 +10,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Send,
   Trash2,
   X,
 } from "lucide-react";
@@ -182,13 +183,26 @@ const Sidebar = ({
   </HighlightWrap>
 );
 
+const SimpleMessageBar = ({
+  placeholder = "Enter your message here",
+  className = "",
+}: {
+  placeholder?: string;
+  className?: string;
+}) => (
+  <div className={`flex items-center gap-2 rounded-full border border-gray-300 bg-white px-2 py-1.5 text-gray-400 ${className}`}>
+    <span className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-gray-300 text-gray-500">
+      <Plus className="h-2.5 w-2.5" strokeWidth={2} />
+    </span>
+    <span className="min-w-0 flex-1 truncate">{placeholder}</span>
+    <span className="flex-shrink-0 text-[10px] leading-none">☺</span>
+    <Send className="h-3 w-3 flex-shrink-0 text-gray-500" strokeWidth={2} />
+  </div>
+);
+
 const ChatComposer = ({ highlight, label }: { highlight: GuideHighlightId; label: string }) => (
   <HighlightWrap active={highlight === "composer"} label={label}>
-    <div className="mt-auto flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-[8px] text-gray-400">
-      <Plus className="h-3 w-3 text-blue-600" />
-      <span className="flex-1">Type your message here...</span>
-      <span>☺</span>
-    </div>
+    <SimpleMessageBar className="mt-auto text-[8px]" />
   </HighlightWrap>
 );
 
@@ -493,10 +507,7 @@ const ThreadPanel = ({
         <p className="mt-0.5">Use the Requests tab in the course menu — not email.</p>
       </div>
       <HighlightWrap active={highlight === "thread-composer"} label={label} className="mt-auto">
-        <div className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-[7px] text-gray-400">
-          <Plus className="h-3 w-3 text-blue-600" />
-          <span className="flex-1">Reply in thread...</span>
-        </div>
+        <SimpleMessageBar placeholder="Reply in thread..." className="text-[7px]" />
       </HighlightWrap>
     </aside>
   </HighlightWrap>
@@ -551,9 +562,7 @@ const MessageThreadScene = ({ highlight, label }: { highlight: GuideHighlightId;
       <main className="flex min-h-0 flex-col border-r border-gray-100 p-2 opacity-60">
         <div className="mb-2 text-xs font-black text-gray-800"># General</div>
         <div className="text-[8px] text-gray-500">{STUDENT}: Where should I submit an extension request?</div>
-        <div className="mt-auto flex items-center gap-1 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[7px] text-gray-400">
-          Type your message here...
-        </div>
+        <SimpleMessageBar className="mt-auto text-[7px]" />
       </main>
       <ThreadPanel highlight={highlight} label={label} />
     </div>
