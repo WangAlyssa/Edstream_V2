@@ -190,7 +190,7 @@ const SimpleMessageBar = ({
   placeholder?: string;
   className?: string;
 }) => (
-  <div className={`flex items-center gap-2 rounded-full border border-gray-300 bg-white px-2 py-1.5 text-gray-400 ${className}`}>
+  <div className={`flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-gray-400 ${className}`}>
     <span className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-gray-300 text-gray-500">
       <Plus className="h-2.5 w-2.5" strokeWidth={2} />
     </span>

@@ -393,7 +393,7 @@ export const FigmaComposer = ({
 
   return (
     <div
-      className={`mt-auto flex flex-shrink-0 items-center gap-2 rounded-full border border-gray-300 bg-white px-2.5 ${barH}`}
+      className={`mt-auto flex flex-shrink-0 items-center gap-2 rounded-lg border border-gray-300 bg-white px-2.5 ${barH}`}
       data-demo-target={demoTarget}
       {...(guideHighlightId ? { "data-guide-highlight": guideHighlightId } : {})}
     >
