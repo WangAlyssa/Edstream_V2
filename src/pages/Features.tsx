@@ -11,21 +11,6 @@ const Features = () => {
     document.title = "Features - EdStream";
   }, []);
 
-  const beforeAfter = {
-    before: [
-      "Fragmented Communication: Multiple platforms and inboxes",
-      "Manual Processes: Time-intensive extension and accommodation handling",
-      "Limited Collaboration: Difficulty connecting students outside class",
-      "Administrative Burden: Hours spent managing communication logistics"
-    ],
-    after: [
-      "Unified Platform: Single interface for all course communication",
-      "Automated Workflows: Smart handling of routine requests",
-      "Enhanced Community: Tools for building lasting academic relationships",
-      "Efficient Management: Streamlined processes save hours weekly"
-    ]
-  };
-
   const implementationPhases = [
     {
       phase: "Phase 1: Setup & Configuration",
@@ -107,47 +92,6 @@ const Features = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Before vs After */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-800 dark:to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-6">
-              Transform Your Workflow
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="border-l-4 border-l-orange-500 dark:border-l-orange-400 shadow-xl bg-white dark:bg-gray-800">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-orange-500 dark:text-orange-400 mb-6">Before EdStream</h3>
-                <ul className="space-y-4">
-                  {beforeAfter.before.map((item, index) => (
-                    <li key={index} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-orange-500 dark:bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
-                      <span className="text-gray-700 dark:text-gray-200 text-lg">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-l-4 border-l-green-600 dark:border-l-green-400 shadow-xl bg-white dark:bg-gray-800">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-6">With EdStream</h3>
-                <ul className="space-y-4">
-                  {beforeAfter.after.map((item, index) => (
-                    <li key={index} className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700 dark:text-gray-200 text-lg">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
