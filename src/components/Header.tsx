@@ -60,9 +60,9 @@ const Header = () => {
             <ThemeToggle />
             <Button 
               asChild
-              className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 transition-all duration-200 font-bold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 transition-all duration-200 font-bold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform [&_a]:text-white [&_a]:visited:text-white [&_a]:active:text-white [&_a]:focus:text-white"
             >
-              <a href="https://app.edstream.io" target="_blank" rel="noopener noreferrer">
+              <a href="https://app.edstream.io/login" target="_blank" rel="noopener noreferrer">
                 Login
               </a>
             </Button>
@@ -102,9 +102,9 @@ const Header = () => {
               <div className="pt-2">
                 <Button 
                   asChild 
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 font-bold py-3 rounded-lg shadow-lg border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform transition-all duration-200"
+                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-500 dark:to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-400 dark:hover:to-orange-500 font-bold py-3 rounded-lg shadow-lg border-2 border-transparent dark:border-orange-400/50 hover:scale-105 transform transition-all duration-200 [&_a]:text-white [&_a]:visited:text-white [&_a]:active:text-white [&_a]:focus:text-white"
                 >
-                  <a href="https://app.edstream.io" target="_blank" rel="noopener noreferrer">
+                  <a href="https://app.edstream.io/login" target="_blank" rel="noopener noreferrer">
                     Login
                   </a>
                 </Button>

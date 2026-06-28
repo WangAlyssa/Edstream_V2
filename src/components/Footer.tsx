@@ -28,7 +28,7 @@ const Footer = () => {
             {/* Brand Section */}
             <div className="lg:col-span-2">
               <Link to="/" className="inline-flex items-center space-x-3 mb-6 hover:opacity-80 transition-all duration-300 hover:scale-105">
-                <EdStreamLogo className="h-10 w-10" />
+                <EdStreamLogo className="h-10 w-auto" />
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">EdStream</span>
               </Link>
               

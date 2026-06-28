@@ -103,19 +103,14 @@
 
     /* Enhanced Dark mode specific improvements */
   .dark {
-    /* Logo enhancement for dark mode - more aggressive inversion */
-    img[alt*="Logo"], img[alt*="logo"], img[alt*="EdStream"] {
-      filter: brightness(0) invert(1) contrast(1.2) !important;
-    }
-
-    /* Target specific logo images */
-    .logo-image {
-      filter: brightness(0) invert(1) contrast(1.2) !important;
-    }
-
-    /* Ensure logo images are fully visible */
+    /* Legacy hero PNG logos only — keep brand SVG true to color in dark mode */
+    img.logo-image,
     img[src*="8f4a6de0-da43-4b0b-8550-2d2f9c1c4e5b"] {
       filter: brightness(0) invert(1) contrast(1.2) !important;
+    }
+
+    img.edstream-brand-logo {
+      filter: none !important;
     }
 
     /* Ensure better contrast for cards and sections */

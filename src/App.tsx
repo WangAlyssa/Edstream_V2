@@ -18,13 +18,15 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" storageKey="edstream-ui-theme">
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/Edstream_V2">
+        <BrowserRouter basename={routerBasename || undefined}>
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
