@@ -101,6 +101,11 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
     /* Enhanced Dark mode specific improvements */
   .dark {
     /* Legacy hero PNG logos only — keep brand SVG true to color in dark mode */
@@ -245,9 +250,10 @@
       @apply border-blue-500 ring-blue-500/20;
     }
 
-    /* Links */
-    a {
-      @apply text-blue-400 hover:text-blue-300;
+    /* Don't force a global link color — nav/buttons set their own.
+       Only style bare content links that opt in via .content-link. */
+    a.content-link {
+      @apply text-blue-400 no-underline hover:text-blue-300;
     }
 
     /* Cards and sections */

@@ -60,7 +60,7 @@ const Footer = () => {
                   <li key={link.name}>
                     <Link 
                       to={link.href} 
-                      className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center group"
+                      className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center group no-underline"
                     >
                       <ArrowRight className="h-4 w-4 text-orange-500 mr-2 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
                       <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
